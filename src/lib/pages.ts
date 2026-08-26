@@ -157,7 +157,7 @@ const PRODUCT: Record<Locale, ProductContent> = {
         {
           icon: "lock",
           title: "完整權限管理",
-          body: "依工作區與專案設定存取範圍，確保每個人只看得到該看的資料。",
+          body: "依工作空間與專案設定存取範圍，確保每個人只看得到該看的資料。",
         },
         {
           icon: "edit",
