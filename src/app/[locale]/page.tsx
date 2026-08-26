@@ -9,6 +9,9 @@ import { getHomeContent } from "@/lib/pages";
 import { organizationSchema } from "@/lib/schemas";
 import { path, toLocale } from "@/lib/i18n";
 
+// SSG + ISR, so published CMS edits appear without a redeploy.
+export const revalidate = 60;
+
 export default async function Home({
   params,
 }: {

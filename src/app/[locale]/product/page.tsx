@@ -11,6 +11,9 @@ import { getProductContent } from "@/lib/pages";
 import { faqSchema } from "@/lib/schemas";
 import { getDictionary, path, toLocale } from "@/lib/i18n";
 
+// SSG + ISR, so published CMS edits appear without a redeploy.
+export const revalidate = 60;
+
 export async function generateMetadata({
   params,
 }: {

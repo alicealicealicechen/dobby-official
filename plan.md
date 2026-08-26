@@ -24,9 +24,9 @@
 ### 任務清單
 
 - [x] 註冊 Sanity 帳號,建立專案(Free 方案起步)
-- [ ] Vercel 專案確認(已有前端 repo 即可直接連)
+- [x] Vercel 專案確認(已有前端 repo 即可直接連)
 - [ ] 網域 DNS 指向 Vercel(A record / CNAME,約 10 分鐘)
-- [ ] 建立三個環境:`production` / `preview`(Vercel PR 自動產生)/ 本地開發
+- [x] 建立三個環境:`production` / `preview`(Vercel PR 自動產生)/ 本地開發
 - [ ] Sanity 建立兩個 dataset:`production` 與 `staging`
 - [ ] 設定環境變數:
   - `NEXT_PUBLIC_SANITY_PROJECT_ID`
@@ -107,9 +107,12 @@
 
 ### 任務清單
 
-- [ ] 與行銷開 workshop,盤點所有頁面類型與欄位需求
-- [ ] 用 Sanity schema(TypeScript)定義以上 content types
-- [ ] 設定欄位驗證(如 metaTitle 長度警告)
+- [ ] 與行銷開 workshop,盤點所有頁面類型與欄位需求  
+      ↳ 尚未進行。目前的 schema 是給這場會議用的草稿,不是定案。
+- [x] 用 Sanity schema(TypeScript)定義以上 content types  
+      ↳ 已在 `src/sanity/schemaTypes/index.ts`,含 page/post/author/category/seo/siteSettings 與 language 欄位。寫成純物件,待安裝 `sanity` 後再包 defineType。
+- [x] 設定欄位驗證(如 metaTitle 長度警告)  
+      ↳ metaTitle ≤ 60、metaDescription ≤ 160、language 必填。
 - [ ] 部署 Sanity Studio(可部署到 `yourcompany.sanity.studio` 或掛在 Next.js 的 `/studio` 路由)
 - [ ] 行銷試用 Studio,回饋欄位命名與順序調整
 
@@ -124,23 +127,30 @@
 
 ### 任務清單
 
-- [ ] 安裝 `next-sanity` 套件,設定 client
-- [ ] 撰寫 GROQ query(每個頁面型別一組)
-- [ ] 動態路由接資料:
+- [x] 安裝 `next-sanity` 套件,設定 client  
+      ↳ `src/lib/sanity.ts`。未設 `NEXT_PUBLIC_SANITY_PROJECT_ID` 時查詢回傳 null,由種子內容遞補,所以 CMS 建好前網站就能跑。
+- [x] 撰寫 GROQ query(每個頁面型別一組)  
+      ↳ `src/lib/queries.ts`,每一條都以 `language` 過濾(文件級翻譯)。
+- [ ] 動態路由接資料:  
+      ↳ blog/[slug]、blog/category/[slug]、blog/author/[slug] 已完成;通用的 `app/[slug]` 尚未建立(還沒有 CMS 頁面內容)。
   - `app/[slug]/page.tsx` → page
   - `app/blog/[slug]/page.tsx` → post
   - `app/blog/category/[slug]/page.tsx` → category
   - `app/blog/author/[slug]/page.tsx` → author
-- [ ] 圖片走 Sanity CDN + `next/image`(自動 WebP、responsive)
-- [ ] Portable Text 渲染元件(內文的標題、圖片、連結、程式碼區塊樣式)
-- [ ] 渲染策略:
+- [x] 圖片走 Sanity CDN + `next/image`(自動 WebP、responsive)  
+      ↳ `next.config.ts` 已允許 `cdn.sanity.io`;文章主圖走 next/image。
+- [ ] Portable Text 渲染元件(內文的標題、圖片、連結、程式碼區塊樣式)  
+      ↳ 改用結構化的 `body[]{heading, paragraphs}`,尚未接 Portable Text。若內文要支援圖片/連結/程式碼區塊需改回。
+- [x] 渲染策略:  
+      ↳ 全部頁面皆 SSG + ISR(`revalidate: 60`),無純 CSR 頁面。
   - 行銷頁與文章:**SSG + ISR**(`revalidate: 60`)
   - 首頁:SSG + ISR
   - 避免純 CSR 頁面
 - [ ] Draft Mode(草稿預覽):
   - 建立 `/api/draft` 路由驗證 token
   - Sanity Studio 的 Preview 按鈕連到草稿版頁面
-- [ ] 404 / 500 頁面
+- [ ] 404 / 500 頁面  
+      ↳ 404 已完成(雙語、含設計);500 / error boundary 尚未建立。
 
 ### 產出
 
@@ -155,9 +165,11 @@
 
 ### 3.1 Metadata(需求 1.1)
 
-- [ ] 每個路由實作 `generateMetadata()`,從 Sanity `seo` 欄位讀取:
+- [x] 每個路由實作 `generateMetadata()`,從 Sanity `seo` 欄位讀取:  
+      ↳ 所有路由皆已實作,並含 hreflang alternates 與各語系 canonical。
   - title / description / canonical / OG tags / Twitter tags / robots
-- [ ] 未填寫時的 fallback 邏輯(用文章標題自動生成)
+- [x] 未填寫時的 fallback 邏輯(用文章標題自動生成)  
+      ↳ `post.seo?.metaTitle ?? post.title`,description 同理。
 
 ### 3.2 URL 與轉址(需求 1.2)
 
@@ -167,29 +179,34 @@
 
 ### 3.3 Sitemap(需求 1.3)
 
-- [ ] `app/sitemap.ts`:自動抓取所有 published 頁面與文章
-- [ ] 含 `lastModified`(用 Sanity `_updatedAt`)
-- [ ] noIndex 的頁面自動排除
+- [x] `app/sitemap.ts`:自動抓取所有 published 頁面與文章  
+      ↳ 與頁面共用同一組存取函式,兩個語系都涵蓋。
+- [ ] 含 `lastModified`(用 Sanity `_updatedAt`)  
+      ↳ 目前用 `publishedAt`;接上 Sanity 後改讀 `_updatedAt`。
+- [x] noIndex 的頁面自動排除
 
 ### 3.4 robots.txt(需求 1.4)
 
-- [ ] `app/robots.ts`:production 開放、preview 環境自動 `Disallow: /`
-- [ ] 指定 sitemap 位置
+- [x] `app/robots.ts`:production 開放、preview 環境自動 `Disallow: /`  
+      ↳ 以 `VERCEL_ENV` 判斷。
+- [x] 指定 sitemap 位置
 
 ### 3.5 結構化資料 Schema(需求 2.3)
 
-- [ ] JSON-LD 生成函式,每個型別一組:
-  - [ ] Organization(全站,資料來自 siteSettings)
-  - [ ] Article(部落格文章)
-  - [ ] BreadcrumbList(所有頁面)
-  - [ ] FAQ(若頁面含 FAQ section)
+- [x] JSON-LD 生成函式,每個型別一組:  
+      ↳ `src/lib/schemas.ts`
+  - [x] Organization(全站,資料來自 siteSettings)
+  - [x] Article(部落格文章)
+  - [x] BreadcrumbList(所有頁面)
+  - [x] FAQ(若頁面含 FAQ section)
   - [ ] Product(若有產品頁)
 - [ ] 用 [Rich Results Test](https://search.google.com/test/rich-results) 驗證
 
 ### 3.6 效能 / Core Web Vitals(需求 2.1)
 
-- [ ] 全站圖片走 `next/image`
-- [ ] 字型用 `next/font` 自架(消除 layout shift)
+- [x] 全站圖片走 `next/image`
+- [x] 字型用 `next/font` 自架(消除 layout shift)  
+      ↳ Inter / Noto Sans TC / Roboto Mono,未連 Google Fonts CDN。
 - [ ] 第三方腳本用 `<Script strategy="afterInteractive">`
 - [ ] Lighthouse 分數目標:Performance ≥ 90、SEO = 100
 - [ ] 目標指標:LCP < 2.0s、CLS < 0.1、INP < 200ms
@@ -289,7 +306,10 @@
 
 ## 未來擴充路線(不在本期範圍)
 
-- 多語系(next-intl + Sanity 文件級翻譯 + hreflang)
+- ~~多語系(next-intl + Sanity 文件級翻譯 + hreflang)~~ — **已提前完成**,但未使用
+  next-intl:語系是網址第一段(`/zh`、`/en`),純靜態產生、不需要 middleware。
+  介面文字在 `src/lib/i18n.ts`,內容依語系分開存放並以 `language` 過濾,對應
+  Sanity 的文件級翻譯。hreflang 與各語系 canonical 已就位。
 - A/B testing(Vercel Edge Middleware)
 - 站內搜尋(Algolia 或 Pagefind)
 - 電子報整合(Resend / Mailchimp)
