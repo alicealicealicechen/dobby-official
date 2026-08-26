@@ -167,6 +167,13 @@
     text-wrap: balance;
   }
 
+  /* `pretty` only avoids word-level orphans, so it does nothing for CJK.
+     Short ledes carry the `text-balance` utility instead, which evens the
+     lines — otherwise the product lede broke as "…地端 AI 工作流 / 程。" */
+  p {
+    text-wrap: pretty;
+  }
+
   /* Layered so a utility class like `text-on-primary` still wins on a link.
      Unlayered element selectors outrank Tailwind's utility layer. */
   a {

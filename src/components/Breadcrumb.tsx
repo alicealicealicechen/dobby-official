@@ -26,14 +26,14 @@ export default function Breadcrumb({
               {isLast || !item.href ? (
                 <span
                   aria-current={isLast ? "page" : undefined}
-                  className="text-[13.5px] font-semibold text-secondary"
+                  className="inline-flex min-h-6 items-center text-[13.5px] font-semibold text-secondary"
                 >
                   {item.label}
                 </span>
               ) : (
                 <Link
                   href={item.href}
-                  className="text-[13.5px] text-muted hover:text-primary"
+                  className="inline-flex min-h-6 items-center text-[13.5px] text-muted hover:text-primary"
                 >
                   {item.label}
                 </Link>

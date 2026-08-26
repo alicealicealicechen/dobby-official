@@ -31,7 +31,7 @@ export default function LocaleSwitcher({
             href={href}
             hrefLang={target}
             aria-current={isCurrent ? "true" : undefined}
-            className={`rounded-lg px-2.5 py-1 text-[13.5px] font-semibold transition-colors duration-150 ease-standard ${
+            className={`inline-flex min-h-6 items-center rounded-lg px-2.5 py-1 text-[13.5px] font-semibold transition-colors duration-150 ease-standard ${
               isCurrent
                 ? "bg-subtle text-ink"
                 : "text-secondary hover:text-primary"

@@ -32,7 +32,7 @@ export default function NotFound() {
       <h1 className="m-0 mb-3 text-[clamp(1.5rem,3vw,2rem)] font-bold text-ink">
         {t.title}
       </h1>
-      <p className="m-0 mb-8 max-w-[420px] text-[15px] leading-[1.7] text-secondary">
+      <p className="text-balance m-0 mb-8 max-w-[420px] text-[15px] leading-[1.7] text-secondary">
         {t.body}
       </p>
       <Link

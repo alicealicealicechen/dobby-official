@@ -65,7 +65,7 @@ export default function Header({
                     key={item.key}
                     href={item.href}
                     aria-current={isActive ? "page" : undefined}
-                    className={`text-[13.5px] whitespace-nowrap transition-colors duration-150 ease-standard sm:text-[14.5px] ${
+                    className={`inline-flex min-h-6 items-center text-[13.5px] whitespace-nowrap transition-colors duration-150 ease-standard sm:text-[14.5px] ${
                       isActive
                         ? "font-bold text-ink"
                         : "font-medium text-secondary hover:text-ink"

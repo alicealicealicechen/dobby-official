@@ -49,7 +49,7 @@ export default async function ContactPage({
             <h1 className="m-0 mb-3 text-[clamp(2rem,3.5vw,2.5rem)] font-bold tracking-[-0.02em] text-ink">
               {t.contact.title}
             </h1>
-            <p className="m-0 text-[16px] text-secondary">
+            <p className="text-balance m-0 text-[16px] text-secondary">
               {t.contact.lede}
             </p>
           </div>
@@ -68,7 +68,7 @@ export default async function ContactPage({
                   <h2 className="m-0 mb-1 text-sm font-semibold text-ink">
                     Email
                   </h2>
-                  <a href={`mailto:${site.email}`} className="text-sm">
+                  <a href={`mailto:${site.email}`} className="inline-flex min-h-6 items-center text-sm">
                     {site.email}
                   </a>
                 </div>
@@ -88,7 +88,7 @@ export default async function ContactPage({
                     href={site.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm"
+                    className="inline-flex min-h-6 items-center text-sm"
                   >
                     {site.name}
                   </a>

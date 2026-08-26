@@ -79,7 +79,7 @@ function FooterLink({
   external?: boolean;
 }) {
   const className =
-    "text-sm text-[#a8a49a] transition-colors duration-150 ease-standard hover:text-[#f9f8f4]";
+    "inline-flex min-h-6 items-center text-sm text-[#a8a49a] transition-colors duration-150 ease-standard hover:text-[#f9f8f4]";
 
   if (external || href.startsWith("mailto:")) {
     return (

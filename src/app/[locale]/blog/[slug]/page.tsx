@@ -92,7 +92,7 @@ export default async function BlogPostPage({
         <article className="mx-auto max-w-[1200px] px-6 sm:px-8 pt-8 pb-6">
           <Link
             href={path(locale, `/blog/category/${category.slug}`)}
-            className="mb-3.5 inline-block text-[12.5px] font-semibold tracking-[0.03em]"
+            className="mb-3.5 inline-flex min-h-6 items-center text-[12.5px] font-semibold tracking-[0.03em]"
             style={{ color: category.color }}
           >
             {category.title}
@@ -138,7 +138,7 @@ export default async function BlogPostPage({
               <a
                 key={block.id}
                 href={`#${block.id}`}
-                className="text-[13.5px] text-secondary hover:text-primary"
+                className="inline-flex min-h-6 items-center text-[13.5px] text-secondary hover:text-primary"
               >
                 {block.heading}
               </a>

@@ -55,7 +55,7 @@ export default async function Home({
           <h2 className="mb-5 text-[clamp(1.6rem,3vw,2.4rem)] font-bold tracking-[-0.02em] text-white">
             {band.title}
           </h2>
-          <p className="mx-auto mb-10 max-w-[480px] text-[15px] leading-[1.7] text-white">
+          <p className="text-balance mx-auto mb-10 max-w-[480px] text-[15px] leading-[1.7] text-white">
             {band.body}
           </p>
           <Image
@@ -112,7 +112,7 @@ export default async function Home({
             <h2 className="m-0 mb-5 text-[clamp(2rem,4vw,3rem)] font-extrabold tracking-[-0.02em] text-ink">
               {cta.title}
             </h2>
-            <p className="mx-auto mb-8 max-w-[480px] text-[16px] leading-[1.7] text-secondary">
+            <p className="text-balance mx-auto mb-8 max-w-[480px] text-[16px] leading-[1.7] text-secondary">
               {cta.lede}
             </p>
             <div className="flex flex-wrap justify-center gap-3.5">
