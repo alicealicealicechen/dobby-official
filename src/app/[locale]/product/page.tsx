@@ -51,17 +51,17 @@ export default async function ProductPage({
       />
 
       <main>
-        <section className="mx-auto max-w-[1200px] px-8 pt-20 pb-10 text-center">
-          <h1 className="m-0 mb-6 text-[clamp(3.5rem,9vw,7rem)] leading-[0.95] font-semibold tracking-[0.02em] text-ink">
+        <section className="mx-auto max-w-[1200px] px-6 pt-14 pb-8 sm:px-8 sm:pt-20 sm:pb-10 text-center">
+          <h1 className="m-0 mb-6 text-[clamp(2.75rem,9vw,7rem)] leading-[1] sm:leading-[0.95] font-semibold tracking-[0.02em] text-ink">
             {content.hero.title}
           </h1>
-          <p className="mx-auto m-0 max-w-[640px] text-[20px] leading-[1.7] font-medium text-secondary">
+          <p className="mx-auto m-0 max-w-[640px] text-[17px] leading-[1.7] font-medium text-secondary sm:text-[20px]">
             {content.hero.lede}
           </p>
         </section>
 
         {/* OVERVIEW */}
-        <section className="mx-auto grid max-w-[1200px] items-center gap-14 px-8 py-12 lg:grid-cols-2">
+        <section className="mx-auto grid max-w-[1200px] items-center gap-14 px-6 sm:px-8 py-12 lg:grid-cols-2">
           <div className="overflow-hidden rounded-[20px] border border-line shadow-[0_24px_48px_-24px_rgba(30,30,30,0.16)]">
             <Image
               src={productShot}
@@ -98,7 +98,7 @@ export default async function ProductPage({
         </section>
 
         {/* PLANS */}
-        <section id="pricing" className="mx-auto max-w-[1024px] px-8 py-14">
+        <section id="pricing" className="mx-auto max-w-[1024px] px-6 sm:px-8 py-14">
           <h2 className="m-0 mb-10 text-center text-[clamp(1.75rem,3vw,2.25rem)] font-bold tracking-[-0.02em] text-ink">
             {content.plansTitle}
           </h2>
@@ -106,7 +106,7 @@ export default async function ProductPage({
             {content.plans.map((plan) => (
               <div
                 key={plan.name}
-                className="flex flex-col rounded-2xl border border-line bg-card p-8"
+                className="flex flex-col rounded-2xl border border-line bg-card p-6 sm:p-8"
               >
                 <h3 className="m-0 mb-1 text-[19px] font-bold text-ink">
                   {plan.name}
@@ -140,7 +140,7 @@ export default async function ProductPage({
         </section>
 
         {/* FAQ */}
-        <section id="faq" className="border-y border-line bg-subtle px-8 py-14">
+        <section id="faq" className="border-y border-line bg-subtle px-6 sm:px-8 py-14">
           <div className="mx-auto max-w-[768px]">
             <h2 className="m-0 mb-8 text-center text-[clamp(1.75rem,3vw,2.25rem)] font-bold tracking-[-0.02em] text-ink">
               {content.faqTitle}
@@ -149,11 +149,11 @@ export default async function ProductPage({
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1024px] px-8 py-16 text-center">
+        <section className="mx-auto max-w-[1024px] px-6 sm:px-8 py-16 text-center">
           <h2 className="m-0 mb-4 text-[clamp(1.6rem,2.5vw,2rem)] font-bold text-ink">
             {content.closing.title}
           </h2>
-          <Button href={path(locale, "/contact")} className="px-8">
+          <Button href={path(locale, "/contact")} className="px-6 sm:px-8">
             {content.closing.cta}
           </Button>
         </section>

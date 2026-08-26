@@ -23,7 +23,7 @@ export default function ContactForm({ t }: { t: ContactLabels }) {
 
   if (submitted) {
     return (
-      <div className="rounded-2xl border border-line bg-card p-12 text-center">
+      <div className="rounded-2xl border border-line bg-card p-8 text-center sm:p-12">
         <Icon
           name="check"
           size={32}
@@ -47,7 +47,7 @@ export default function ContactForm({ t }: { t: ContactLabels }) {
         // No submission endpoint exists yet — see the note in the handover.
         setSubmitted(true);
       }}
-      className="flex flex-col gap-[18px] rounded-2xl border border-line bg-card p-8"
+      className="flex flex-col gap-[18px] rounded-2xl border border-line bg-card p-6 sm:p-8"
     >
       <div>
         <label

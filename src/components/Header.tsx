@@ -42,8 +42,12 @@ export default function Header({
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-40 border-b border-line bg-paper/[0.86] backdrop-blur-[10px]">
-        <div className="flex flex-wrap items-center justify-between gap-6 px-6 py-4 md:px-10">
+      {/* Sticky, not fixed: the bar wraps to two rows on narrow screens, and a
+          sticky element reserves its own flow space. The previous fixed header
+          sat above a hard-coded 72px spacer, so once it wrapped it covered the
+          top 39-75px of every page. */}
+      <header className="sticky top-0 z-40 border-b border-line bg-paper/[0.86] backdrop-blur-[10px]">
+        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-6 py-3.5 sm:py-4 md:px-10">
           <Link href={nav[0].href} aria-label="Dobby AI" className="flex items-center">
             <Logo
               variant={scrolled ? "mark" : "wordmark"}
@@ -52,8 +56,8 @@ export default function Header({
             />
           </Link>
 
-          <div className="flex items-center gap-5 sm:gap-9">
-            <nav className="flex flex-wrap items-center gap-5 sm:gap-7">
+          <div className="flex items-center gap-4 sm:gap-9">
+            <nav className="flex flex-wrap items-center gap-4 sm:gap-7">
               {nav.map((item) => {
                 const isActive = item.key === active;
                 return (
@@ -61,7 +65,7 @@ export default function Header({
                     key={item.key}
                     href={item.href}
                     aria-current={isActive ? "page" : undefined}
-                    className={`text-[14.5px] transition-colors duration-150 ease-standard ${
+                    className={`text-[13.5px] whitespace-nowrap transition-colors duration-150 ease-standard sm:text-[14.5px] ${
                       isActive
                         ? "font-bold text-ink"
                         : "font-medium text-secondary hover:text-ink"
@@ -76,7 +80,6 @@ export default function Header({
           </div>
         </div>
       </header>
-      <div className="h-[72px]" />
     </>
   );
 }

@@ -17,7 +17,7 @@ export default function NotFound() {
   const t = getDictionary(locale).notFound;
 
   return (
-    <main className="flex min-h-[60vh] flex-col items-center justify-center px-8 py-20 text-center">
+    <main className="flex min-h-[60vh] flex-col items-center justify-center px-6 sm:px-8 py-20 text-center">
       <p
         aria-hidden
         className="m-0 text-[clamp(4rem,10vw,7rem)] leading-none font-extrabold tracking-[-0.03em] text-sage-200"

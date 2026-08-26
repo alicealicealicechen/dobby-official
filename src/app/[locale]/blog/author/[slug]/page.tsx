@@ -75,7 +75,7 @@ export default async function AuthorPage({
       />
 
       <main>
-        <section className="mx-auto max-w-[1200px] px-8 pt-10 pb-2">
+        <section className="mx-auto max-w-[1200px] px-6 sm:px-8 pt-10 pb-2">
           <p className="mb-2.5 text-[12.5px] font-semibold tracking-[0.03em] text-orange-700">
             {t.blog.author}
           </p>
@@ -92,7 +92,7 @@ export default async function AuthorPage({
           </p>
         </section>
 
-        <section className="mx-auto max-w-[1200px] px-8 pb-16">
+        <section className="mx-auto max-w-[1200px] px-6 sm:px-8 pb-16">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => {
               const category = resolveCategory(categories, post.category);

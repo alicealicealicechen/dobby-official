@@ -68,20 +68,20 @@ export default function BlogIndex({
 
   return (
     <>
-      <section className="mx-auto max-w-[1200px] px-8 pt-12 pb-2">
+      <section className="mx-auto max-w-[1200px] px-6 sm:px-8 pt-12 pb-2">
         <p className="mb-4 font-mono text-[12.5px] font-bold tracking-[0.14em] text-primary uppercase">
           {t.eyebrow}
         </p>
         <div className="mb-8 flex flex-wrap items-end justify-between gap-6">
           <div>
-            <h1 className="m-0 mb-2.5 text-[clamp(2.2rem,4vw,3rem)] font-extrabold tracking-[-0.02em] text-ink">
+            <h1 className="m-0 mb-2.5 text-[clamp(1.9rem,4vw,3rem)] font-extrabold tracking-[-0.02em] text-ink">
               {t.title}
             </h1>
             <p className="m-0 text-[16px] text-secondary">
               {t.lede}
             </p>
           </div>
-          <div className="relative w-[280px] max-w-full">
+          <div className="relative w-full sm:w-[280px]">
             <Icon
               name="search"
               size={16}
@@ -103,7 +103,7 @@ export default function BlogIndex({
       </section>
 
       {showFeatured && featured && (
-        <section className="mx-auto max-w-[1200px] px-8 pb-10">
+        <section className="mx-auto max-w-[1200px] px-6 sm:px-8 pb-10">
           <Link
             href={path(locale, `/blog/${featured.slug}`)}
             className="grid overflow-hidden rounded-[20px] border border-line bg-card shadow-md lg:grid-cols-[1.1fr_1fr]"
@@ -111,7 +111,7 @@ export default function BlogIndex({
             <div className="flex min-h-[280px] items-center justify-center bg-sage-700 p-8">
               <Logo variant="mark" invert className="h-16 opacity-35" />
             </div>
-            <div className="flex flex-col justify-center p-[clamp(28px,4vw,44px)]">
+            <div className="flex flex-col justify-center p-6 sm:p-[clamp(28px,4vw,44px)]">
               <p className="mb-3.5 font-mono text-[11.5px] font-bold tracking-[0.06em] text-primary">
                 {t.featured} · {label(featured.category)}
               </p>
@@ -133,7 +133,7 @@ export default function BlogIndex({
         </section>
       )}
 
-      <section className="mx-auto max-w-[1200px] px-8 pb-4">
+      <section className="mx-auto max-w-[1200px] px-6 sm:px-8 pb-4">
         {pageItems.length === 0 ? (
           <p className="py-12 text-center text-[15px] text-muted">
             {t.noResults.replace("{q}", query)}
@@ -180,7 +180,7 @@ export default function BlogIndex({
       {totalPages > 1 && (
         <nav
           aria-label={t.pagination}
-          className="mx-auto flex max-w-[1200px] justify-center gap-2 px-8 pt-2 pb-[72px]"
+          className="mx-auto flex max-w-[1200px] justify-center gap-2 px-6 sm:px-8 pt-2 pb-[72px]"
         >
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
             const isCurrent = n === current;

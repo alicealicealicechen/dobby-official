@@ -89,7 +89,7 @@ export default async function BlogPostPage({
       />
 
       <main>
-        <article className="mx-auto max-w-[1200px] px-8 pt-8 pb-6">
+        <article className="mx-auto max-w-[1200px] px-6 sm:px-8 pt-8 pb-6">
           <Link
             href={path(locale, `/blog/category/${category.slug}`)}
             className="mb-3.5 inline-block text-[12.5px] font-semibold tracking-[0.03em]"
@@ -97,7 +97,7 @@ export default async function BlogPostPage({
           >
             {category.title}
           </Link>
-          <h1 className="m-0 mb-5 max-w-[760px] text-[clamp(2rem,3.5vw,2.75rem)] font-bold tracking-[-0.02em] text-ink">
+          <h1 className="m-0 mb-5 max-w-[760px] text-[clamp(1.7rem,3.5vw,2.75rem)] font-bold tracking-[-0.02em] text-ink">
             {post.title}
           </h1>
           <div className="mb-8 flex flex-wrap items-center gap-4 text-[13.5px] text-muted">
@@ -121,12 +121,12 @@ export default async function BlogPostPage({
               width={1200}
               height={280}
               sizes="(max-width: 1200px) 100vw, 1136px"
-              className="mb-10 block h-[280px] w-full rounded-2xl object-cover"
+              className="mb-10 block h-[180px] w-full rounded-2xl object-cover sm:h-[280px]"
             />
           )}
         </article>
 
-        <section className="mx-auto grid max-w-[1200px] items-start gap-14 px-8 pb-16 lg:grid-cols-[220px_1fr]">
+        <section className="mx-auto grid max-w-[1200px] items-start gap-14 px-6 sm:px-8 pb-16 lg:grid-cols-[220px_1fr]">
           <nav
             aria-label={t.blog.toc}
             className="top-24 hidden flex-col gap-2.5 rounded-xl border border-line bg-card p-5 lg:sticky lg:flex"
@@ -175,7 +175,7 @@ export default async function BlogPostPage({
         </section>
 
         {related.length > 0 && (
-          <section className="mx-auto max-w-[1200px] px-8 pb-[72px]">
+          <section className="mx-auto max-w-[1200px] px-6 sm:px-8 pb-[72px]">
             <h2 className="m-0 mb-5 text-[20px] font-bold text-ink">
               {t.blog.related}
             </h2>

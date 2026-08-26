@@ -69,7 +69,7 @@ export default async function BlogCategoryPage({
       />
 
       <main>
-        <section className="mx-auto max-w-[1200px] px-8 pt-10 pb-2">
+        <section className="mx-auto max-w-[1200px] px-6 sm:px-8 pt-10 pb-2">
           <p className="mb-2.5 text-[12.5px] font-semibold tracking-[0.03em] text-orange-700">
             {t.blog.category}
           </p>
@@ -82,7 +82,7 @@ export default async function BlogCategoryPage({
           </p>
         </section>
 
-        <section className="mx-auto max-w-[1200px] px-8 pb-16">
+        <section className="mx-auto max-w-[1200px] px-6 sm:px-8 pb-16">
           {posts.length === 0 ? (
             <p className="py-12 text-center text-[15px] text-muted">
               {t.blog.emptyCategory}

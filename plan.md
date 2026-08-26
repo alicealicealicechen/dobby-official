@@ -23,7 +23,7 @@
 
 ### 任務清單
 
-- [ ] 註冊 Sanity 帳號,建立專案(Free 方案起步)
+- [x] 註冊 Sanity 帳號,建立專案(Free 方案起步)
 - [ ] Vercel 專案確認(已有前端 repo 即可直接連)
 - [ ] 網域 DNS 指向 Vercel(A record / CNAME,約 10 分鐘)
 - [ ] 建立三個環境:`production` / `preview`(Vercel PR 自動產生)/ 本地開發

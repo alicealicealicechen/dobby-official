@@ -25,22 +25,22 @@ export default async function Home({
   return (
     <main>
       {/* HERO */}
-      <section className="relative mx-auto flex min-h-[calc(100vh-232px)] max-w-[1520px] flex-col justify-center overflow-hidden px-8">
+      <section className="relative mx-auto flex min-h-[78svh] max-w-[1520px] flex-col justify-center overflow-hidden px-6 sm:px-8">
         <div
           aria-hidden
           className="hero-blob pointer-events-none absolute top-[10%] -right-[10%] z-0 h-[560px] w-[560px] rounded-full bg-orange-100 opacity-70 blur-[70px]"
         />
         <div className="relative z-10 py-20">
-          <p className="mb-7 font-mono text-[16px] font-semibold tracking-[0.14em] text-primary">
+          <p className="mb-5 font-mono text-[12.5px] font-semibold tracking-[0.14em] text-primary sm:mb-7 sm:text-[16px]">
             {hero.eyebrow}
           </p>
-          <h1 className="m-0 mb-8 text-[clamp(3rem,8vw,6.2rem)] leading-[0.98] font-extrabold tracking-[-0.04em] text-ink">
+          <h1 className="m-0 mb-8 text-[clamp(2.25rem,8vw,6.2rem)] leading-[1.02] sm:leading-[0.98] font-extrabold tracking-[-0.04em] text-ink">
             {hero.titleLead}
             <br />
             {hero.titleRest}
             <span className="text-primary">{hero.highlight}</span>
           </h1>
-          <p className="m-0 max-w-[480px] text-[19px] leading-[1.6] text-secondary">
+          <p className="m-0 max-w-[480px] text-[17px] leading-[1.65] text-secondary sm:text-[19px]">
             {hero.lede}
           </p>
         </div>
@@ -48,7 +48,7 @@ export default async function Home({
 
       {/* STATS BAND */}
       <section className="w-full bg-ink">
-        <div className="mx-auto max-w-[1520px] px-8 py-[clamp(48px,7vw,72px)] text-center">
+        <div className="mx-auto max-w-[1520px] px-6 py-[clamp(48px,7vw,72px)] sm:px-8 text-center">
           <h2 className="mb-5 text-[clamp(1.6rem,3vw,2.4rem)] font-bold tracking-[-0.02em] text-white">
             {band.title}
           </h2>
@@ -66,7 +66,7 @@ export default async function Home({
       </section>
 
       {/* SELLING POINTS */}
-      <section className="mx-auto max-w-[1520px] px-8 py-[clamp(64px,9vw,104px)]">
+      <section className="mx-auto max-w-[1520px] px-6 py-[clamp(64px,9vw,104px)] sm:px-8">
         <h2 className="m-0 mb-12 max-w-[640px] text-[clamp(1.75rem,3.2vw,2.4rem)] font-bold tracking-[-0.02em] text-ink">
           {content.pointsTitle}
         </h2>
@@ -74,19 +74,19 @@ export default async function Home({
           {points.map((point, i) => (
             <li
               key={point.title}
-              className="flex items-baseline gap-8 border-b border-line py-7 last:border-b-0"
+              className="flex items-baseline gap-4 border-b border-line py-6 last:border-b-0 sm:gap-8 sm:py-7"
             >
               <span
                 aria-hidden
-                className="w-[100px] shrink-0 text-[clamp(2rem,4vw,3rem)] font-light text-line"
+                className="w-12 shrink-0 text-[clamp(1.75rem,4vw,3rem)] font-light text-line sm:w-[100px]"
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <div className="flex flex-1 flex-wrap justify-between gap-6">
-                <h3 className="m-0 min-w-[220px] text-[22px] font-bold text-ink">
+              <div className="flex min-w-0 flex-1 flex-wrap justify-between gap-2 sm:gap-6">
+                <h3 className="m-0 text-[19px] font-bold text-ink sm:min-w-[220px] sm:text-[22px]">
                   {point.title}
                 </h3>
-                <p className="m-0 max-w-[480px] text-[17px] leading-[1.7] text-secondary">
+                <p className="m-0 max-w-[480px] text-[15px] leading-[1.7] text-secondary sm:text-[17px]">
                   {point.body}
                 </p>
               </div>
@@ -96,8 +96,8 @@ export default async function Home({
       </section>
 
       {/* BOTTOM CTA */}
-      <section className="mx-auto flex max-w-[1520px] items-center px-8 py-8">
-        <div className="relative mx-auto flex w-full max-w-[1300px] items-center justify-center overflow-hidden rounded-[24px] border border-line bg-card px-8 py-[clamp(56px,9vw,96px)] text-center shadow-lg lg:min-h-[620px]">
+      <section className="mx-auto flex max-w-[1520px] items-center px-6 py-8 sm:px-8">
+        <div className="relative mx-auto flex w-full max-w-[1300px] items-center justify-center overflow-hidden rounded-[24px] border border-line bg-card px-6 py-[clamp(56px,9vw,96px)] sm:px-8 text-center shadow-lg lg:min-h-[620px]">
           <div
             aria-hidden
             className="pointer-events-none absolute -top-[20%] left-1/2 z-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-orange-100 opacity-60 blur-[90px]"

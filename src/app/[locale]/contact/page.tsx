@@ -44,7 +44,7 @@ export default async function ContactPage({
       />
 
       <main>
-        <section className="mx-auto max-w-[1200px] px-8 pt-10 pb-20">
+        <section className="mx-auto max-w-[1200px] px-6 sm:px-8 pt-10 pb-20">
           <div className="mb-12 text-center">
             <h1 className="m-0 mb-3 text-[clamp(2rem,3.5vw,2.5rem)] font-bold tracking-[-0.02em] text-ink">
               {t.contact.title}
