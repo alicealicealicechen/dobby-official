@@ -1,26 +1,247 @@
 @import "tailwindcss";
 
+/* ============================================================
+   Dobby design system — imported from the Claude Design project
+   "Dobby AI 官網優化設計". Terracotta + sage on warm paper.
+   Deliberately not a cool blue/purple "AI startup" palette.
+
+   Single theme by design: the system defines no dark palette,
+   so there is no prefers-color-scheme block here.
+   ============================================================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  /* ---- Brand: terracotta / orange (primary) ---- */
+  --orange-900: #682d03;
+  --orange-700: #a03910;
+  --orange-600: #c04a13;
+  --orange-500: #be6840;
+  --orange-400: #d06c3e;
+  --orange-300: #fb6c29;
+  --orange-200: #e9d1be;
+  --orange-100: #f4e4d7;
+  --orange-50: #f8efe7;
+
+  /* ---- Brand: sage / olive (secondary) ---- */
+  --sage-700: #615e4e;
+  --sage-600: #807a5d;
+  --sage-500: #989065;
+  --sage-400: #b5ac7b;
+  --sage-300: #bfc087;
+  --sage-200: #d8d9b3;
+
+  /* ---- Warm paper neutrals — no pure-cool grey anywhere ---- */
+  --neutral-900: #1e1e1e;
+  --neutral-850: #2c2c2c;
+  --neutral-700: #484747;
+  --neutral-600: #757575;
+  --neutral-400: #c2c2c2;
+  --neutral-300: #d4d2cb;
+  --neutral-200: #e0ddd5;
+  --neutral-150: #f3f2ea;
+  --neutral-100: #f9f8f4;
+  --white: #ffffff;
+
+  /* ---- Status ---- */
+  --error: #ef4444;
+  --success: #10b981;
+  --success-strong: #085a2e;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+
+  /* ---- Semantic aliases — prefer these in components ---- */
+  --brand: var(--orange-600);
+  --brand-hover: var(--orange-700);
+  --brand-light: var(--orange-400);
+  --brand-accent: var(--sage-700);
+
+  --text-primary: var(--neutral-850);
+  --text-secondary: var(--neutral-700);
+  --text-muted: var(--neutral-600);
+  --text-on-primary: var(--orange-50);
+  --text-emphasis: var(--orange-900);
+
+  --surface-bg: var(--neutral-100);
+  --surface-card: var(--white);
+  --surface-subtle: var(--neutral-150);
+  --surface-inverse: var(--neutral-850);
+
+  --border-default: var(--neutral-400);
+  --border-subtle: var(--neutral-300);
+  --border-strong: var(--neutral-700);
+
+  /* ---- Radii ---- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 15px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+
+  /* ---- Shadows — low, warm, never harsh ---- */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --ring-focus: 0 0 0 3px rgba(208, 108, 62, 0.35);
+
+  /* ---- Motion — restrained and functional ---- */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 150ms;
+  --dur-base: 300ms;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-orange-900: var(--orange-900);
+  --color-orange-700: var(--orange-700);
+  --color-orange-600: var(--orange-600);
+  --color-orange-400: var(--orange-400);
+  --color-orange-200: var(--orange-200);
+  --color-orange-100: var(--orange-100);
+  --color-orange-50: var(--orange-50);
+
+  --color-sage-700: var(--sage-700);
+  --color-sage-600: var(--sage-600);
+  --color-sage-200: var(--sage-200);
+
+  --color-ink: var(--neutral-900);
+  --color-ink-2: var(--neutral-850);
+  --color-muted: var(--neutral-600);
+  --color-secondary: var(--neutral-700);
+
+  --color-paper: var(--neutral-100);
+  --color-subtle: var(--neutral-150);
+  --color-card: var(--white);
+  --color-line: var(--neutral-300);
+  --color-line-2: var(--neutral-400);
+  --color-line-soft: var(--neutral-200);
+
+  --color-primary: var(--brand);
+  --color-primary-hover: var(--brand-hover);
+  --color-primary-light: var(--brand-light);
+  --color-on-primary: var(--text-on-primary);
+  --color-success-strong: var(--success-strong);
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+
+  --ease-standard: var(--ease-standard);
+
+  --font-sans: var(--font-inter), var(--font-noto-tc), ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-roboto-mono), ui-monospace, SFMono-Regular, Menlo,
+    Monaco, Consolas, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ============================================================
+   Base
+   ============================================================ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+  }
+
+  body {
+    margin: 0;
+    background: var(--surface-bg);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  /* Layered so a utility class like `text-on-primary` still wins on a link.
+     Unlayered element selectors outrank Tailwind's utility layer. */
+  a {
+    color: var(--brand);
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-standard);
+  }
+
+  a:hover {
+    color: var(--brand-hover);
+  }
+
+  ::selection {
+    background: var(--orange-100);
+    color: var(--neutral-900);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brand-light);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Warm scrollbar — track invisible until hover */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+*:hover {
+  scrollbar-color: var(--neutral-300) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 4px;
+}
+*:hover::-webkit-scrollbar-thumb {
+  background: var(--neutral-300);
+}
+
+/* ============================================================
+   Motion — the system calls for colour shifts on press, never
+   scale transforms. The only ambient motion is the hero blob.
+   ============================================================ */
+@keyframes heroDrift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(50px, -30px) scale(1.08);
+  }
+  100% {
+    transform: translate(-40px, 25px) scale(1);
+  }
+}
+
+.hero-blob {
+  animation: heroDrift 16s var(--ease-standard) infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
 }
