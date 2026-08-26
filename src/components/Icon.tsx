@@ -62,6 +62,13 @@ const PATHS = {
       <path d="m9.5 9.5 5 5M14.5 9.5l-5 5" />
     </>
   ),
+  lock: (
+    <>
+      <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5" />
+      <path d="M8 10.5V7.75a4 4 0 0 1 8 0v2.75" />
+      <circle cx="12" cy="15.25" r="1.15" />
+    </>
+  ),
   chevronRight: <path d="m9.5 5.5 6.5 6.5-6.5 6.5" />,
   chevronDown: <path d="m5.5 9.5 6.5 6.5 6.5-6.5" />,
 } as const;

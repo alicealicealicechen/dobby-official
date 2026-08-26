@@ -155,9 +155,9 @@ const PRODUCT: Record<Locale, ProductContent> = {
           body: "PDF、Word、圖片、表格皆可在地端完成解析與索引。",
         },
         {
-          icon: "dualChat",
-          title: "雙模型交叉驗證",
-          body: "關鍵決策場景可啟用雙模型比對，降低單一模型誤判。",
+          icon: "lock",
+          title: "完整權限管理",
+          body: "依部門與專案設定存取範圍，確保每個人只看得到該看的資料。",
         },
         {
           icon: "edit",
@@ -238,9 +238,9 @@ const PRODUCT: Record<Locale, ProductContent> = {
           body: "PDFs, Word files, images and tables are parsed and indexed entirely on your own hardware.",
         },
         {
-          icon: "dualChat",
-          title: "Dual-model cross-checking",
-          body: "For high-stakes decisions, two models compare results to cut single-model error.",
+          icon: "lock",
+          title: "Full permission management",
+          body: "Scope access by department and project, so people only ever see what they should.",
         },
         {
           icon: "edit",
