@@ -85,7 +85,7 @@ const SITE: Record<Locale, SiteSettings> = {
       "3F.-3, No. 262, Sec. 2, Beixin Rd.,",
       "Xindian Dist., New Taipei City, Taiwan",
     ],
-    linkedin: "https://www.linkedin.com/",
+    linkedin: "https://www.linkedin.com/company/dobbyai-co",
   },
   en: {
     name: "Dobby AI",
@@ -98,7 +98,7 @@ const SITE: Record<Locale, SiteSettings> = {
       "3F.-3, No. 262, Sec. 2, Beixin Rd.,",
       "Xindian Dist., New Taipei City, Taiwan",
     ],
-    linkedin: "https://www.linkedin.com/",
+    linkedin: "https://www.linkedin.com/company/dobbyai-co",
   },
 };
 

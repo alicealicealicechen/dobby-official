@@ -51,7 +51,6 @@ const dictionaries = {
       legal: "法律",
       privacy: "隱私權政策",
       terms: "服務條款",
-      rights: "版權所有",
     },
     blog: {
       eyebrow: "Blog",
@@ -109,7 +108,6 @@ const dictionaries = {
       legal: "Legal",
       privacy: "Privacy policy",
       terms: "Terms of service",
-      rights: "All rights reserved",
     },
     blog: {
       eyebrow: "Blog",

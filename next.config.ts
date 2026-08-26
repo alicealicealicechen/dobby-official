@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Hides the floating dev-tools badge in the corner during `next dev`.
+  devIndicators: false,
+
   images: {
     // Post images are served from the Sanity asset CDN.
     remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Logo from "./Logo";
 import { getSiteSettings } from "@/lib/content";
-import { getDictionary, getNav, path, type Locale } from "@/lib/i18n";
+import { getDictionary, getNav, type Locale } from "@/lib/i18n";
 
 export default async function Footer({ locale }: { locale: Locale }) {
   const site = await getSiteSettings(locale);
@@ -11,7 +11,7 @@ export default async function Footer({ locale }: { locale: Locale }) {
 
   return (
     <footer className="bg-[#2c2c2c] text-[#d4d2cb]">
-      <div className="mx-auto grid max-w-[1520px] gap-10 px-6 pt-14 pb-8 sm:grid-cols-2 sm:px-8 sm:pt-16 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div className="mx-auto grid max-w-[1520px] gap-10 px-6 pt-14 pb-8 sm:grid-cols-2 sm:px-8 sm:pt-16 lg:grid-cols-[1.6fr_1fr_1fr]">
         <div>
           <Logo invert className="mb-4 h-[18px]" />
           <p className="m-0 max-w-[260px] text-sm leading-[1.7] text-[#a8a49a]">
@@ -41,14 +41,18 @@ export default async function Footer({ locale }: { locale: Locale }) {
           </FooterLink>
         </FooterColumn>
 
+        {/* Parked until the privacy and terms pages exist — /privacy and
+            /terms have no route, so these linked to a 404. Restoring this also
+            needs `path` back in the i18n import above.
         <FooterColumn title={t.legal}>
           <FooterLink href={path(locale, "/privacy")}>{t.privacy}</FooterLink>
           <FooterLink href={path(locale, "/terms")}>{t.terms}</FooterLink>
         </FooterColumn>
+        */}
       </div>
 
       <div className="mx-auto max-w-[1520px] border-t border-[#484747] px-6 sm:px-8 py-6 text-[13px] text-[#757575]">
-        © {year} {site.name}. {t.rights}.
+        © {year} {site.name}. All rights reserved.
       </div>
     </footer>
   );
