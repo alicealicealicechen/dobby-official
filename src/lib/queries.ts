@@ -1,5 +1,10 @@
 import { groq } from "next-sanity";
 
+/**
+ * Every query filters on `language` — Sanity translates at document level, so
+ * a zh post and its en counterpart are two documents sharing a slug.
+ */
+
 /** Shared SEO projection — matches the `seo` object in sanity/schemaTypes. */
 const SEO = groq`seo{metaTitle, metaDescription, canonicalUrl, noIndex, "ogImage": ogImage.asset->url}`;
 
@@ -16,21 +21,19 @@ const POST_FIELDS = groq`
 `;
 
 export const siteSettingsQuery = groq`
-  *[_type == "siteSettings"][0]{
+  *[_type == "siteSettings" && language == $locale][0]{
     "name": siteName,
     tagline,
     description,
     url,
     email,
     address,
-    linkedin,
-    nav[]{ "key": key, label, href },
-    footerLegal[]{ label, href }
+    linkedin
   }
 `;
 
 export const categoriesQuery = groq`
-  *[_type == "category"] | order(order asc){
+  *[_type == "category" && language == $locale] | order(order asc){
     title,
     "slug": slug.current,
     description,
@@ -39,7 +42,7 @@ export const categoriesQuery = groq`
 `;
 
 export const categoryQuery = groq`
-  *[_type == "category" && slug.current == $slug][0]{
+  *[_type == "category" && slug.current == $slug && language == $locale][0]{
     title,
     "slug": slug.current,
     description,
@@ -48,25 +51,25 @@ export const categoryQuery = groq`
 `;
 
 export const postsQuery = groq`
-  *[_type == "post" && !(${SEO}.noIndex == true)] | order(publishedAt desc){
+  *[_type == "post" && language == $locale && seo.noIndex != true] | order(publishedAt desc){
     ${POST_FIELDS}
   }
 `;
 
 export const postQuery = groq`
-  *[_type == "post" && slug.current == $slug][0]{
+  *[_type == "post" && slug.current == $slug && language == $locale][0]{
     ${POST_FIELDS}
   }
 `;
 
 export const postsByCategoryQuery = groq`
-  *[_type == "post" && $slug in categories[]->slug.current] | order(publishedAt desc){
+  *[_type == "post" && language == $locale && $slug in categories[]->slug.current] | order(publishedAt desc){
     ${POST_FIELDS}
   }
 `;
 
 export const authorQuery = groq`
-  *[_type == "author" && slug.current == $slug][0]{
+  *[_type == "author" && slug.current == $slug && language == $locale][0]{
     name,
     "slug": slug.current,
     bio,
@@ -75,7 +78,7 @@ export const authorQuery = groq`
 `;
 
 export const pageQuery = groq`
-  *[_type == "page" && slug.current == $slug][0]{
+  *[_type == "page" && slug.current == $slug && language == $locale][0]{
     title,
     "slug": slug.current,
     sections,
@@ -85,7 +88,7 @@ export const pageQuery = groq`
 
 /** Every indexable route, for app/sitemap.ts. */
 export const sitemapQuery = groq`{
-  "posts": *[_type == "post" && defined(slug.current)]{ "slug": slug.current, "updatedAt": _updatedAt },
+  "posts": *[_type == "post" && defined(slug.current)]{ "slug": slug.current, language, "updatedAt": _updatedAt },
   "categories": *[_type == "category" && defined(slug.current)]{ "slug": slug.current, "updatedAt": _updatedAt },
   "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, "updatedAt": _updatedAt }
 }`;

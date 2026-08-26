@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import Breadcrumb from "@/components/Breadcrumb";
 import Icon from "@/components/Icon";
 import {
@@ -12,6 +10,7 @@ import {
   getSiteSettings,
   resolveCategory,
 } from "@/lib/content";
+import { getDictionary, locales, path, toLocale } from "@/lib/i18n";
 
 export const revalidate = 60;
 
@@ -20,48 +19,57 @@ export const revalidate = 60;
  * layout — the closest pattern in the system — to stay consistent.
  */
 export async function generateStaticParams() {
-  const author = await getAuthor();
-  return author ? [{ slug: author.slug }] : [];
+  const params = await Promise.all(
+    locales.map(async (locale) => {
+      const author = await getAuthor(locale);
+      return author ? [{ locale, slug: author.slug }] : [];
+    }),
+  );
+  return params.flat();
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const author = await getAuthor(slug);
+  const { locale: rawLocale, slug } = await params;
+  const locale = toLocale(rawLocale);
+  const author = await getAuthor(locale, slug);
   if (!author) return {};
 
   return {
-    title: `${author.name} · 部落格`,
+    title: `${author.name} · ${getDictionary(locale).blog.title}`,
     description: author.bio,
+    alternates: { canonical: path(locale, `/blog/author/${slug}`) },
   };
 }
 
 export default async function AuthorPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { locale: rawLocale, slug } = await params;
+  const locale = toLocale(rawLocale);
   const [site, author, posts, categories] = await Promise.all([
-    getSiteSettings(),
-    getAuthor(slug),
-    getPosts(),
-    getCategories(),
+    getSiteSettings(locale),
+    getAuthor(locale, slug),
+    getPosts(locale),
+    getCategories(locale),
   ]);
 
   if (!author) notFound();
 
+  const t = getDictionary(locale);
+
   return (
     <>
-      <Header nav={site.nav} active="blog" />
       <Breadcrumb
         baseUrl={site.url}
         items={[
-          { label: "首頁", href: "/" },
-          { label: "部落格", href: "/blog" },
+          { label: t.breadcrumb.home, href: path(locale) },
+          { label: t.breadcrumb.blog, href: path(locale, "/blog") },
           { label: author.name },
         ]}
       />
@@ -69,7 +77,7 @@ export default async function AuthorPage({
       <main>
         <section className="mx-auto max-w-[1200px] px-8 pt-10 pb-2">
           <p className="mb-2.5 text-[12.5px] font-semibold tracking-[0.03em] text-orange-700">
-            作者
+            {t.blog.author}
           </p>
           <h1 className="m-0 mb-3 text-[clamp(2rem,3.5vw,2.5rem)] font-bold tracking-[-0.02em] text-ink">
             {author.name}
@@ -80,7 +88,7 @@ export default async function AuthorPage({
             </p>
           )}
           <p className="m-0 mb-8 text-[15px] text-muted">
-            共 {posts.length} 篇文章
+            {t.blog.postCount(posts.length)}
           </p>
         </section>
 
@@ -91,7 +99,7 @@ export default async function AuthorPage({
               return (
                 <Link
                   key={post.slug}
-                  href={`/blog/${post.slug}`}
+                  href={path(locale, `/blog/${post.slug}`)}
                   className="flex flex-col overflow-hidden rounded-2xl border border-line bg-card shadow-sm"
                 >
                   <span
@@ -125,8 +133,6 @@ export default async function AuthorPage({
           </div>
         </section>
       </main>
-
-      <Footer />
     </>
   );
 }

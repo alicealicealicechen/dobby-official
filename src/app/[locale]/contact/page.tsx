@@ -1,42 +1,61 @@
 import type { Metadata } from "next";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import Breadcrumb from "@/components/Breadcrumb";
 import ContactForm from "@/components/ContactForm";
 import Icon from "@/components/Icon";
 import JsonLd from "@/components/JsonLd";
 import { getSiteSettings } from "@/lib/content";
 import { organizationSchema } from "@/lib/schemas";
+import { getDictionary, path, toLocale } from "@/lib/i18n";
 
-export const metadata: Metadata = {
-  title: "聯絡我們",
-  description: "讓我們一起評估，如何在你的環境中安全地導入 AI。",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  const locale = toLocale(rawLocale);
+  const t = getDictionary(locale).contact;
 
-export default async function ContactPage() {
-  const site = await getSiteSettings();
+  return {
+    title: t.title,
+    description: t.lede,
+    alternates: { canonical: path(locale, "/contact") },
+  };
+}
+
+export default async function ContactPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: rawLocale } = await params;
+  const locale = toLocale(rawLocale);
+  const site = await getSiteSettings(locale);
+  const t = getDictionary(locale);
 
   return (
     <>
-      <Header nav={site.nav} active="contact" />
       <Breadcrumb
         baseUrl={site.url}
-        items={[{ label: "首頁", href: "/" }, { label: "聯絡我們" }]}
+        items={[
+          { label: t.breadcrumb.home, href: path(locale) },
+          { label: t.breadcrumb.contact },
+        ]}
       />
 
       <main>
         <section className="mx-auto max-w-[1200px] px-8 pt-10 pb-20">
           <div className="mb-12 text-center">
             <h1 className="m-0 mb-3 text-[clamp(2rem,3.5vw,2.5rem)] font-bold tracking-[-0.02em] text-ink">
-              聯絡我們
+              {t.contact.title}
             </h1>
             <p className="m-0 text-[16px] text-secondary">
-              讓我們一起評估，如何在你的環境中安全地導入 AI
+              {t.contact.lede}
             </p>
           </div>
 
           <div className="mx-auto grid max-w-[960px] gap-12 lg:grid-cols-[1.2fr_1fr]">
-            <ContactForm />
+            <ContactForm t={t.contact} />
 
             <div className="flex flex-col gap-6">
               <div className="flex gap-3">
@@ -84,7 +103,7 @@ export default async function ContactPage() {
                 />
                 <div>
                   <h2 className="m-0 mb-1 text-sm font-semibold text-ink">
-                    地址
+                    {t.contact.address}
                   </h2>
                   <p className="m-0 text-sm leading-[1.7] text-secondary">
                     {site.address.map((line) => (
@@ -99,8 +118,6 @@ export default async function ContactPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
 
       <JsonLd schema={organizationSchema(site)} />
     </>

@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 
-export default function ShareActions() {
+export default function ShareActions({
+  t,
+}: {
+  t: { copyLink: string; copied: string; shareLinkedIn: string };
+}) {
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
@@ -31,10 +35,10 @@ export default function ShareActions() {
   return (
     <div className="mt-10 flex gap-3 border-t border-line pt-6">
       <button type="button" onClick={copy} className={style}>
-        {copied ? "已複製連結" : "複製連結"}
+        {copied ? t.copied : t.copyLink}
       </button>
       <button type="button" onClick={shareLinkedIn} className={style}>
-        分享至 LinkedIn
+        {t.shareLinkedIn}
       </button>
     </div>
   );

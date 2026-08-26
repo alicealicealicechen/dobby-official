@@ -5,17 +5,35 @@ import { useMemo, useState } from "react";
 import Icon from "./Icon";
 import Logo from "./Logo";
 import type { Category, Post } from "@/lib/content";
+import { path, type Locale } from "@/lib/i18n";
 
 const PER_PAGE = 3;
+
+export type BlogIndexLabels = {
+  eyebrow: string;
+  title: string;
+  lede: string;
+  searchPlaceholder: string;
+  searchLabel: string;
+  featured: string;
+  /** Contains a `{q}` placeholder — dictionary functions cannot cross the
+      server/client boundary, so the template is interpolated here. */
+  noResults: string;
+  pagination: string;
+};
 
 export default function BlogIndex({
   posts,
   categories,
   authorName,
+  locale,
+  t,
 }: {
   posts: Post[];
   categories: Category[];
   authorName: string;
+  locale: Locale;
+  t: BlogIndexLabels;
 }) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -52,15 +70,15 @@ export default function BlogIndex({
     <>
       <section className="mx-auto max-w-[1200px] px-8 pt-12 pb-2">
         <p className="mb-4 font-mono text-[12.5px] font-bold tracking-[0.14em] text-primary uppercase">
-          Blog
+          {t.eyebrow}
         </p>
         <div className="mb-8 flex flex-wrap items-end justify-between gap-6">
           <div>
             <h1 className="m-0 mb-2.5 text-[clamp(2.2rem,4vw,3rem)] font-extrabold tracking-[-0.02em] text-ink">
-              部落格
+              {t.title}
             </h1>
             <p className="m-0 text-[16px] text-secondary">
-              地端 AI 導入的實務觀點與案例分享
+              {t.lede}
             </p>
           </div>
           <div className="relative w-[280px] max-w-full">
@@ -76,8 +94,8 @@ export default function BlogIndex({
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              placeholder="搜尋文章…"
-              aria-label="搜尋文章"
+              placeholder={t.searchPlaceholder}
+              aria-label={t.searchLabel}
               className="h-[42px] w-full rounded-full border border-line bg-card pr-4 pl-10 text-sm text-ink placeholder:text-muted"
             />
           </div>
@@ -87,7 +105,7 @@ export default function BlogIndex({
       {showFeatured && featured && (
         <section className="mx-auto max-w-[1200px] px-8 pb-10">
           <Link
-            href={`/blog/${featured.slug}`}
+            href={path(locale, `/blog/${featured.slug}`)}
             className="grid overflow-hidden rounded-[20px] border border-line bg-card shadow-md lg:grid-cols-[1.1fr_1fr]"
           >
             <div className="flex min-h-[280px] items-center justify-center bg-sage-700 p-8">
@@ -95,7 +113,7 @@ export default function BlogIndex({
             </div>
             <div className="flex flex-col justify-center p-[clamp(28px,4vw,44px)]">
               <p className="mb-3.5 font-mono text-[11.5px] font-bold tracking-[0.06em] text-primary">
-                精選文章 · {label(featured.category)}
+                {t.featured} · {label(featured.category)}
               </p>
               <h2 className="m-0 mb-3.5 text-[clamp(1.3rem,2.4vw,1.7rem)] leading-[1.35] font-bold tracking-[-0.01em] text-ink">
                 {featured.title}
@@ -118,14 +136,14 @@ export default function BlogIndex({
       <section className="mx-auto max-w-[1200px] px-8 pb-4">
         {pageItems.length === 0 ? (
           <p className="py-12 text-center text-[15px] text-muted">
-            找不到符合「{query}」的文章。
+            {t.noResults.replace("{q}", query)}
           </p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {pageItems.map((post) => (
               <Link
                 key={post.slug}
-                href={`/blog/${post.slug}`}
+                href={path(locale, `/blog/${post.slug}`)}
                 className="flex flex-col overflow-hidden rounded-2xl border border-line bg-card shadow-sm"
               >
                 <span
@@ -161,7 +179,7 @@ export default function BlogIndex({
 
       {totalPages > 1 && (
         <nav
-          aria-label="分頁"
+          aria-label={t.pagination}
           className="mx-auto flex max-w-[1200px] justify-center gap-2 px-8 pt-2 pb-[72px]"
         >
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {

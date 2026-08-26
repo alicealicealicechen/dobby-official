@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import Breadcrumb from "@/components/Breadcrumb";
 import Icon from "@/components/Icon";
 import JsonLd from "@/components/JsonLd";
@@ -17,29 +15,36 @@ import {
   resolveCategory,
 } from "@/lib/content";
 import { articleSchema } from "@/lib/schemas";
+import { getDictionary, locales, path, toLocale } from "@/lib/i18n";
 
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const posts = await getPosts();
-  return posts.map((post) => ({ slug: post.slug }));
+  const params = await Promise.all(
+    locales.map(async (locale) => {
+      const posts = await getPosts(locale);
+      return posts.map((post) => ({ locale, slug: post.slug }));
+    }),
+  );
+  return params.flat();
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const post = await getPost(slug);
+  const { locale: rawLocale, slug } = await params;
+  const locale = toLocale(rawLocale);
+  const post = await getPost(slug, locale);
   if (!post) return {};
 
   return {
     title: post.seo?.metaTitle ?? post.title,
     description: post.seo?.metaDescription ?? post.excerpt,
-    alternates: post.seo?.canonicalUrl
-      ? { canonical: post.seo.canonicalUrl }
-      : undefined,
+    alternates: {
+      canonical: post.seo?.canonicalUrl ?? path(locale, `/blog/${slug}`),
+    },
     robots: post.seo?.noIndex ? { index: false, follow: false } : undefined,
     openGraph: {
       type: "article",
@@ -54,30 +59,31 @@ export async function generateMetadata({
 export default async function BlogPostPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { locale: rawLocale, slug } = await params;
+  const locale = toLocale(rawLocale);
   const [site, post, posts, categories, author] = await Promise.all([
-    getSiteSettings(),
-    getPost(slug),
-    getPosts(),
-    getCategories(),
-    getAuthor(),
+    getSiteSettings(locale),
+    getPost(slug, locale),
+    getPosts(locale),
+    getCategories(locale),
+    getAuthor(locale),
   ]);
 
   if (!post) notFound();
 
+  const t = getDictionary(locale);
   const category = resolveCategory(categories, post.category);
   const related = posts.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   return (
     <>
-      <Header nav={site.nav} active="blog" />
       <Breadcrumb
         baseUrl={site.url}
         items={[
-          { label: "首頁", href: "/" },
-          { label: "部落格", href: "/blog" },
+          { label: t.breadcrumb.home, href: path(locale) },
+          { label: t.breadcrumb.blog, href: path(locale, "/blog") },
           { label: post.title },
         ]}
       />
@@ -85,7 +91,7 @@ export default async function BlogPostPage({
       <main>
         <article className="mx-auto max-w-[1200px] px-8 pt-8 pb-6">
           <Link
-            href={`/blog/category/${category.slug}`}
+            href={path(locale, `/blog/category/${category.slug}`)}
             className="mb-3.5 inline-block text-[12.5px] font-semibold tracking-[0.03em]"
             style={{ color: category.color }}
           >
@@ -107,6 +113,7 @@ export default async function BlogPostPage({
               {post.readTime}
             </span>
           </div>
+          {/* Served from the Sanity asset CDN; posts without one skip the slot. */}
           {post.mainImage && (
             <Image
               src={post.mainImage.src}
@@ -121,11 +128,11 @@ export default async function BlogPostPage({
 
         <section className="mx-auto grid max-w-[1200px] items-start gap-14 px-8 pb-16 lg:grid-cols-[220px_1fr]">
           <nav
-            aria-label="目錄"
+            aria-label={t.blog.toc}
             className="top-24 hidden flex-col gap-2.5 rounded-xl border border-line bg-card p-5 lg:sticky lg:flex"
           >
             <h2 className="m-0 mb-1 text-xs font-bold tracking-[0.03em] text-ink">
-              目錄
+              {t.blog.toc}
             </h2>
             {post.body.map((block) => (
               <a
@@ -157,20 +164,28 @@ export default async function BlogPostPage({
               ))}
             </div>
 
-            <ShareActions />
+            <ShareActions
+              t={{
+                copyLink: t.blog.copyLink,
+                copied: t.blog.copied,
+                shareLinkedIn: t.blog.shareLinkedIn,
+              }}
+            />
           </div>
         </section>
 
         {related.length > 0 && (
           <section className="mx-auto max-w-[1200px] px-8 pb-[72px]">
-            <h2 className="m-0 mb-5 text-[20px] font-bold text-ink">相關文章</h2>
+            <h2 className="m-0 mb-5 text-[20px] font-bold text-ink">
+              {t.blog.related}
+            </h2>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((item) => {
                 const itemCategory = resolveCategory(categories, item.category);
                 return (
                   <Link
                     key={item.slug}
-                    href={`/blog/${item.slug}`}
+                    href={path(locale, `/blog/${item.slug}`)}
                     className="rounded-[14px] border border-line bg-card p-5"
                   >
                     <span
@@ -189,8 +204,6 @@ export default async function BlogPostPage({
           </section>
         )}
       </main>
-
-      <Footer />
 
       <JsonLd schema={articleSchema(post, author, site)} />
     </>

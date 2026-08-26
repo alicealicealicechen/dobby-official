@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import Breadcrumb from "@/components/Breadcrumb";
 import Icon from "@/components/Icon";
 import {
@@ -11,51 +9,61 @@ import {
   getPostsByCategory,
   getSiteSettings,
 } from "@/lib/content";
+import { getDictionary, locales, path, toLocale } from "@/lib/i18n";
 
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const categories = await getCategories();
-  return categories.map((category) => ({ slug: category.slug }));
+  const params = await Promise.all(
+    locales.map(async (locale) => {
+      const categories = await getCategories(locale);
+      return categories.map((category) => ({ locale, slug: category.slug }));
+    }),
+  );
+  return params.flat();
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const category = await getCategory(slug);
+  const { locale: rawLocale, slug } = await params;
+  const locale = toLocale(rawLocale);
+  const category = await getCategory(slug, locale);
   if (!category) return {};
 
   return {
-    title: `${category.title} · 部落格`,
+    title: `${category.title} · ${getDictionary(locale).blog.title}`,
     description: category.description,
+    alternates: { canonical: path(locale, `/blog/category/${slug}`) },
   };
 }
 
 export default async function BlogCategoryPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { locale: rawLocale, slug } = await params;
+  const locale = toLocale(rawLocale);
   const [site, category, posts] = await Promise.all([
-    getSiteSettings(),
-    getCategory(slug),
-    getPostsByCategory(slug),
+    getSiteSettings(locale),
+    getCategory(slug, locale),
+    getPostsByCategory(slug, locale),
   ]);
 
   if (!category) notFound();
 
+  const t = getDictionary(locale);
+
   return (
     <>
-      <Header nav={site.nav} active="blog" />
       <Breadcrumb
         baseUrl={site.url}
         items={[
-          { label: "首頁", href: "/" },
-          { label: "部落格", href: "/blog" },
+          { label: t.breadcrumb.home, href: path(locale) },
+          { label: t.breadcrumb.blog, href: path(locale, "/blog") },
           { label: category.title },
         ]}
       />
@@ -63,28 +71,28 @@ export default async function BlogCategoryPage({
       <main>
         <section className="mx-auto max-w-[1200px] px-8 pt-10 pb-2">
           <p className="mb-2.5 text-[12.5px] font-semibold tracking-[0.03em] text-orange-700">
-            分類
+            {t.blog.category}
           </p>
           <h1 className="m-0 mb-3 text-[clamp(2rem,3.5vw,2.5rem)] font-bold tracking-[-0.02em] text-ink">
             {category.title}
           </h1>
           <p className="m-0 mb-8 text-[15px] text-secondary">
-            {category.description ? `${category.description} ` : ""}共{" "}
-            {posts.length} 篇文章
+            {category.description ? `${category.description} ` : ""}
+            {t.blog.postCount(posts.length)}
           </p>
         </section>
 
         <section className="mx-auto max-w-[1200px] px-8 pb-16">
           {posts.length === 0 ? (
             <p className="py-12 text-center text-[15px] text-muted">
-              這個分類目前還沒有文章。
+              {t.blog.emptyCategory}
             </p>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {posts.map((post) => (
                 <Link
                   key={post.slug}
-                  href={`/blog/${post.slug}`}
+                  href={path(locale, `/blog/${post.slug}`)}
                   className="flex flex-col overflow-hidden rounded-2xl border border-line bg-card"
                 >
                   <div
@@ -117,14 +125,12 @@ export default async function BlogCategoryPage({
           )}
 
           <p className="mt-8">
-            <Link href="/blog" className="text-sm font-semibold">
-              ← 查看所有文章
+            <Link href={path(locale, "/blog")} className="text-sm font-semibold">
+              {t.blog.allPosts}
             </Link>
           </p>
         </section>
       </main>
-
-      <Footer />
     </>
   );
 }

@@ -48,6 +48,14 @@ export const category = {
   title: "分類",
   type: "document",
   fields: [
+    {
+      name: "language",
+      type: "string",
+      title: "語言",
+      description: "zh 或 en。文件級翻譯：每個語言各一份文件，共用 slug。",
+      options: { list: ["zh", "en"] },
+      validation: (Rule: { required: () => unknown }) => Rule.required(),
+    },
     { name: "title", type: "string", title: "分類名稱" },
     { name: "slug", type: "slug", title: "網址", options: { source: "title" } },
     { name: "description", type: "text", rows: 2, title: "分類描述" },
@@ -66,6 +74,14 @@ export const author = {
   title: "作者",
   type: "document",
   fields: [
+    {
+      name: "language",
+      type: "string",
+      title: "語言",
+      description: "zh 或 en。文件級翻譯：每個語言各一份文件，共用 slug。",
+      options: { list: ["zh", "en"] },
+      validation: (Rule: { required: () => unknown }) => Rule.required(),
+    },
     { name: "name", type: "string", title: "姓名" },
     { name: "slug", type: "slug", title: "網址", options: { source: "name" } },
     { name: "avatar", type: "image", title: "頭像" },
@@ -78,6 +94,14 @@ export const post = {
   title: "文章",
   type: "document",
   fields: [
+    {
+      name: "language",
+      type: "string",
+      title: "語言",
+      description: "zh 或 en。文件級翻譯：每個語言各一份文件，共用 slug。",
+      options: { list: ["zh", "en"] },
+      validation: (Rule: { required: () => unknown }) => Rule.required(),
+    },
     { name: "title", type: "string", title: "標題" },
     { name: "slug", type: "slug", title: "網址", options: { source: "title" } },
     { name: "excerpt", type: "text", rows: 2, title: "摘要" },
@@ -131,6 +155,14 @@ export const page = {
   title: "頁面",
   type: "document",
   fields: [
+    {
+      name: "language",
+      type: "string",
+      title: "語言",
+      description: "zh 或 en。文件級翻譯：每個語言各一份文件，共用 slug。",
+      options: { list: ["zh", "en"] },
+      validation: (Rule: { required: () => unknown }) => Rule.required(),
+    },
     { name: "title", type: "string", title: "頁面名稱" },
     { name: "slug", type: "slug", title: "網址", options: { source: "title" } },
     {
@@ -149,6 +181,14 @@ export const siteSettings = {
   title: "全站設定",
   type: "document",
   fields: [
+    {
+      name: "language",
+      type: "string",
+      title: "語言",
+      description: "zh 或 en。文件級翻譯：每個語言各一份文件，共用 slug。",
+      options: { list: ["zh", "en"] },
+      validation: (Rule: { required: () => unknown }) => Rule.required(),
+    },
     { name: "siteName", type: "string", title: "網站名稱" },
     { name: "tagline", type: "string", title: "標語" },
     { name: "description", type: "text", rows: 3, title: "網站描述" },
@@ -162,35 +202,8 @@ export const siteSettings = {
     },
     { name: "linkedin", type: "url", title: "LinkedIn" },
     { name: "defaultOgImage", type: "image", title: "預設分享圖" },
-    {
-      name: "nav",
-      type: "array",
-      title: "主導覽",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "key", type: "string", title: "識別碼" },
-            { name: "label", type: "string", title: "顯示文字" },
-            { name: "href", type: "string", title: "連結" },
-          ],
-        },
-      ],
-    },
-    {
-      name: "footerLegal",
-      type: "array",
-      title: "頁尾法律連結",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "label", type: "string", title: "顯示文字" },
-            { name: "href", type: "string", title: "連結" },
-          ],
-        },
-      ],
-    },
+    // Nav labels and legal links are interface chrome, not editorial content —
+    // they live in lib/i18n.ts so marketing cannot break routing.
     {
       name: "redirects",
       type: "array",

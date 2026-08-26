@@ -1,34 +1,53 @@
 import type { Metadata } from "next";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumb";
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
 import Faq from "@/components/Faq";
-import Logo from "@/components/Logo";
+import JsonLd from "@/components/JsonLd";
+import productShot from "@/assets/product_screenshot.png";
 import { getSiteSettings } from "@/lib/content";
 import { getProductContent } from "@/lib/pages";
-import JsonLd from "@/components/JsonLd";
 import { faqSchema } from "@/lib/schemas";
+import { getDictionary, path, toLocale } from "@/lib/i18n";
 
-export const metadata: Metadata = {
-  title: "產品 / 服務",
-  description:
-    "從文件整理到 RAG 問答，一套完整、可重現、可稽核的地端 AI 工作流程。",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  const locale = toLocale(rawLocale);
+  const content = await getProductContent(locale);
 
-export default async function ProductPage() {
+  return {
+    title: getDictionary(locale).breadcrumb.product,
+    description: content.hero.lede,
+    alternates: { canonical: path(locale, "/product") },
+  };
+}
+
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: rawLocale } = await params;
+  const locale = toLocale(rawLocale);
   const [site, content] = await Promise.all([
-    getSiteSettings(),
-    getProductContent(),
+    getSiteSettings(locale),
+    getProductContent(locale),
   ]);
+  const t = getDictionary(locale).breadcrumb;
 
   return (
     <>
-      <Header nav={site.nav} active="product" />
       <Breadcrumb
         baseUrl={site.url}
-        items={[{ label: "首頁", href: "/" }, { label: "產品 / 服務" }]}
+        items={[
+          { label: t.home, href: path(locale) },
+          { label: t.product },
+        ]}
       />
 
       <main>
@@ -43,8 +62,14 @@ export default async function ProductPage() {
 
         {/* OVERVIEW */}
         <section className="mx-auto grid max-w-[1200px] items-center gap-14 px-8 py-12 lg:grid-cols-2">
-          <div className="flex min-h-[280px] items-center justify-center overflow-hidden rounded-[20px] border border-line bg-sage-700 p-8 shadow-[0_24px_48px_-24px_rgba(30,30,30,0.16)]">
-            <Logo variant="mark" invert className="h-16 opacity-35" />
+          <div className="overflow-hidden rounded-[20px] border border-line shadow-[0_24px_48px_-24px_rgba(30,30,30,0.16)]">
+            <Image
+              src={productShot}
+              alt={content.overview.imageAlt}
+              sizes="(max-width: 1024px) 100vw, 560px"
+              placeholder="blur"
+              className="block h-auto w-full"
+            />
           </div>
           <div>
             <h2 className="m-0 mb-4 text-[clamp(1.6rem,2.5vw,2rem)] font-bold tracking-[-0.02em] text-ink">
@@ -115,10 +140,7 @@ export default async function ProductPage() {
         </section>
 
         {/* FAQ */}
-        <section
-          id="faq"
-          className="border-y border-line bg-subtle px-8 py-14"
-        >
+        <section id="faq" className="border-y border-line bg-subtle px-8 py-14">
           <div className="mx-auto max-w-[768px]">
             <h2 className="m-0 mb-8 text-center text-[clamp(1.75rem,3vw,2.25rem)] font-bold tracking-[-0.02em] text-ink">
               {content.faqTitle}
@@ -131,13 +153,11 @@ export default async function ProductPage() {
           <h2 className="m-0 mb-4 text-[clamp(1.6rem,2.5vw,2rem)] font-bold text-ink">
             {content.closing.title}
           </h2>
-          <Button href={content.closing.cta.href} className="px-8">
-            {content.closing.cta.label}
+          <Button href={path(locale, "/contact")} className="px-8">
+            {content.closing.cta}
           </Button>
         </section>
       </main>
-
-      <Footer />
 
       <JsonLd schema={faqSchema(content.faqs)} />
     </>

@@ -6,7 +6,19 @@ import Icon from "./Icon";
 const FIELD =
   "w-full rounded-lg border-[1.5px] border-line-2 px-3.5 text-[14.5px] text-ink transition-colors duration-150 ease-standard placeholder:text-muted focus:border-primary focus:outline-none";
 
-export default function ContactForm() {
+export type ContactLabels = {
+  name: string;
+  namePlaceholder: string;
+  email: string;
+  emailPlaceholder: string;
+  message: string;
+  messagePlaceholder: string;
+  submit: string;
+  successTitle: string;
+  successBody: string;
+};
+
+export default function ContactForm({ t }: { t: ContactLabels }) {
   const [submitted, setSubmitted] = useState(false);
 
   if (submitted) {
@@ -19,10 +31,10 @@ export default function ContactForm() {
           className="mx-auto mb-4 text-primary"
         />
         <p className="m-0 mb-2 text-[19px] font-bold text-ink">
-          已收到您的訊息
+          {t.successTitle}
         </p>
         <p className="m-0 text-[14.5px] text-secondary">
-          我們會在 1-2 個工作天內與您聯繫。
+          {t.successBody}
         </p>
       </div>
     );
@@ -42,7 +54,7 @@ export default function ContactForm() {
           htmlFor="name"
           className="mb-1.5 block text-[13.5px] font-semibold text-ink"
         >
-          姓名
+          {t.name}
         </label>
         <input
           id="name"
@@ -50,7 +62,7 @@ export default function ContactForm() {
           type="text"
           required
           autoComplete="name"
-          placeholder="您的姓名"
+          placeholder={t.namePlaceholder}
           className={`${FIELD} h-11`}
         />
       </div>
@@ -60,7 +72,7 @@ export default function ContactForm() {
           htmlFor="email"
           className="mb-1.5 block text-[13.5px] font-semibold text-ink"
         >
-          Email
+          {t.email}
         </label>
         <input
           id="email"
@@ -68,7 +80,7 @@ export default function ContactForm() {
           type="email"
           required
           autoComplete="email"
-          placeholder="you@company.com"
+          placeholder={t.emailPlaceholder}
           className={`${FIELD} h-11`}
         />
       </div>
@@ -78,14 +90,14 @@ export default function ContactForm() {
           htmlFor="message"
           className="mb-1.5 block text-[13.5px] font-semibold text-ink"
         >
-          需求說明
+          {t.message}
         </label>
         <textarea
           id="message"
           name="message"
           required
           rows={5}
-          placeholder="請簡述您的場域與需求"
+          placeholder={t.messagePlaceholder}
           className={`${FIELD} resize-y py-3`}
         />
       </div>
@@ -94,7 +106,7 @@ export default function ContactForm() {
         type="submit"
         className="h-12 cursor-pointer rounded-lg bg-primary text-[15px] font-semibold text-on-primary transition-colors duration-150 ease-standard hover:bg-primary-hover"
       >
-        送出
+        {t.submit}
       </button>
     </form>
   );

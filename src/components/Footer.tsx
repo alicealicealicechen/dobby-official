@@ -1,9 +1,12 @@
 import Link from "next/link";
 import Logo from "./Logo";
 import { getSiteSettings } from "@/lib/content";
+import { getDictionary, getNav, path, type Locale } from "@/lib/i18n";
 
-export default async function Footer() {
-  const site = await getSiteSettings();
+export default async function Footer({ locale }: { locale: Locale }) {
+  const site = await getSiteSettings(locale);
+  const t = getDictionary(locale).footer;
+  const nav = getNav(locale);
   const year = new Date().getFullYear();
 
   return (
@@ -16,15 +19,15 @@ export default async function Footer() {
           </p>
         </div>
 
-        <FooterColumn title="網站地圖">
-          {site.nav.map((item) => (
+        <FooterColumn title={t.sitemap}>
+          {nav.map((item) => (
             <FooterLink key={item.key} href={item.href}>
               {item.label}
             </FooterLink>
           ))}
         </FooterColumn>
 
-        <FooterColumn title="聯絡資訊">
+        <FooterColumn title={t.contact}>
           <FooterLink href={`mailto:${site.email}`}>{site.email}</FooterLink>
           <p className="m-0 text-sm text-[#a8a49a]">
             {site.address.map((line) => (
@@ -38,17 +41,14 @@ export default async function Footer() {
           </FooterLink>
         </FooterColumn>
 
-        <FooterColumn title="法律">
-          {site.footerLegal.map((item) => (
-            <FooterLink key={item.href} href={item.href}>
-              {item.label}
-            </FooterLink>
-          ))}
+        <FooterColumn title={t.legal}>
+          <FooterLink href={path(locale, "/privacy")}>{t.privacy}</FooterLink>
+          <FooterLink href={path(locale, "/terms")}>{t.terms}</FooterLink>
         </FooterColumn>
       </div>
 
       <div className="mx-auto max-w-[1520px] border-t border-[#484747] px-8 py-6 text-[13px] text-[#757575]">
-        © {year} {site.name}. All rights reserved.
+        © {year} {site.name}. {t.rights}.
       </div>
     </footer>
   );
@@ -86,9 +86,7 @@ function FooterLink({
       <a
         href={href}
         className={className}
-        {...(external
-          ? { target: "_blank", rel: "noopener noreferrer" }
-          : {})}
+        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
         {children}
       </a>
