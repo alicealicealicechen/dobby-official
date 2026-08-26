@@ -7,18 +7,22 @@ const nextConfig: NextConfig = {
   },
 
   async redirects() {
+    // Only the paths we actually own get redirected into the default locale.
+    //
+    // An earlier version used a catch-all `/:rest(...)` rule with an exclusion
+    // list. It swallowed Next's own dev endpoints (/__nextjs_font,
+    // /__nextjs_original-stack-frame, /turbopack-hmr), which broke HMR and made
+    // the browser reload in a loop. Any blanket rule has the same hazard: it
+    // intercepts every framework route that happens to lack a file extension.
+    // Unprefixed paths we don't list simply 404, which is the safe failure.
     return [
-      // Anything without a locale prefix falls through to the default one, so
-      // `/` lands on the Chinese site and `/typo` reaches a localised 404
-      // rather than Next's unstyled fallback.
       { source: "/", destination: "/zh", permanent: false },
+      { source: "/product", destination: "/zh/product", permanent: false },
+      { source: "/contact", destination: "/zh/contact", permanent: false },
+      { source: "/blog", destination: "/zh/blog", permanent: false },
       {
-        // Named capture, not $1 — Next matches with path-to-regexp.
-        // `[^.]*` keeps anything with a file extension out of the rule, so
-        // files served from public/ are never rewritten into a locale.
-        source:
-          "/:rest((?!(?:zh|en)(?:/|$))(?!_next|api|studio)[^.]*)",
-        destination: "/zh/:rest",
+        source: "/blog/:path*",
+        destination: "/zh/blog/:path*",
         permanent: false,
       },
     ];
