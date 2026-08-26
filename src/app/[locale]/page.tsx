@@ -25,12 +25,15 @@ export default async function Home({
   return (
     <main>
       {/* HERO */}
-      <section className="relative mx-auto flex min-h-[78svh] max-w-[1520px] flex-col justify-center overflow-hidden px-6 sm:px-8">
+      {/* Full-bleed so the glow clips to the viewport. When the max-width sat on
+          the section itself, anything wider than 1520px showed the blob cut off
+          against a hard vertical edge at the content column's boundary. */}
+      <section className="relative overflow-hidden">
         <div
           aria-hidden
           className="hero-blob pointer-events-none absolute top-[10%] -right-[10%] z-0 h-[560px] w-[560px] rounded-full bg-orange-100 opacity-70 blur-[70px]"
         />
-        <div className="relative z-10 py-20">
+        <div className="relative z-10 mx-auto flex min-h-[78svh] max-w-[1520px] flex-col justify-center px-6 py-20 sm:px-8">
           <p className="mb-5 font-mono text-[12.5px] font-semibold tracking-[0.14em] text-primary sm:mb-7 sm:text-[16px]">
             {hero.eyebrow}
           </p>
