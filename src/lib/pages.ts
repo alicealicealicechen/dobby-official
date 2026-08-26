@@ -157,7 +157,7 @@ const PRODUCT: Record<Locale, ProductContent> = {
         {
           icon: "lock",
           title: "完整權限管理",
-          body: "依部門與專案設定存取範圍，確保每個人只看得到該看的資料。",
+          body: "依工作區與專案設定存取範圍，確保每個人只看得到該看的資料。",
         },
         {
           icon: "edit",
@@ -240,7 +240,7 @@ const PRODUCT: Record<Locale, ProductContent> = {
         {
           icon: "lock",
           title: "Full permission management",
-          body: "Scope access by department and project, so people only ever see what they should.",
+          body: "Scope access by workspace and project, so people only ever see what they should.",
         },
         {
           icon: "edit",
