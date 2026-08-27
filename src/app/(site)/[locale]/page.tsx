@@ -61,13 +61,26 @@ export default async function Home({
           <p className="text-balance mx-auto mb-10 max-w-[480px] text-[15px] leading-[1.7] text-white">
             {band.body}
           </p>
-          <Image
-            src={heroPhoto}
-            alt={band.imageAlt}
-            sizes="(max-width: 768px) 100vw, 720px"
-            placeholder="blur"
-            className="mx-auto h-auto w-full max-w-[720px] rounded-[4px]"
-          />
+          {/* The CMS image wins when the document has one; the bundled asset
+              is the fallback so the page never renders a hole. */}
+          {band.image ? (
+            <Image
+              src={band.image}
+              alt={band.imageAlt}
+              width={1144}
+              height={1440}
+              sizes="(max-width: 768px) 100vw, 720px"
+              className="mx-auto h-auto w-full max-w-[720px] rounded-[4px]"
+            />
+          ) : (
+            <Image
+              src={heroPhoto}
+              alt={band.imageAlt}
+              sizes="(max-width: 768px) 100vw, 720px"
+              placeholder="blur"
+              className="mx-auto h-auto w-full max-w-[720px] rounded-[4px]"
+            />
+          )}
         </div>
       </section>
 

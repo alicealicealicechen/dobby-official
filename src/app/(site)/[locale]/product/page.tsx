@@ -66,13 +66,24 @@ export default async function ProductPage({
         {/* OVERVIEW */}
         <section className="mx-auto grid max-w-[1200px] items-center gap-14 px-6 sm:px-8 py-12 lg:grid-cols-2">
           <div className="overflow-hidden rounded-[20px] border border-line shadow-[0_24px_48px_-24px_rgba(30,30,30,0.16)]">
-            <Image
-              src={productShot}
-              alt={content.overview.imageAlt}
-              sizes="(max-width: 1024px) 100vw, 560px"
-              placeholder="blur"
-              className="block h-auto w-full"
-            />
+            {content.overview.image ? (
+              <Image
+                src={content.overview.image}
+                alt={content.overview.imageAlt}
+                width={1364}
+                height={766}
+                sizes="(max-width: 1024px) 100vw, 560px"
+                className="block h-auto w-full"
+              />
+            ) : (
+              <Image
+                src={productShot}
+                alt={content.overview.imageAlt}
+                sizes="(max-width: 1024px) 100vw, 560px"
+                placeholder="blur"
+                className="block h-auto w-full"
+              />
+            )}
           </div>
           <div>
             <h2 className="m-0 mb-4 text-[clamp(1.6rem,2.5vw,2rem)] font-bold tracking-[-0.02em] text-ink">
