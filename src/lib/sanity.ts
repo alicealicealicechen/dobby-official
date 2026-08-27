@@ -13,13 +13,26 @@ export const apiVersion = "2024-10-01";
  */
 export const isSanityConfigured = Boolean(projectId);
 
+/**
+ * Server-only. Next replaces non-NEXT_PUBLIC_ vars with undefined in client
+ * bundles, so this never reaches the browser — and every query in this app runs
+ * during SSG/ISR anyway.
+ *
+ * A private dataset returns an empty result set rather than an error when the
+ * request is unauthenticated, which reads exactly like "the CMS is empty". The
+ * token avoids that whether the dataset is private or public.
+ */
+const token = process.env.SANITY_API_READ_TOKEN;
+
 const client = projectId
   ? createClient({
       projectId,
       dataset,
       apiVersion,
-      useCdn: true,
+      // The CDN cannot serve authenticated reads of a private dataset.
+      useCdn: !token,
       perspective: "published",
+      token,
     })
   : null;
 

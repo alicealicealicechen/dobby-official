@@ -8,6 +8,8 @@
 
 import type { IconName } from "@/components/Icon";
 import type { Locale } from "./i18n";
+import { sanityFetch } from "./sanity";
+import { homePageQuery, productPageQuery } from "./queries";
 
 export type HomeContent = {
   hero: {
@@ -17,7 +19,7 @@ export type HomeContent = {
     highlight: string;
     lede: string;
   };
-  band: { title: string; body: string; imageAlt: string };
+  band: { title: string; body: string; image?: string; imageAlt: string };
   pointsTitle: string;
   points: { title: string; body: string }[];
   cta: {
@@ -33,6 +35,7 @@ export type ProductContent = {
   hero: { title: string; lede: string };
   overview: {
     title: string;
+    image?: string;
     imageAlt: string;
     features: { icon: IconName; title: string; body: string }[];
   };
@@ -307,12 +310,49 @@ const PRODUCT: Record<Locale, ProductContent> = {
   },
 };
 
+/**
+ * Sanity first, the copy above as the fallback — same contract as content.ts.
+ * A `homePage` / `productPage` document overrides section by section, so a
+ * partially-filled document still renders.
+ */
 export async function getHomeContent(locale: Locale): Promise<HomeContent> {
-  return HOME[locale];
+  const remote = await sanityFetch<Partial<HomeContent>>(homePageQuery, {
+    locale,
+  });
+  const seed = HOME[locale];
+  if (!remote?.hero?.titleLead) return seed;
+
+  return {
+    hero: { ...seed.hero, ...remote.hero },
+    band: { ...seed.band, ...remote.band },
+    pointsTitle: remote.pointsTitle ?? seed.pointsTitle,
+    points: remote.points?.length ? remote.points : seed.points,
+    cta: { ...seed.cta, ...remote.cta },
+  };
 }
 
 export async function getProductContent(
   locale: Locale,
 ): Promise<ProductContent> {
-  return PRODUCT[locale];
+  const remote = await sanityFetch<Partial<ProductContent>>(productPageQuery, {
+    locale,
+  });
+  const seed = PRODUCT[locale];
+  if (!remote?.hero?.title) return seed;
+
+  return {
+    hero: { ...seed.hero, ...remote.hero },
+    overview: {
+      ...seed.overview,
+      ...remote.overview,
+      features: remote.overview?.features?.length
+        ? remote.overview.features
+        : seed.overview.features,
+    },
+    plansTitle: remote.plansTitle ?? seed.plansTitle,
+    plans: remote.plans?.length ? remote.plans : seed.plans,
+    faqTitle: remote.faqTitle ?? seed.faqTitle,
+    faqs: remote.faqs?.length ? remote.faqs : seed.faqs,
+    closing: { ...seed.closing, ...remote.closing },
+  };
 }

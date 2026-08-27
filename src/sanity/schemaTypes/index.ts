@@ -212,6 +212,182 @@ export const page = {
   preview: { select: { title: "title", subtitle: "language" } },
 };
 
+/* ------------------------------------------------------------------
+   Marketing page content.
+
+   Deliberately not the composable `page` builder: there are only two such
+   pages and their layouts differ, so a generic block list would force every
+   field to be vague. These mirror what each page actually renders, which
+   makes the Studio form self-explanatory — marketing edits the words,
+   engineering keeps the layout.
+   ------------------------------------------------------------------ */
+
+export const ctaLink = {
+  name: "ctaLink",
+  title: "次要連結",
+  type: "object",
+  fields: [
+    { name: "label", type: "string", title: "文字" },
+    {
+      name: "to",
+      type: "string",
+      title: "前往",
+      description: "站內路徑,不含語系前綴。",
+      options: {
+        list: [
+          { title: "產品", value: "/product" },
+          { title: "部落格", value: "/blog" },
+          { title: "聯絡我們", value: "/contact" },
+        ],
+      },
+    },
+  ],
+  preview: { select: { title: "label", subtitle: "to" } },
+};
+
+export const homePoint = {
+  name: "homePoint",
+  title: "賣點",
+  type: "object",
+  fields: [
+    { name: "title", type: "string", title: "標題" },
+    { name: "body", type: "text", rows: 2, title: "說明" },
+  ],
+  preview: { select: { title: "title", subtitle: "body" } },
+};
+
+export const productFeature = {
+  name: "productFeature",
+  title: "功能",
+  type: "object",
+  fields: [
+    {
+      name: "icon",
+      type: "string",
+      title: "圖示",
+      options: {
+        list: [
+          { title: "上傳", value: "upload" },
+          { title: "鎖頭", value: "lock" },
+          { title: "編輯", value: "edit" },
+          { title: "雙對話", value: "dualChat" },
+          { title: "文件", value: "fileText" },
+        ],
+      },
+    },
+    { name: "title", type: "string", title: "標題" },
+    { name: "body", type: "text", rows: 2, title: "說明" },
+  ],
+  preview: { select: { title: "title", subtitle: "body" } },
+};
+
+export const productPlan = {
+  name: "productPlan",
+  title: "方案",
+  type: "object",
+  fields: [
+    { name: "name", type: "string", title: "方案名稱" },
+    { name: "subtitle", type: "string", title: "副標" },
+    { name: "description", type: "string", title: "一句話說明" },
+    {
+      name: "features",
+      type: "array",
+      of: [{ type: "string" }],
+      title: "包含項目",
+    },
+  ],
+  preview: { select: { title: "name", subtitle: "subtitle" } },
+};
+
+export const faqItem = {
+  name: "faqItem",
+  title: "問答",
+  type: "object",
+  fields: [
+    { name: "q", type: "string", title: "問題" },
+    { name: "a", type: "text", rows: 4, title: "回答" },
+  ],
+  preview: { select: { title: "q" } },
+};
+
+export const homePage = {
+  name: "homePage",
+  title: "首頁",
+  type: "document",
+  fields: [
+    language,
+    { name: "heroEyebrow", type: "string", title: "主視覺 · 小標" },
+    { name: "heroTitleLead", type: "string", title: "主視覺 · 標題第一行" },
+    { name: "heroTitleRest", type: "string", title: "主視覺 · 標題第二行" },
+    {
+      name: "heroHighlight",
+      type: "string",
+      title: "主視覺 · 強調字",
+      description: "接在第二行之後,以品牌色顯示。",
+    },
+    { name: "heroLede", type: "text", rows: 3, title: "主視覺 · 說明" },
+    { name: "bandTitle", type: "string", title: "深色橫幅 · 標題" },
+    { name: "bandBody", type: "text", rows: 4, title: "深色橫幅 · 說明" },
+    {
+      name: "bandImage",
+      type: "image",
+      title: "深色橫幅 · 圖片",
+      fields: [{ name: "alt", type: "string", title: "替代文字" }],
+    },
+    { name: "pointsTitle", type: "string", title: "賣點區 · 標題" },
+    {
+      name: "points",
+      type: "array",
+      of: [{ type: "homePoint" }],
+      title: "賣點",
+    },
+    { name: "ctaEyebrow", type: "string", title: "CTA · 小標" },
+    { name: "ctaTitle", type: "string", title: "CTA · 標題" },
+    { name: "ctaLede", type: "text", rows: 2, title: "CTA · 說明" },
+    { name: "ctaPrimary", type: "string", title: "CTA · 主按鈕文字" },
+    {
+      name: "ctaSecondary",
+      type: "array",
+      of: [{ type: "ctaLink" }],
+      title: "CTA · 次要連結",
+    },
+    { name: "seo", type: "seo", title: "SEO" },
+  ],
+  preview: { select: { title: "heroTitleLead", subtitle: "language" } },
+};
+
+export const productPage = {
+  name: "productPage",
+  title: "產品頁",
+  type: "document",
+  fields: [
+    language,
+    { name: "heroTitle", type: "string", title: "主視覺 · 標題" },
+    { name: "heroLede", type: "text", rows: 3, title: "主視覺 · 說明" },
+    { name: "overviewTitle", type: "string", title: "功能總覽 · 標題" },
+    {
+      name: "overviewImage",
+      type: "image",
+      title: "功能總覽 · 截圖",
+      fields: [{ name: "alt", type: "string", title: "替代文字" }],
+    },
+    {
+      name: "features",
+      type: "array",
+      of: [{ type: "productFeature" }],
+      title: "功能",
+    },
+    { name: "plansTitle", type: "string", title: "方案區 · 標題" },
+    { name: "plans", type: "array", of: [{ type: "productPlan" }], title: "方案" },
+    { name: "faqTitle", type: "string", title: "常見問題 · 標題" },
+    { name: "faqs", type: "array", of: [{ type: "faqItem" }], title: "問答" },
+    { name: "closingTitle", type: "string", title: "結尾 · 標題" },
+    { name: "closingCta", type: "string", title: "結尾 · 按鈕文字" },
+    { name: "seo", type: "seo", title: "SEO" },
+  ],
+  preview: { select: { title: "heroTitle", subtitle: "language" } },
+};
+
 export const siteSettings = {
   name: "siteSettings",
   title: "全站設定",
@@ -254,8 +430,15 @@ export const schemaTypes = [
   seo,
   pageSection,
   redirect,
+  ctaLink,
+  homePoint,
+  productFeature,
+  productPlan,
+  faqItem,
   blogCategory,
   post,
   page,
+  homePage,
+  productPage,
   siteSettings,
 ];

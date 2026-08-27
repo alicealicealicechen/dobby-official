@@ -78,6 +78,50 @@ export const pageQuery = groq`
   }
 `;
 
+export const homePageQuery = groq`
+  *[_type == "homePage" && language == $locale][0]{
+    "hero": {
+      "eyebrow": heroEyebrow,
+      "titleLead": heroTitleLead,
+      "titleRest": heroTitleRest,
+      "highlight": heroHighlight,
+      "lede": heroLede
+    },
+    "band": {
+      "title": bandTitle,
+      "body": bandBody,
+      "image": bandImage.asset->url,
+      "imageAlt": bandImage.alt
+    },
+    pointsTitle,
+    points[]{ title, body },
+    "cta": {
+      "eyebrow": ctaEyebrow,
+      "title": ctaTitle,
+      "lede": ctaLede,
+      "primary": ctaPrimary,
+      "secondary": ctaSecondary[]{ label, to }
+    }
+  }
+`;
+
+export const productPageQuery = groq`
+  *[_type == "productPage" && language == $locale][0]{
+    "hero": { "title": heroTitle, "lede": heroLede },
+    "overview": {
+      "title": overviewTitle,
+      "image": overviewImage.asset->url,
+      "imageAlt": overviewImage.alt,
+      features[]{ icon, title, body }
+    },
+    plansTitle,
+    plans[]{ name, subtitle, description, features },
+    faqTitle,
+    faqs[]{ q, a },
+    "closing": { "title": closingTitle, "cta": closingCta }
+  }
+`;
+
 /** Every indexable route, for app/sitemap.ts. */
 export const sitemapQuery = groq`{
   "posts": *[_type == "post" && defined(slug.current)]{ "slug": slug.current, language, "updatedAt": _updatedAt },
