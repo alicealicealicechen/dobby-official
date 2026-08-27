@@ -23,6 +23,50 @@ const SUBJECT_PREFIX = process.env.CONTACT_SUBJECT_PREFIX ?? "[TEST] ";
 const MAX_LENGTHS = { name: 100, email: 200, message: 5000 };
 
 /**
+ * Verifies a Cloudflare Turnstile token.
+ *
+ * Fails *closed* in production: if the secret is missing there, every
+ * submission is rejected rather than quietly waved through. A misconfigured
+ * captcha that silently passes everything is worse than no captcha, because
+ * nobody notices. Locally it is skipped so the form works without credentials.
+ */
+async function verifyCaptcha(
+  token: string,
+  ip: string,
+): Promise<{ ok: boolean; reason?: string }> {
+  const secret = process.env.TURNSTILE_SECRET_KEY;
+
+  if (!secret) {
+    if (process.env.NODE_ENV === "production") {
+      console.error("[contact] TURNSTILE_SECRET_KEY missing in production");
+      return { ok: false, reason: "captcha_misconfigured" };
+    }
+    return { ok: true };
+  }
+
+  if (!token) return { ok: false, reason: "captcha_missing" };
+
+  const res = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ secret, response: token, remoteip: ip }),
+    },
+  );
+
+  const data = (await res.json()) as {
+    success: boolean;
+    "error-codes"?: string[];
+  };
+  if (!data.success) {
+    console.warn("[contact] captcha rejected:", data["error-codes"]);
+    return { ok: false, reason: "captcha_failed" };
+  }
+  return { ok: true };
+}
+
+/**
  * Naive per-IP throttle. On serverless each instance keeps its own map, so this
  * slows a naive script rather than stopping a determined one; the honeypot does
  * the heavier lifting. Move to a shared store if abuse becomes real.
@@ -35,10 +79,19 @@ function rateLimited(ip: string): boolean {
   const recent = (hits.get(ip) ?? []).filter(
     (t) => now - t < RATE_LIMIT.windowMs,
   );
+
+  // Only accepted attempts count. Recording rejected ones too would mean each
+  // retry pushed the window forward, so anyone who hit the limit — including
+  // someone retrying after a delivery error — could never get back in.
+  if (recent.length >= RATE_LIMIT.max) {
+    hits.set(ip, recent);
+    return true;
+  }
+
   recent.push(now);
   hits.set(ip, recent);
   if (hits.size > 500) hits.clear(); // crude bound on memory
-  return recent.length > RATE_LIMIT.max;
+  return false;
 }
 
 async function sendEmail(fields: {
@@ -139,6 +192,14 @@ export async function POST(request: Request) {
     message.length > MAX_LENGTHS.message
   ) {
     return Response.json({ error: "too_long" }, { status: 400 });
+  }
+
+  const captcha = await verifyCaptcha(
+    String(body.turnstileToken ?? ""),
+    ip,
+  );
+  if (!captcha.ok) {
+    return Response.json({ error: captcha.reason }, { status: 403 });
   }
 
   const fields = { name, email, message, locale };

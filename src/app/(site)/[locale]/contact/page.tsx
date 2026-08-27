@@ -62,6 +62,7 @@ export default async function ContactPage({
               t={t.contact}
               locale={locale}
               fallbackEmail={site.email}
+              turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
             />
 
             <div className="flex flex-col gap-6">

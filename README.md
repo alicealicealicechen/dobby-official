@@ -63,6 +63,9 @@ Sanity Studio runs at `http://localhost:3000/studio`.
 |---|---|---|
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project ID | Sanity dashboard → project settings |
 | `NEXT_PUBLIC_SANITY_DATASET` | `production` or `staging` | — |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile widget key (public) | dash.cloudflare.com → Turnstile |
+| `TURNSTILE_SECRET_KEY` | Turnstile verification secret — **required in production**, the contact API rejects every submission without it | dash.cloudflare.com → Turnstile |
+| `RESEND_API_KEY` | Contact form email delivery | resend.com → API Keys |
 | `SANITY_API_TOKEN` | Editor token — reads content from the private dataset and stores contact submissions | Sanity dashboard → API → Tokens |
 
 All variables must also be set in Vercel → Project Settings → Environment

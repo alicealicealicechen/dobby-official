@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Icon from "./Icon";
+import Turnstile from "./Turnstile";
 import type { Locale } from "@/lib/i18n";
 
 const FIELD =
@@ -27,14 +28,17 @@ export default function ContactForm({
   t,
   locale,
   fallbackEmail,
+  turnstileSiteKey,
 }: {
   t: ContactLabels;
   locale: Locale;
   fallbackEmail: string;
+  turnstileSiteKey?: string;
 }) {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">(
     "idle",
   );
+  const [captchaNonce, setCaptchaNonce] = useState(0);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -50,6 +54,7 @@ export default function ContactForm({
           email: data.get("email"),
           message: data.get("message"),
           company: data.get("company"), // honeypot
+          turnstileToken: data.get("cf-turnstile-response"),
           locale,
         }),
       });
@@ -59,6 +64,8 @@ export default function ContactForm({
       // Deliberately leaves the fields filled — nobody should have to retype
       // their enquiry, and they can copy it into an email instead.
       setState("error");
+      // Turnstile tokens are single-use, so a retry needs a fresh one.
+      setCaptchaNonce((n) => n + 1);
     }
   }
 
@@ -176,6 +183,12 @@ export default function ContactForm({
           autoComplete="off"
         />
       </div>
+
+      <Turnstile
+        siteKey={turnstileSiteKey}
+        locale={locale}
+        resetSignal={captchaNonce}
+      />
 
       <button
         type="submit"
