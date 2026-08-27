@@ -19,6 +19,8 @@ export type BlogIndexLabels = {
   /** Contains a `{q}` placeholder — dictionary functions cannot cross the
       server/client boundary, so the template is interpolated here. */
   noResults: string;
+  /** Shown when the blog has no posts at all, as opposed to no search hits. */
+  empty: string;
   pagination: string;
 };
 
@@ -136,7 +138,7 @@ export default function BlogIndex({
       <section className="mx-auto max-w-[1200px] px-6 sm:px-8 pb-4">
         {pageItems.length === 0 ? (
           <p className="py-12 text-center text-[15px] text-muted">
-            {t.noResults.replace("{q}", query)}
+            {query ? t.noResults.replace("{q}", query) : t.empty}
           </p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

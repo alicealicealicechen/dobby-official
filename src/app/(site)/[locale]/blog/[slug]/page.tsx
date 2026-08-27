@@ -90,13 +90,15 @@ export default async function BlogPostPage({
 
       <main>
         <article className="mx-auto max-w-[1200px] px-6 sm:px-8 pt-8 pb-6">
-          <Link
-            href={path(locale, `/blog/category/${category.slug}`)}
-            className="mb-3.5 inline-flex min-h-6 items-center text-[12.5px] font-semibold tracking-[0.03em]"
-            style={{ color: category.color }}
-          >
-            {category.title}
-          </Link>
+          {category.slug && (
+            <Link
+              href={path(locale, `/blog/category/${category.slug}`)}
+              className="mb-3.5 inline-flex min-h-6 items-center text-[12.5px] font-semibold tracking-[0.03em]"
+              style={{ color: category.color }}
+            >
+              {category.title}
+            </Link>
+          )}
           <h1 className="m-0 mb-5 max-w-[760px] text-[clamp(1.7rem,3.5vw,2.75rem)] font-bold tracking-[-0.02em] text-ink">
             {post.title}
           </h1>

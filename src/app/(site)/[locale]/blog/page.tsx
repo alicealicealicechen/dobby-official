@@ -63,6 +63,7 @@ export default async function BlogListPage({
             searchLabel: t.blog.searchLabel,
             featured: t.blog.featured,
             noResults: t.blog.noResults("{q}"),
+            empty: t.blog.empty,
             pagination: t.blog.pagination,
           }}
         />
