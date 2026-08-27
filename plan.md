@@ -28,7 +28,7 @@
 - [ ] 網域 DNS 指向 Vercel(A record / CNAME,約 10 分鐘)
 - [x] 建立三個環境:`production` / `preview`(Vercel PR 自動產生)/ 本地開發
 - [x] Sanity 建立兩個 dataset:`production` 與 `staging`
-- [x] 設定環境變數(本機 `.env.local` 已設定;**Vercel 尚未**):
+- [x] 設定環境變數(本機 `.env.local` 已設定):
   - `NEXT_PUBLIC_SANITY_PROJECT_ID`
   - `NEXT_PUBLIC_SANITY_DATASET`
   - `SANITY_API_READ_TOKEN`
@@ -269,16 +269,16 @@ npx sanity dataset export staging staging.tar.gz
 npx sanity dataset import staging.tar.gz production
 ```
 
-- [ ] 匯出 staging → 匯入 production
-- [ ] 確認 production 的文件數與 staging 一致
+- [x] 匯出 staging → 匯入 production
+- [x] 確認 production 的文件數與 staging 一致
 - [ ] 確認每份文件的 `language` 都有值(空的查不到,頁面會靜默退回 fallback)
 
 ### Vercel 環境變數
 
-- [ ] `NEXT_PUBLIC_SANITY_PROJECT_ID`
-- [ ] `NEXT_PUBLIC_SANITY_DATASET` = `production`(**不是 staging**)
-- [ ] `SANITY_API_READ_TOKEN`(若 dataset 維持 private 則必填)
-- [ ] 三個變數在 Production 與 Preview 兩種環境都要設
+- [x] `NEXT_PUBLIC_SANITY_PROJECT_ID`
+- [x] `NEXT_PUBLIC_SANITY_DATASET` = `production`(**不是 staging**)
+- [x] `SANITY_API_READ_TOKEN`(若 dataset 維持 private 則必填)
+- [x] 三個變數在 Production 與 Preview 兩種環境都要設
 
 ### 技術檢查清單
 

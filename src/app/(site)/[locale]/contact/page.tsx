@@ -58,7 +58,11 @@ export default async function ContactPage({
           </div>
 
           <div className="mx-auto grid max-w-[960px] gap-12 lg:grid-cols-[1.2fr_1fr]">
-            <ContactForm t={t.contact} />
+            <ContactForm
+              t={t.contact}
+              locale={locale}
+              fallbackEmail={site.email}
+            />
 
             <div className="flex flex-col gap-6">
               <div className="flex gap-3">

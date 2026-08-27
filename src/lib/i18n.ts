@@ -83,8 +83,12 @@ const dictionaries = {
       message: "需求說明",
       messagePlaceholder: "請簡述您的場域與需求",
       submit: "送出",
+      sending: "傳送中…",
       successTitle: "已收到您的訊息",
       successBody: "我們會在 1-2 個工作天內與您聯繫。",
+      errorTitle: "送出失敗",
+      errorBody:
+        "請稍後再試,或直接寄信到 {email}。您填寫的內容已保留,可直接複製。",
       address: "地址",
     },
     notFound: {
@@ -141,8 +145,12 @@ const dictionaries = {
       message: "What do you need?",
       messagePlaceholder: "Tell us about your environment and requirements",
       submit: "Send",
+      sending: "Sending…",
       successTitle: "Message received",
       successBody: "We'll be in touch within 1–2 business days.",
+      errorTitle: "Couldn't send",
+      errorBody:
+        "Please try again, or email us directly at {email}. What you wrote is still here — feel free to copy it.",
       address: "Address",
     },
     notFound: {

@@ -388,6 +388,65 @@ export const productPage = {
   preview: { select: { title: "heroTitle", subtitle: "language" } },
 };
 
+/**
+ * A contact-form submission. Written by the public API route so an enquiry
+ * survives even when the email provider is down — see app/api/contact.
+ * Never edited by hand; `status` is the only field marketing changes.
+ */
+export const contactSubmission = {
+  name: "contactSubmission",
+  title: "聯絡表單訊息",
+  type: "document",
+  fields: [
+    { name: "name", type: "string", title: "姓名", readOnly: true },
+    { name: "email", type: "string", title: "Email", readOnly: true },
+    { name: "message", type: "text", rows: 6, title: "需求說明", readOnly: true },
+    { name: "submittedAt", type: "datetime", title: "送出時間", readOnly: true },
+    {
+      name: "locale",
+      type: "string",
+      title: "來源語系",
+      readOnly: true,
+      options: { list: ["zh", "en"] },
+    },
+    {
+      name: "status",
+      type: "string",
+      title: "處理狀態",
+      initialValue: "new",
+      options: {
+        list: [
+          { title: "未處理", value: "new" },
+          { title: "已回覆", value: "replied" },
+          { title: "已關閉", value: "closed" },
+        ],
+        layout: "radio",
+      },
+    },
+    {
+      name: "emailDelivered",
+      type: "boolean",
+      title: "通知信已寄出",
+      readOnly: true,
+      description: "false 代表寄信失敗,這筆只存在 Sanity,請主動聯繫。",
+    },
+  ],
+  orderings: [
+    {
+      title: "最新的在前",
+      name: "newestFirst",
+      by: [{ field: "submittedAt", direction: "desc" }],
+    },
+  ],
+  preview: {
+    select: { title: "name", subtitle: "email", status: "status" },
+    prepare: ({ title, subtitle, status }: Record<string, string>) => ({
+      title: `${status === "new" ? "● " : ""}${title ?? "(無姓名)"}`,
+      subtitle,
+    }),
+  },
+};
+
 export const siteSettings = {
   name: "siteSettings",
   title: "全站設定",
@@ -440,5 +499,6 @@ export const schemaTypes = [
   page,
   homePage,
   productPage,
+  contactSubmission,
   siteSettings,
 ];
