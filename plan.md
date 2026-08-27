@@ -48,7 +48,7 @@
 ### 要定義的 Content Types(Schema)
 
 #### 1. `page` — 一般頁面
-(這感覺要逐一設計？因為我們有很多頁面)
+(暫不使用:實際只有 Home 與 Product 兩頁會用到,且版型差異大。先各自用 singleton 或維持程式碼管理,等行銷需要自行開活動頁時再啟用。)
 | 欄位 | 型別 | 說明 |
 |---|---|---|
 | title | string | 頁面名稱 |
@@ -65,7 +65,7 @@
 | categories | array of reference | 關聯到 blog-category |
 | publishedAt | datetime | 發佈時間 |
 | mainImage | image | 主圖(含 alt text 欄位) |
-| body | portable text | 內文(富文本)(write using markdown?) |
+| body | portable text | 內文(富文本)。用 Portable Text 而非 markdown:行銷在 Studio 所見即所得,圖片走 Sanity 資產管線,內部連結可用 reference。H2 自動成為文章目錄。 |
 | seo | object | 共用 SEO 欄位 |
 
 #### 4. `blog-category` — 分類
@@ -130,8 +130,8 @@
   - `app/blog/category/[slug]/page.tsx` → category
 - [x] 圖片走 Sanity CDN + `next/image`(自動 WebP、responsive)  
       ↳ `next.config.ts` 已允許 `cdn.sanity.io`;文章主圖走 next/image。
-- [ ] Portable Text 渲染元件(內文的標題、圖片、連結、程式碼區塊樣式)  
-      ↳ 改用結構化的 `body[]{heading, paragraphs}`,尚未接 Portable Text。若內文要支援圖片/連結/程式碼區塊需改回。
+- [x] Portable Text 渲染元件(內文的標題、圖片、連結、程式碼區塊樣式)  
+      ↳ `src/components/PostBody.tsx`。支援 h2/h3、引言、項目與編號清單、粗體/斜體/行內程式碼、連結(外部自動開新分頁)、圖片(含圖說,走 next/image)。目錄由內文的 h2 自動產生。
 - [x] 渲染策略:  
       ↳ 全部頁面皆 SSG + ISR(`revalidate: 60`),無純 CSR 頁面。
   - 行銷頁與文章:**SSG + ISR**(`revalidate: 60`)

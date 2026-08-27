@@ -57,23 +57,6 @@ export const seo = {
   ],
 };
 
-/** One heading plus its paragraphs — drives both the article body and its TOC. */
-export const postSection = {
-  name: "postSection",
-  title: "章節",
-  type: "object",
-  fields: [
-    { name: "heading", type: "string", title: "小標" },
-    {
-      name: "paragraphs",
-      type: "array",
-      of: [{ type: "text" }],
-      title: "段落",
-    },
-  ],
-  preview: { select: { title: "heading" } },
-};
-
 /**
  * A composable marketing block; `variant` picks the layout that renders it.
  * The real block list comes out of the Phase 1 workshop — this is a draft.
@@ -165,7 +148,45 @@ export const post = {
       name: "body",
       type: "array",
       title: "內文",
-      of: [{ type: "postSection" }],
+      description:
+        "H2 小標會自動成為文章目錄。段落、清單、粗體、連結、圖片、引言皆可用。",
+      of: [
+        {
+          type: "block",
+          styles: [
+            { title: "內文", value: "normal" },
+            { title: "小標 H2", value: "h2" },
+            { title: "小標 H3", value: "h3" },
+            { title: "引言", value: "blockquote" },
+          ],
+          lists: [
+            { title: "項目符號", value: "bullet" },
+            { title: "編號", value: "number" },
+          ],
+          marks: {
+            decorators: [
+              { title: "粗體", value: "strong" },
+              { title: "斜體", value: "em" },
+              { title: "程式碼", value: "code" },
+            ],
+            annotations: [
+              {
+                name: "link",
+                type: "object",
+                title: "連結",
+                fields: [{ name: "href", type: "url", title: "網址" }],
+              },
+            ],
+          },
+        },
+        {
+          type: "image",
+          fields: [
+            { name: "alt", type: "string", title: "替代文字" },
+            { name: "caption", type: "string", title: "圖說" },
+          ],
+        },
+      ],
     },
     { name: "seo", type: "seo", title: "SEO" },
   ],
@@ -231,7 +252,6 @@ export const siteSettings = {
 export const schemaTypes = [
   // Objects first — the documents below reference them by name.
   seo,
-  postSection,
   pageSection,
   redirect,
   blogCategory,

@@ -6,6 +6,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Icon from "@/components/Icon";
 import JsonLd from "@/components/JsonLd";
 import ShareActions from "@/components/ShareActions";
+import PostBody, { tableOfContents } from "@/components/PostBody";
 import {
   getCategories,
   getPost,
@@ -73,6 +74,7 @@ export default async function BlogPostPage({
 
   const t = getDictionary(locale);
   const category = resolveCategory(categories, post.category);
+  const toc = tableOfContents(post.body);
   const related = posts.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   return (
@@ -127,40 +129,26 @@ export default async function BlogPostPage({
         <section className="mx-auto grid max-w-[1200px] items-start gap-14 px-6 sm:px-8 pb-16 lg:grid-cols-[220px_1fr]">
           <nav
             aria-label={t.blog.toc}
-            className="top-24 hidden flex-col gap-2.5 rounded-xl border border-line bg-card p-5 lg:sticky lg:flex"
+            className={`top-24 flex-col gap-2.5 rounded-xl border border-line bg-card p-5 lg:sticky ${
+              toc.length > 0 ? "hidden lg:flex" : "hidden"
+            }`}
           >
             <h2 className="m-0 mb-1 text-xs font-bold tracking-[0.03em] text-ink">
               {t.blog.toc}
             </h2>
-            {post.body.map((block) => (
+            {toc.map((entry) => (
               <a
-                key={block.id}
-                href={`#${block.id}`}
+                key={entry.id}
+                href={`#${entry.id}`}
                 className="inline-flex min-h-6 items-center text-[13.5px] text-secondary hover:text-primary"
               >
-                {block.heading}
+                {entry.text}
               </a>
             ))}
           </nav>
 
           <div>
-            <div className="max-w-[680px] text-[16px] leading-[1.9] text-ink-2">
-              {post.body.map((block) => (
-                <section key={block.id}>
-                  <h2
-                    id={block.id}
-                    className="m-0 mb-4 scroll-mt-24 text-[22px] font-bold text-ink"
-                  >
-                    {block.heading}
-                  </h2>
-                  {block.paragraphs.map((paragraph) => (
-                    <p key={paragraph} className="mt-0 mb-7">
-                      {paragraph}
-                    </p>
-                  ))}
-                </section>
-              ))}
-            </div>
+            <PostBody body={post.body} />
 
             <ShareActions
               t={{

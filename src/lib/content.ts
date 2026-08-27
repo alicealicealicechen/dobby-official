@@ -20,6 +20,7 @@ import {
   siteSettingsQuery,
 } from "./queries";
 import type { Locale } from "./i18n";
+import type { PortableTextBlock } from "@portabletext/types";
 
 export type Seo = {
   metaTitle?: string;
@@ -37,11 +38,40 @@ export type Category = {
   color: string;
 };
 
-export type PostBlock = {
+/**
+ * Seed content is authored in this shape because it is far easier to read and
+ * edit than raw Portable Text. `toPortableText` converts it at the accessor
+ * boundary, so the rendering path is identical whether a post comes from here
+ * or from Sanity.
+ */
+type SeedSection = {
   id: string;
   heading: string;
   paragraphs: string[];
 };
+
+function textBlock(
+  key: string,
+  style: "h2" | "normal",
+  text: string,
+): PortableTextBlock {
+  return {
+    _type: "block",
+    _key: key,
+    style,
+    markDefs: [],
+    children: [{ _type: "span", _key: `${key}-s`, text, marks: [] }],
+  };
+}
+
+function toPortableText(sections: SeedSection[]): PortableTextBlock[] {
+  return sections.flatMap((section) => [
+    textBlock(`${section.id}-h`, "h2", section.heading),
+    ...section.paragraphs.map((text, i) =>
+      textBlock(`${section.id}-p${i}`, "normal", text),
+    ),
+  ]);
+}
 
 export type Post = {
   title: string;
@@ -52,7 +82,7 @@ export type Post = {
   readTime: string;
   /** Served from the Sanity asset CDN; absent until the post has one. */
   mainImage?: { src: string; alt: string };
-  body: PostBlock[];
+  body: PortableTextBlock[];
   seo?: Seo;
 };
 
@@ -143,7 +173,9 @@ const CATEGORIES: Record<Locale, Category[]> = {
   ],
 };
 
-const POSTS: Record<Locale, Post[]> = {
+type SeedPost = Omit<Post, "body"> & { body: SeedSection[] };
+
+const POSTS: Record<Locale, SeedPost[]> = {
   zh: [
     {
       title: "地端部署 AI 常見的五個迷思",
@@ -524,12 +556,16 @@ export async function getCategory(
   return remote ?? CATEGORIES[locale].find((c) => c.slug === slug) ?? null;
 }
 
+function hydrate(post: SeedPost): Post {
+  return { ...post, body: toPortableText(post.body) };
+}
+
 export async function getPosts(locale: Locale): Promise<Post[]> {
   const remote = await sanityFetch<Post[]>(postsQuery, { locale });
   if (remote?.length) return remote;
-  return [...POSTS[locale]].sort((a, b) =>
-    b.publishedAt.localeCompare(a.publishedAt),
-  );
+  return [...POSTS[locale]]
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+    .map(hydrate);
 }
 
 export async function getPost(
@@ -537,7 +573,9 @@ export async function getPost(
   locale: Locale,
 ): Promise<Post | null> {
   const remote = await sanityFetch<Post>(postQuery, { slug, locale });
-  return remote ?? POSTS[locale].find((p) => p.slug === slug) ?? null;
+  if (remote) return remote;
+  const seed = POSTS[locale].find((p) => p.slug === slug);
+  return seed ? hydrate(seed) : null;
 }
 
 export async function getPostsByCategory(

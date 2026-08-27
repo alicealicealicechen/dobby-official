@@ -16,7 +16,7 @@ const POST_FIELDS = groq`
   publishedAt,
   readTime,
   "mainImage": {"src": mainImage.asset->url, "alt": mainImage.alt},
-  body[]{ "id": _key, heading, paragraphs },
+  body[]{ ..., _type == "image" => { ..., "url": asset->url } },
   ${SEO}
 `;
 
