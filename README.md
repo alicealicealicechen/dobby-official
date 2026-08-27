@@ -65,28 +65,72 @@ Sanity Studio runs at `http://localhost:3000/studio`.
 | `NEXT_PUBLIC_SANITY_DATASET` | `production` or `staging` | — |
 | `SANITY_API_READ_TOKEN` | Token for draft preview | Sanity dashboard → API → Tokens |
 
-All variables must also be set in Vercel → Project Settings → Environment Variables.
+All variables must also be set in Vercel → Project Settings → Environment
+Variables, for **both** Production and Preview.
+
+> ⚠️ **Both datasets are private.** An unauthenticated GROQ query against a
+> private dataset returns an empty result set rather than an error — which is
+> indistinguishable from "the CMS has no content". Every page then silently
+> serves its built-in fallback: no crash, no error, just stale-looking content.
+>
+> So `SANITY_API_READ_TOKEN` is not optional here. Either set it everywhere, or
+> make the dataset public — reasonable for a marketing site, and one less
+> variable to forget:
+>
+> ```bash
+> npx sanity dataset visibility set production public
+> ```
 
 ## Project Structure
 
 ```
 ├── app/
-│   ├── [slug]/              # Generic CMS-driven pages
-│   ├── blog/
-│   │   ├── [slug]/          # Blog posts
-│   │   └── category/[slug]/ # Category pages
-│   ├── studio/              # Embedded Sanity Studio
-│   ├── api/draft/           # Draft mode for content preview
-│   ├── sitemap.ts           # Auto-generated sitemap from Sanity
-│   └── robots.ts            # Blocks preview envs, allows production
+│   ├── (site)/[locale]/     # Public site — locale is zh or en
+│   │   ├── product/
+│   │   ├── contact/
+│   │   ├── blog/
+│   │   │   ├── [slug]/          # Blog posts
+│   │   │   └── category/[slug]/ # Category pages
+│   │   └── [...rest]/       # Catch-all → localised 404
+│   ├── (studio)/studio/     # Embedded Sanity Studio
+│   ├── sitemap.ts           # Both locales, from the same accessors as pages
+│   └── robots.ts            # Blocks non-production envs and /studio
 ├── components/              # React components
 ├── lib/
-│   ├── sanity.ts            # Sanity client
-│   └── schemas.ts           # JSON-LD schema generators
+│   ├── sanity.ts            # Sanity client (sends the read token)
+│   ├── queries.ts           # GROQ, all filtered by `language`
+│   ├── content.ts           # Site settings, posts, categories
+│   ├── pages.ts             # Home and product page copy
+│   ├── i18n.ts              # Locales + interface strings (not CMS content)
+│   └── schemas.ts           # JSON-LD generators
 ├── sanity/
-│   └── schemaTypes/         # Sanity content models (page, post, blog-category, seo…)
-└── public/                  # Static assets
+│   └── schemaTypes/         # Content models (homePage, productPage, post…)
+├── scripts/seed.mjs         # One-off: pushes lib/pages.ts copy into a dataset
+└── src/assets/              # Logo and imagery imported by next/image
+
+Two route groups means two root layouts, so `/studio` sits outside the
+`[locale]` tree and has no language prefix. Route groups do not affect URLs.
 ```
+
+## Languages
+
+The site is bilingual. Locale is the first URL segment — `/zh` and `/en` — so
+every page stays statically generated with no middleware. `/` redirects to
+`/zh`.
+
+Two different things live in two different places:
+
+| | Where | Who edits |
+|---|---|---|
+| Page copy, posts, plans, FAQs | Sanity | Marketing |
+| Nav labels, buttons, form labels, 404 text | `lib/i18n.ts` | Engineering |
+
+Interface strings stay in code because they are tied to routing and layout.
+
+Translation is document-level: each post/page exists once per language with a
+`language` field, and **every query filters on it**. A document with an empty
+`language` is invisible to the site — this is the most common reason new content
+"doesn't show up".
 
 ## Content Editing (for Marketers)
 
@@ -97,6 +141,25 @@ All variables must also be set in Vercel → Project Settings → Environment Va
 
 > **Save** = draft only (not live). **Publish** = triggers deployment.
 > If content doesn't appear after publishing, wait 60s (ISR cache) before escalating.
+
+## Going Live
+
+`production` starts empty. **Do not run `scripts/seed.mjs` against it** — that
+script reads the original hardcoded copy from `lib/pages.ts` and would overwrite
+whatever marketing has since edited. It was a one-off migration and its job is
+done.
+
+Move the real content across instead, which brings image assets with it:
+
+```bash
+npx sanity dataset export staging staging.tar.gz
+npx sanity dataset import staging.tar.gz production
+```
+
+Then point Vercel at it: `NEXT_PUBLIC_SANITY_DATASET=production`.
+
+Verify by editing one word in the Studio, waiting 60s, and reloading. Seeing
+content on the page is not proof — the fallback looks identical.
 
 ## Deployment
 
@@ -127,7 +190,14 @@ npx sanity deploy    # Deploy Sanity Studio (if hosted separately)
 
 ## Troubleshooting
 
-**Published content not showing** — ISR cache; wait up to 60s, or check the Vercel deploy hook fired (Vercel → Deployments).
+**Published content not showing** — in order of likelihood:
+1. The document has no `language` value (`zh` or `en`). Every query filters on
+   it, so the document is invisible.
+2. It is still a draft. Save stores a draft; only Publish goes live.
+3. `SANITY_API_READ_TOKEN` is missing in that environment — see the warning
+   under Environment Variables. Symptom: the whole site quietly shows fallback
+   content.
+4. ISR cache; wait up to 60s, or check the deploy hook fired.
 
 **Build fails with Sanity errors** — usually a GROQ query referencing a renamed field. Check the schema in `sanity/schemaTypes/` matches your queries.
 

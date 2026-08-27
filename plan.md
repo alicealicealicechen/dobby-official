@@ -28,10 +28,19 @@
 - [ ] 網域 DNS 指向 Vercel(A record / CNAME,約 10 分鐘)
 - [x] 建立三個環境:`production` / `preview`(Vercel PR 自動產生)/ 本地開發
 - [x] Sanity 建立兩個 dataset:`production` 與 `staging`
-- [x] 設定環境變數:
+- [x] 設定環境變數(本機 `.env.local` 已設定;**Vercel 尚未**):
   - `NEXT_PUBLIC_SANITY_PROJECT_ID`
   - `NEXT_PUBLIC_SANITY_DATASET`
-  - `SANITY_API_READ_TOKEN`(preview 草稿用)
+  - `SANITY_API_READ_TOKEN`
+
+> ⚠️ **兩個 dataset 目前都是 private。** 私有 dataset 遇到未帶 token 的查詢
+> **不會報錯,而是回傳空陣列**——與「CMS 裡沒內容」完全無法分辨。網站因此會
+> 安靜地全部退回 fallback,不會當機也沒有錯誤訊息。
+>
+> 因應方式二選一:
+> 1. 每個環境都設好 `SANITY_API_READ_TOKEN`(現在的做法),或
+> 2. 把 production 改為公開:`npx sanity dataset visibility set production public`
+>    ——行銷網站內容本來就要公開,少一個會忘記設定的變數。
 
 ### 產出
 
@@ -247,6 +256,30 @@
 - [ ] 行銷把首波內容(頁面 + 至少 3-5 篇文章)輸入 Sanity
 - [ ] 所有頁面 SEO 欄位填寫完整
 
+### 把 staging 的內容搬到 production
+
+`production` 目前是空的(0 筆)。**不要用 `scripts/seed.mjs` 灌 production**
+——那支腳本讀的是 `src/lib/pages.ts` 裡最初的硬編文案,會覆蓋掉行銷在 staging
+改過的所有內容。它的用途是一次性把網站搬進 CMS,任務已完成。
+
+正確做法是搬 dataset,連圖片資產一起帶過去:
+
+```bash
+npx sanity dataset export staging staging.tar.gz
+npx sanity dataset import staging.tar.gz production
+```
+
+- [ ] 匯出 staging → 匯入 production
+- [ ] 確認 production 的文件數與 staging 一致
+- [ ] 確認每份文件的 `language` 都有值(空的查不到,頁面會靜默退回 fallback)
+
+### Vercel 環境變數
+
+- [ ] `NEXT_PUBLIC_SANITY_PROJECT_ID`
+- [ ] `NEXT_PUBLIC_SANITY_DATASET` = `production`(**不是 staging**)
+- [ ] `SANITY_API_READ_TOKEN`(若 dataset 維持 private 則必填)
+- [ ] 三個變數在 Production 與 Preview 兩種環境都要設
+
 ### 技術檢查清單
 
 - [ ] 用 Screaming Frog 爬整站:無 404、無重複 title、無孤立頁
@@ -256,6 +289,9 @@
 - [ ] 舊網站 URL 對照表 → 301 轉址全部設定(**若是改版遷移,此項最重要**)
 - [ ] OG 分享預覽測試(Facebook Debugger、Twitter Card Validator)
 - [ ] 手機實機測試(iOS Safari + Android Chrome)
+- [ ] **確認內容真的來自 Sanity**:在 Studio 改一個字 → 等 60 秒 → 重新整理看是否更新。
+      只看頁面「有內容」不算通過,fallback 長得一模一樣。
+- [ ] 確認 `/studio` 已被 robots.txt 擋掉(`curl /robots.txt`)
 
 ### 上線日
 
