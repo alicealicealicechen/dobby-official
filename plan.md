@@ -27,7 +27,7 @@
 - [x] Vercel 專案確認(已有前端 repo 即可直接連)
 - [ ] 網域 DNS 指向 Vercel(A record / CNAME,約 10 分鐘)
 - [x] 建立三個環境:`production` / `preview`(Vercel PR 自動產生)/ 本地開發
-- [ ] Sanity 建立兩個 dataset:`production` 與 `staging`
+- [x] Sanity 建立兩個 dataset:`production` 與 `staging`
 - [ ] 設定環境變數:
   - `NEXT_PUBLIC_SANITY_PROJECT_ID`
   - `NEXT_PUBLIC_SANITY_DATASET`
@@ -113,7 +113,9 @@
       ↳ 已在 `src/sanity/schemaTypes/index.ts`,含 page/post/author/category/seo/siteSettings 與 language 欄位。寫成純物件,待安裝 `sanity` 後再包 defineType。
 - [x] 設定欄位驗證(如 metaTitle 長度警告)  
       ↳ metaTitle ≤ 60、metaDescription ≤ 160、language 必填。
-- [ ] 部署 Sanity Studio(可部署到 `yourcompany.sanity.studio` 或掛在 Next.js 的 `/studio` 路由)
+- [x] 部署 Sanity Studio(可部署到 `yourcompany.sanity.studio` 或掛在 Next.js 的 `/studio` 路由)  
+      ↳ 內嵌在 Next.js 的 `/studio`。用 route group 拆成兩個 root layout,Studio 因此沒有語系前綴。
+        設定在根目錄 `sanity.config.ts`;env 未設定時該路由顯示設定說明而非崩潰。robots.txt 已擋掉。
 - [ ] 行銷試用 Studio,回饋欄位命名與順序調整
 
 ### 產出

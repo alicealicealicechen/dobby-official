@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Noto_Sans_TC, Roboto_Mono } from "next/font/google";
-import "../globals.css";
+import "../../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getSiteSettings } from "@/lib/content";
