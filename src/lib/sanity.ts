@@ -22,7 +22,7 @@ export const isSanityConfigured = Boolean(projectId);
  * request is unauthenticated, which reads exactly like "the CMS is empty". The
  * token avoids that whether the dataset is private or public.
  */
-const token = process.env.SANITY_API_READ_TOKEN;
+const token = process.env.SANITY_API_TOKEN;
 
 const client = projectId
   ? createClient({

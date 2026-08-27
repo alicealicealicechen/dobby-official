@@ -63,7 +63,7 @@ Sanity Studio runs at `http://localhost:3000/studio`.
 |---|---|---|
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project ID | Sanity dashboard → project settings |
 | `NEXT_PUBLIC_SANITY_DATASET` | `production` or `staging` | — |
-| `SANITY_API_READ_TOKEN` | Token for draft preview | Sanity dashboard → API → Tokens |
+| `SANITY_API_TOKEN` | Editor token — reads content from the private dataset and stores contact submissions | Sanity dashboard → API → Tokens |
 
 All variables must also be set in Vercel → Project Settings → Environment
 Variables, for **both** Production and Preview.
@@ -73,7 +73,7 @@ Variables, for **both** Production and Preview.
 > indistinguishable from "the CMS has no content". Every page then silently
 > serves its built-in fallback: no crash, no error, just stale-looking content.
 >
-> So `SANITY_API_READ_TOKEN` is not optional here. Either set it everywhere, or
+> So `SANITY_API_TOKEN` is not optional here. Either set it everywhere, or
 > make the dataset public — reasonable for a marketing site, and one less
 > variable to forget:
 >
@@ -194,14 +194,14 @@ npx sanity deploy    # Deploy Sanity Studio (if hosted separately)
 1. The document has no `language` value (`zh` or `en`). Every query filters on
    it, so the document is invisible.
 2. It is still a draft. Save stores a draft; only Publish goes live.
-3. `SANITY_API_READ_TOKEN` is missing in that environment — see the warning
+3. `SANITY_API_TOKEN` is missing in that environment — see the warning
    under Environment Variables. Symptom: the whole site quietly shows fallback
    content.
 4. ISR cache; wait up to 60s, or check the deploy hook fired.
 
 **Build fails with Sanity errors** — usually a GROQ query referencing a renamed field. Check the schema in `sanity/schemaTypes/` matches your queries.
 
-**Preview not working** — verify `SANITY_API_READ_TOKEN` is set in both `.env.local` and Vercel.
+**Preview not working** — verify `SANITY_API_TOKEN` is set in both `.env.local` and Vercel.
 
 ## Links
 

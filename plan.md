@@ -31,14 +31,14 @@
 - [x] 設定環境變數(本機 `.env.local` 已設定):
   - `NEXT_PUBLIC_SANITY_PROJECT_ID`
   - `NEXT_PUBLIC_SANITY_DATASET`
-  - `SANITY_API_READ_TOKEN`
+  - `SANITY_API_TOKEN`(Editor:讀取內容 + 寫入聯絡表單訊息)
 
 > ⚠️ **兩個 dataset 目前都是 private。** 私有 dataset 遇到未帶 token 的查詢
 > **不會報錯,而是回傳空陣列**——與「CMS 裡沒內容」完全無法分辨。網站因此會
 > 安靜地全部退回 fallback,不會當機也沒有錯誤訊息。
 >
 > 因應方式二選一:
-> 1. 每個環境都設好 `SANITY_API_READ_TOKEN`(現在的做法),或
+> 1. 每個環境都設好 `SANITY_API_TOKEN`(現在的做法),或
 > 2. 把 production 改為公開:`npx sanity dataset visibility set production public`
 >    ——行銷網站內容本來就要公開,少一個會忘記設定的變數。
 
@@ -277,7 +277,7 @@ npx sanity dataset import staging.tar.gz production
 
 - [x] `NEXT_PUBLIC_SANITY_PROJECT_ID`
 - [x] `NEXT_PUBLIC_SANITY_DATASET` = `production`(**不是 staging**)
-- [x] `SANITY_API_READ_TOKEN`(若 dataset 維持 private 則必填)
+- [x] `SANITY_API_TOKEN`(若 dataset 維持 private 則必填)
 - [x] 三個變數在 Production 與 Preview 兩種環境都要設
 
 ### 技術檢查清單

@@ -31,7 +31,7 @@ const env = Object.fromEntries(
 
 const projectId = env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 const dataset = env.NEXT_PUBLIC_SANITY_DATASET;
-const token = env.SANITY_API_WRITE_TOKEN || env.SANITY_API_READ_TOKEN;
+const token = env.SANITY_API_TOKEN;
 const write = process.argv.includes("--write");
 
 if (!projectId || !dataset || !token) {

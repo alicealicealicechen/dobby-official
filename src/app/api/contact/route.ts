@@ -80,7 +80,7 @@ async function saveToSanity(
   fields: { name: string; email: string; message: string; locale: string },
   emailDelivered: boolean,
 ): Promise<void> {
-  const token = process.env.SANITY_API_WRITE_TOKEN;
+  const token = process.env.SANITY_API_TOKEN;
   if (!projectId || !token) {
     throw new Error("Sanity write is not configured");
   }

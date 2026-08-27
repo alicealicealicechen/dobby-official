@@ -38,7 +38,7 @@ export default function StudioPage() {
         >
 {`NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
 NEXT_PUBLIC_SANITY_DATASET=production
-SANITY_API_READ_TOKEN=your-read-token`}
+SANITY_API_TOKEN=your-editor-token`}
         </pre>
         <p style={{ margin: "16px 0 0", color: "#757575", fontSize: 14 }}>
           Current value: <code>{String(projectId)}</code>. Until it is set the
