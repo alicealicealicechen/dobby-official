@@ -7,7 +7,6 @@ import Icon from "@/components/Icon";
 import JsonLd from "@/components/JsonLd";
 import ShareActions from "@/components/ShareActions";
 import {
-  getAuthor,
   getCategories,
   getPost,
   getPosts,
@@ -63,12 +62,11 @@ export default async function BlogPostPage({
 }) {
   const { locale: rawLocale, slug } = await params;
   const locale = toLocale(rawLocale);
-  const [site, post, posts, categories, author] = await Promise.all([
+  const [site, post, posts, categories] = await Promise.all([
     getSiteSettings(locale),
     getPost(slug, locale),
     getPosts(locale),
     getCategories(locale),
-    getAuthor(locale),
   ]);
 
   if (!post) notFound();
@@ -103,7 +101,7 @@ export default async function BlogPostPage({
           <div className="mb-8 flex flex-wrap items-center gap-4 text-[13.5px] text-muted">
             <span className="flex items-center gap-1.5">
               <Icon name="user" size={14} className="opacity-60" />
-              {author?.name ?? site.name}
+              {site.authorName}
             </span>
             <span>·</span>
             <time dateTime={post.publishedAt}>{post.publishedAt}</time>
@@ -205,7 +203,7 @@ export default async function BlogPostPage({
         )}
       </main>
 
-      <JsonLd schema={articleSchema(post, author, site)} />
+      <JsonLd schema={articleSchema(post, site)} />
     </>
   );
 }

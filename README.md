@@ -74,8 +74,7 @@ All variables must also be set in Vercel → Project Settings → Environment Va
 │   ├── [slug]/              # Generic CMS-driven pages
 │   ├── blog/
 │   │   ├── [slug]/          # Blog posts
-│   │   ├── category/[slug]/ # Category pages
-│   │   └── author/[slug]/   # Author pages
+│   │   └── category/[slug]/ # Category pages
 │   ├── studio/              # Embedded Sanity Studio
 │   ├── api/draft/           # Draft mode for content preview
 │   ├── sitemap.ts           # Auto-generated sitemap from Sanity
@@ -85,7 +84,7 @@ All variables must also be set in Vercel → Project Settings → Environment Va
 │   ├── sanity.ts            # Sanity client
 │   └── schemas.ts           # JSON-LD schema generators
 ├── sanity/
-│   └── schemaTypes/         # Sanity content models (page, post, author, seo…)
+│   └── schemaTypes/         # Sanity content models (page, post, blog-category, seo…)
 └── public/                  # Static assets
 ```
 

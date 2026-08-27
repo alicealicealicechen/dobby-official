@@ -28,12 +28,13 @@ export const siteSettingsQuery = groq`
     url,
     email,
     address,
-    linkedin
+    linkedin,
+    authorName
   }
 `;
 
 export const categoriesQuery = groq`
-  *[_type == "category" && language == $locale] | order(order asc){
+  *[_type == "blog-category" && language == $locale] | order(order asc){
     title,
     "slug": slug.current,
     description,
@@ -42,7 +43,7 @@ export const categoriesQuery = groq`
 `;
 
 export const categoryQuery = groq`
-  *[_type == "category" && slug.current == $slug && language == $locale][0]{
+  *[_type == "blog-category" && slug.current == $slug && language == $locale][0]{
     title,
     "slug": slug.current,
     description,
@@ -68,15 +69,6 @@ export const postsByCategoryQuery = groq`
   }
 `;
 
-export const authorQuery = groq`
-  *[_type == "author" && slug.current == $slug && language == $locale][0]{
-    name,
-    "slug": slug.current,
-    bio,
-    "avatar": avatar.asset->url
-  }
-`;
-
 export const pageQuery = groq`
   *[_type == "page" && slug.current == $slug && language == $locale][0]{
     title,
@@ -89,6 +81,6 @@ export const pageQuery = groq`
 /** Every indexable route, for app/sitemap.ts. */
 export const sitemapQuery = groq`{
   "posts": *[_type == "post" && defined(slug.current)]{ "slug": slug.current, language, "updatedAt": _updatedAt },
-  "categories": *[_type == "category" && defined(slug.current)]{ "slug": slug.current, "updatedAt": _updatedAt },
+  "categories": *[_type == "blog-category" && defined(slug.current)]{ "slug": slug.current, "updatedAt": _updatedAt },
   "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, "updatedAt": _updatedAt }
 }`;

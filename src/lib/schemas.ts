@@ -4,7 +4,7 @@
  * place against the Rich Results Test.
  */
 
-import type { Author, Post, SiteSettings } from "./content";
+import type { Post, SiteSettings } from "./content";
 
 export type Json = Record<string, unknown>;
 
@@ -25,11 +25,7 @@ export function organizationSchema(site: SiteSettings): Json {
   };
 }
 
-export function articleSchema(
-  post: Post,
-  author: Author | null,
-  site: SiteSettings,
-): Json {
+export function articleSchema(post: Post, site: SiteSettings): Json {
   return {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -40,7 +36,7 @@ export function articleSchema(
     ...(post.mainImage ? { image: `${site.url}${post.mainImage.src}` } : {}),
     author: {
       "@type": "Organization",
-      name: author?.name ?? site.name,
+      name: site.authorName,
     },
     publisher: {
       "@type": "Organization",

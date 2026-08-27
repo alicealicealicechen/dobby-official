@@ -28,7 +28,7 @@
 - [ ] 網域 DNS 指向 Vercel(A record / CNAME,約 10 分鐘)
 - [x] 建立三個環境:`production` / `preview`(Vercel PR 自動產生)/ 本地開發
 - [x] Sanity 建立兩個 dataset:`production` 與 `staging`
-- [ ] 設定環境變數:
+- [x] 設定環境變數:
   - `NEXT_PUBLIC_SANITY_PROJECT_ID`
   - `NEXT_PUBLIC_SANITY_DATASET`
   - `SANITY_API_READ_TOKEN`(preview 草稿用)
@@ -48,7 +48,7 @@
 ### 要定義的 Content Types(Schema)
 
 #### 1. `page` — 一般頁面
-
+(這感覺要逐一設計？因為我們有很多頁面)
 | 欄位 | 型別 | 說明 |
 |---|---|---|
 | title | string | 頁面名稱 |
@@ -62,23 +62,13 @@
 |---|---|---|
 | title | string | 文章標題 |
 | slug | slug | URL 後綴 |
-| author | reference | 關聯到 author |
-| categories | array of reference | 關聯到 category |
+| categories | array of reference | 關聯到 blog-category |
 | publishedAt | datetime | 發佈時間 |
 | mainImage | image | 主圖(含 alt text 欄位) |
-| body | portable text | 內文(富文本) |
+| body | portable text | 內文(富文本)(write using markdown?) |
 | seo | object | 共用 SEO 欄位 |
 
-#### 3. `author` — 作者
-
-| 欄位 | 型別 | 說明 |
-|---|---|---|
-| name | string | 姓名 |
-| slug | slug | 作者頁 URL |
-| avatar | image | 頭像 |
-| bio | text | 簡介 |
-
-#### 4. `category` — 分類
+#### 4. `blog-category` — 分類
 
 | 欄位 | 型別 | 說明 |
 |---|---|---|
@@ -134,11 +124,10 @@
 - [x] 撰寫 GROQ query(每個頁面型別一組)  
       ↳ `src/lib/queries.ts`,每一條都以 `language` 過濾(文件級翻譯)。
 - [ ] 動態路由接資料:  
-      ↳ blog/[slug]、blog/category/[slug]、blog/author/[slug] 已完成;通用的 `app/[slug]` 尚未建立(還沒有 CMS 頁面內容)。
+      ↳ blog/[slug] 與 blog/category/[slug] 已完成。author 型別已移除,作者頁一併刪除,署名改由 siteSettings.authorName 提供。通用的 `app/[slug]` 見下方討論。
   - `app/[slug]/page.tsx` → page
   - `app/blog/[slug]/page.tsx` → post
   - `app/blog/category/[slug]/page.tsx` → category
-  - `app/blog/author/[slug]/page.tsx` → author
 - [x] 圖片走 Sanity CDN + `next/image`(自動 WebP、responsive)  
       ↳ `next.config.ts` 已允許 `cdn.sanity.io`;文章主圖走 next/image。
 - [ ] Portable Text 渲染元件(內文的標題、圖片、連結、程式碼區塊樣式)  

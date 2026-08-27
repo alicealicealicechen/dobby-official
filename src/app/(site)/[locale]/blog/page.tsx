@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Breadcrumb from "@/components/Breadcrumb";
 import BlogIndex from "@/components/BlogIndex";
 import {
-  getAuthor,
   getCategories,
   getPosts,
   getSiteSettings,
@@ -34,11 +33,10 @@ export default async function BlogListPage({
 }) {
   const { locale: rawLocale } = await params;
   const locale = toLocale(rawLocale);
-  const [site, posts, categories, author] = await Promise.all([
+  const [site, posts, categories] = await Promise.all([
     getSiteSettings(locale),
     getPosts(locale),
     getCategories(locale),
-    getAuthor(locale),
   ]);
   const t = getDictionary(locale);
 
@@ -55,7 +53,7 @@ export default async function BlogListPage({
         <BlogIndex
           posts={posts}
           categories={categories}
-          authorName={author?.name ?? site.name}
+          authorName={site.authorName}
           locale={locale}
           t={{
             eyebrow: t.blog.eyebrow,

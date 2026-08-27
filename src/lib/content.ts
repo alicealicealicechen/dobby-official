@@ -12,7 +12,6 @@
 
 import { sanityFetch } from "./sanity";
 import {
-  authorQuery,
   categoriesQuery,
   categoryQuery,
   postQuery,
@@ -28,12 +27,6 @@ export type Seo = {
   canonicalUrl?: string;
   ogImage?: string;
   noIndex?: boolean;
-};
-
-export type Author = {
-  name: string;
-  slug: string;
-  bio?: string;
 };
 
 export type Category = {
@@ -65,6 +58,8 @@ export type Post = {
 
 export type SiteSettings = {
   name: string;
+  /** Byline shown on every post — the blog has no per-author documents. */
+  authorName: string;
   tagline: string;
   description: string;
   url: string;
@@ -76,6 +71,7 @@ export type SiteSettings = {
 const SITE: Record<Locale, SiteSettings> = {
   zh: {
     name: "Dobby AI",
+    authorName: "Dobby AI 團隊",
     tagline: "地端企業級 AI 平台",
     description:
       "地端企業級 AI 平台，為高複雜、關鍵基礎設施場域設計，讓 AI 成為真正融入團隊的工作夥伴。",
@@ -89,6 +85,7 @@ const SITE: Record<Locale, SiteSettings> = {
   },
   en: {
     name: "Dobby AI",
+    authorName: "Dobby AI Team",
     tagline: "On-premise enterprise AI platform",
     description:
       "An on-premise enterprise AI platform built for complex, critical-infrastructure environments — so AI can genuinely join the team.",
@@ -144,19 +141,6 @@ const CATEGORIES: Record<Locale, Category[]> = {
       color: "var(--orange-900)",
     },
   ],
-};
-
-const AUTHOR: Record<Locale, Author> = {
-  zh: {
-    name: "Dobby AI 團隊",
-    slug: "dobby-team",
-    bio: "地端企業級 AI 平台團隊。",
-  },
-  en: {
-    name: "Dobby AI Team",
-    slug: "dobby-team",
-    bio: "The team behind the on-premise enterprise AI platform.",
-  },
 };
 
 const POSTS: Record<Locale, Post[]> = {
@@ -567,14 +551,6 @@ export async function getPostsByCategory(
   if (remote?.length) return remote;
   const posts = await getPosts(locale);
   return posts.filter((p) => p.category === slug);
-}
-
-export async function getAuthor(
-  locale: Locale,
-  slug = AUTHOR[locale].slug,
-): Promise<Author | null> {
-  const remote = await sanityFetch<Author>(authorQuery, { slug, locale });
-  return remote ?? (slug === AUTHOR[locale].slug ? AUTHOR[locale] : null);
 }
 
 /** Resolves a post's category record, falling back to the first category. */

@@ -118,8 +118,8 @@ export const redirect = {
   preview: { select: { title: "from", subtitle: "to" } },
 };
 
-export const category = {
-  name: "category",
+export const blogCategory = {
+  name: "blog-category",
   title: "分類",
   type: "document",
   fields: [
@@ -138,20 +138,6 @@ export const category = {
   preview: { select: { title: "title", subtitle: "language" } },
 };
 
-export const author = {
-  name: "author",
-  title: "作者",
-  type: "document",
-  fields: [
-    language,
-    { name: "name", type: "string", title: "姓名" },
-    { name: "slug", type: "slug", title: "網址", options: { source: "name" } },
-    { name: "avatar", type: "image", title: "頭像" },
-    { name: "bio", type: "text", rows: 3, title: "簡介" },
-  ],
-  preview: { select: { title: "name", subtitle: "language" } },
-};
-
 export const post = {
   name: "post",
   title: "文章",
@@ -162,15 +148,9 @@ export const post = {
     { name: "slug", type: "slug", title: "網址", options: { source: "title" } },
     { name: "excerpt", type: "text", rows: 2, title: "摘要" },
     {
-      name: "author",
-      type: "reference",
-      to: [{ type: "author" }],
-      title: "作者",
-    },
-    {
       name: "categories",
       type: "array",
-      of: [{ type: "reference", to: [{ type: "category" }] }],
+      of: [{ type: "reference", to: [{ type: "blog-category" }] }],
       title: "分類",
     },
     { name: "publishedAt", type: "datetime", title: "發佈時間" },
@@ -218,6 +198,12 @@ export const siteSettings = {
   fields: [
     language,
     { name: "siteName", type: "string", title: "網站名稱" },
+    {
+      name: "authorName",
+      type: "string",
+      title: "文章署名",
+      description: "所有文章共用的作者名稱(部落格沒有獨立作者型別)。",
+    },
     { name: "tagline", type: "string", title: "標語" },
     { name: "description", type: "text", rows: 3, title: "網站描述" },
     { name: "url", type: "url", title: "正式網址" },
@@ -248,8 +234,7 @@ export const schemaTypes = [
   postSection,
   pageSection,
   redirect,
-  category,
-  author,
+  blogCategory,
   post,
   page,
   siteSettings,
