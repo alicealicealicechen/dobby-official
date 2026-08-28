@@ -228,9 +228,27 @@
 
 ### 一鍵發佈機制
 
-- [ ] Vercel 建立 Deploy Hook(Settings → Git → Deploy Hooks)
-- [ ] Sanity 設定 Webhook:publish 時 POST 到 Deploy Hook URL
-- [ ] 測試:行銷點 Publish → 1-3 分鐘後網站更新
+改用**按需重新驗證**,不用 Deploy Hook。Deploy Hook 會為了一個字重建整站
+(1-3 分鐘,且每次存檔都消耗一次 build);webhook 直接清掉對應的快取標籤,
+發佈後數秒生效。
+
+- [x] `/api/revalidate` 路由(驗證 Sanity 簽章,依 `_type` 清除快取標籤)
+- [ ] Sanity 設定 Webhook,填入下列設定
+- [ ] 測試:行銷點 Publish → 數秒後網站更新
+
+Sanity → API → Webhooks → Create:
+
+| 欄位 | 值 |
+|---|---|
+| URL | `https://<正式網域>/api/revalidate` |
+| Dataset | `production` |
+| Trigger | Create、Update、Delete |
+| Filter | `_type in ["post","blog-category","homePage","productPage","siteSettings"]` |
+| Projection | `{"_type": _type}` |
+| Secret | 同 `SANITY_REVALIDATE_SECRET` |
+
+> 環境變數 `SANITY_REVALIDATE_SECRET` 未設定時,該路由一律拒絕(回 500),
+> 不會接受未簽章的請求。
 
 ### 選配強化(依團隊需求)
 

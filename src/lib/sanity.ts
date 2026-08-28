@@ -39,13 +39,20 @@ const client = projectId
 export async function sanityFetch<T>(
   query: string,
   params: Record<string, unknown> = {},
+  /**
+   * Document types this query depends on. Publishing in the Studio fires a
+   * webhook that purges exactly these tags, so a post going live does not
+   * rebuild the product page. Without tags the only recovery is waiting out
+   * the 60s window.
+   */
+  tags: string[] = [],
 ): Promise<T | null> {
   if (!client) return null;
 
   try {
     // SSG + ISR, per the rendering contract in the README.
     return await client.fetch<T>(query, params, {
-      next: { revalidate: 60 },
+      next: { revalidate: 60, tags },
     });
   } catch (error) {
     console.error("[sanity] query failed; falling back to seed content", error);

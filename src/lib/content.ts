@@ -151,12 +151,12 @@ const POSTS: Record<Locale, SeedPost[]> = { zh: [], en: [] };
    ------------------------------------------------------------------ */
 
 export async function getSiteSettings(locale: Locale): Promise<SiteSettings> {
-  const remote = await sanityFetch<SiteSettings>(siteSettingsQuery, { locale });
+  const remote = await sanityFetch<SiteSettings>(siteSettingsQuery, { locale }, ["siteSettings"]);
   return remote?.name ? { ...SITE[locale], ...remote } : SITE[locale];
 }
 
 export async function getCategories(locale: Locale): Promise<Category[]> {
-  const remote = await sanityFetch<Category[]>(categoriesQuery, { locale });
+  const remote = await sanityFetch<Category[]>(categoriesQuery, { locale }, ["blog-category"]);
   return remote?.length ? remote : CATEGORIES[locale];
 }
 
@@ -164,7 +164,7 @@ export async function getCategory(
   slug: string,
   locale: Locale,
 ): Promise<Category | null> {
-  const remote = await sanityFetch<Category>(categoryQuery, { slug, locale });
+  const remote = await sanityFetch<Category>(categoryQuery, { slug, locale }, ["blog-category"]);
   return remote ?? CATEGORIES[locale].find((c) => c.slug === slug) ?? null;
 }
 
@@ -173,7 +173,7 @@ function hydrate(post: SeedPost): Post {
 }
 
 export async function getPosts(locale: Locale): Promise<Post[]> {
-  const remote = await sanityFetch<Post[]>(postsQuery, { locale });
+  const remote = await sanityFetch<Post[]>(postsQuery, { locale }, ["post"]);
   if (remote?.length) return remote;
   return [...POSTS[locale]]
     .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
@@ -184,7 +184,7 @@ export async function getPost(
   slug: string,
   locale: Locale,
 ): Promise<Post | null> {
-  const remote = await sanityFetch<Post>(postQuery, { slug, locale });
+  const remote = await sanityFetch<Post>(postQuery, { slug, locale }, ["post"]);
   if (remote) return remote;
   const seed = POSTS[locale].find((p) => p.slug === slug);
   return seed ? hydrate(seed) : null;
@@ -194,10 +194,11 @@ export async function getPostsByCategory(
   slug: string,
   locale: Locale,
 ): Promise<Post[]> {
-  const remote = await sanityFetch<Post[]>(postsByCategoryQuery, {
-    slug,
-    locale,
-  });
+  const remote = await sanityFetch<Post[]>(
+    postsByCategoryQuery,
+    { slug, locale },
+    ["post", "blog-category"],
+  );
   if (remote?.length) return remote;
   const posts = await getPosts(locale);
   return posts.filter((p) => p.category === slug);

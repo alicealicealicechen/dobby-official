@@ -316,9 +316,11 @@ const PRODUCT: Record<Locale, ProductContent> = {
  * partially-filled document still renders.
  */
 export async function getHomeContent(locale: Locale): Promise<HomeContent> {
-  const remote = await sanityFetch<Partial<HomeContent>>(homePageQuery, {
-    locale,
-  });
+  const remote = await sanityFetch<Partial<HomeContent>>(
+    homePageQuery,
+    { locale },
+    ["homePage"],
+  );
   const seed = HOME[locale];
   if (!remote?.hero?.titleLead) return seed;
 
@@ -334,9 +336,11 @@ export async function getHomeContent(locale: Locale): Promise<HomeContent> {
 export async function getProductContent(
   locale: Locale,
 ): Promise<ProductContent> {
-  const remote = await sanityFetch<Partial<ProductContent>>(productPageQuery, {
-    locale,
-  });
+  const remote = await sanityFetch<Partial<ProductContent>>(
+    productPageQuery,
+    { locale },
+    ["productPage"],
+  );
   const seed = PRODUCT[locale];
   if (!remote?.hero?.title) return seed;
 
