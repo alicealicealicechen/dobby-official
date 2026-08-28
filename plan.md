@@ -207,7 +207,8 @@
 - [x] 全站圖片走 `next/image`
 - [x] 字型用 `next/font` 自架(消除 layout shift)  
       ↳ Inter / Noto Sans TC / Roboto Mono,未連 Google Fonts CDN。
-- [ ] 第三方腳本用 `<Script strategy="afterInteractive">`
+- [x] 第三方腳本用 `<Script strategy="afterInteractive">`  \
+      ↳ 目前唯一的第三方腳本是 Turnstile,以 `next/script` 的 `afterInteractive` 載入。
 - [ ] Lighthouse 分數目標:Performance ≥ 90、SEO = 100
 - [ ] 目標指標:LCP < 2.0s、CLS < 0.1、INP < 200ms
 
@@ -232,7 +233,9 @@
 (1-3 分鐘,且每次存檔都消耗一次 build);webhook 直接清掉對應的快取標籤,
 發佈後數秒生效。
 
-- [x] `/api/revalidate` 路由(驗證 Sanity 簽章,依 `_type` 清除快取標籤)
+- [x] `/api/revalidate` 路由(驗證 Sanity 簽章,依 `_type` 清除快取標籤)  \
+      ↳ 已部署。本機實測:正確簽章清除成功、錯誤簽章 401、未知型別回 skipped。
+        清除後第一個請求仍回舊值並在背景重建,第二個請求才是新的(stale-while-revalidate)。
 - [ ] Sanity 設定 Webhook,填入下列設定
 - [ ] 測試:行銷點 Publish → 數秒後網站更新
 
@@ -264,6 +267,24 @@ Sanity → API → Webhooks → Create:
 ### 產出
 
 - 行銷完全自助發佈,不需工程師介入
+
+---
+
+## 額外完成(原計畫未列)
+
+原始計畫沒有涵蓋這些,但實作過程中發現是必要的:
+
+- [x] **聯絡表單真的會送出**。原本送出後只是切換成功畫面,訊息全部丟棄,
+      卻顯示「我們會在 1-2 個工作天內與您聯繫」。現在同時寄信(Resend)與寫入
+      Sanity(`contactSubmission`),兩條獨立失敗,只有兩條都失敗才回報錯誤,
+      所以供應商當機也不會掉單。文件會記錄 `emailDelivered`,只存到 Sanity 的
+      那些在 Studio 一眼可辨。
+- [x] **Cloudflare Turnstile**。production 缺 secret 時一律拒絕送出,
+      不會默默放行——設定錯誤卻看起來正常的 captcha 比沒有更糟。
+- [x] Honeypot 欄位與每 IP 頻率限制(限制為每實例計算,擋腳本不擋決心)。
+- [x] **全站雙語(zh / en)**。語系是網址第一段,純靜態產生,不需要 middleware。
+- [x] 內嵌 Sanity Studio 於 `/studio`(route group 拆出第二個 root layout)。
+- [x] `scripts/seed.mjs`:一次性把既有文案與圖片灌進 dataset,不必手動重打。
 
 ---
 
