@@ -24,6 +24,12 @@ const SUBJECT_PREFIX = process.env.CONTACT_SUBJECT_PREFIX ?? "";
 
 const MAX_LENGTHS = { name: 100, email: 200, message: 5000 };
 
+// `name` is interpolated into the Subject header and `email` into Reply-To.
+// A control character in either is a header-injection attempt or corrupt input,
+// so they are rejected outright rather than stripped — silently mangling
+// someone's name is worse than telling them the field is invalid.
+const CONTROL_CHARS = /[\u0000-\u001f\u007f]/;
+
 /**
  * Verifies a Cloudflare Turnstile token.
  *
@@ -187,6 +193,9 @@ export async function POST(request: Request) {
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return Response.json({ error: "invalid_email" }, { status: 400 });
+  }
+  if (CONTROL_CHARS.test(name) || CONTROL_CHARS.test(email)) {
+    return Response.json({ error: "invalid_characters" }, { status: 400 });
   }
   if (
     name.length > MAX_LENGTHS.name ||
