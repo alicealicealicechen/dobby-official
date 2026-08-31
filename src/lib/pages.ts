@@ -8,7 +8,7 @@
 
 import type { IconName } from "@/components/Icon";
 import type { Locale } from "./i18n";
-import { sanityFetch } from "./sanity";
+import { overlay, sanityFetch } from "./sanity";
 import { homePageQuery, productPageQuery } from "./queries";
 
 export type HomeContent = {
@@ -325,11 +325,11 @@ export async function getHomeContent(locale: Locale): Promise<HomeContent> {
   if (!remote?.hero?.titleLead) return seed;
 
   return {
-    hero: { ...seed.hero, ...remote.hero },
-    band: { ...seed.band, ...remote.band },
-    pointsTitle: remote.pointsTitle ?? seed.pointsTitle,
+    hero: overlay(seed.hero, remote.hero),
+    band: overlay(seed.band, remote.band),
+    pointsTitle: remote.pointsTitle || seed.pointsTitle,
     points: remote.points?.length ? remote.points : seed.points,
-    cta: { ...seed.cta, ...remote.cta },
+    cta: overlay(seed.cta, remote.cta),
   };
 }
 
@@ -345,18 +345,17 @@ export async function getProductContent(
   if (!remote?.hero?.title) return seed;
 
   return {
-    hero: { ...seed.hero, ...remote.hero },
+    hero: overlay(seed.hero, remote.hero),
     overview: {
-      ...seed.overview,
-      ...remote.overview,
+      ...overlay(seed.overview, remote.overview),
       features: remote.overview?.features?.length
         ? remote.overview.features
         : seed.overview.features,
     },
-    plansTitle: remote.plansTitle ?? seed.plansTitle,
+    plansTitle: remote.plansTitle || seed.plansTitle,
     plans: remote.plans?.length ? remote.plans : seed.plans,
-    faqTitle: remote.faqTitle ?? seed.faqTitle,
+    faqTitle: remote.faqTitle || seed.faqTitle,
     faqs: remote.faqs?.length ? remote.faqs : seed.faqs,
-    closing: { ...seed.closing, ...remote.closing },
+    closing: overlay(seed.closing, remote.closing),
   };
 }

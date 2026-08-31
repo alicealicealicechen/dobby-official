@@ -114,3 +114,14 @@ export const productPageQuery = groq`
   }
 `;
 
+
+/**
+ * Every redirect from every siteSettings document, flattened into one list.
+ *
+ * The field sits on a per-language document, but a redirect is not language
+ * specific — an old URL is an old URL. Merging both documents means an editor
+ * cannot get it wrong by putting the entry in the "other" language.
+ */
+export const redirectsQuery = groq`
+  *[_type == "siteSettings"].redirects[]{from, to}
+`;

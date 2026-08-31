@@ -57,13 +57,37 @@ export const seo = {
   ],
 };
 
+/**
+ * A retired URL and where it now goes. Read at request time by the locale
+ * catch-all, so publishing one takes effect without a deploy — and because the
+ * catch-all only runs after every real route has missed, an entry here can
+ * never shadow a page that exists.
+ */
 export const redirect = {
   name: "redirect",
   title: "轉址",
   type: "object",
   fields: [
-    { name: "from", type: "string", title: "來源路徑" },
-    { name: "to", type: "string", title: "目標路徑" },
+    {
+      name: "from",
+      type: "string",
+      title: "舊網址",
+      description:
+        "要退休的路徑,以 / 開頭。語系前綴可加可不加:/old-page 對中英文都生效,/zh/old-page 只對中文生效。",
+      validation: (Rule: { required: () => { regex: (r: RegExp, o: object) => unknown } }) =>
+        Rule.required().regex(/^\//, { name: "必須以 / 開頭" }),
+    },
+    {
+      name: "to",
+      type: "string",
+      title: "新網址",
+      description:
+        "站內路徑(/product,會自動補上語系)或完整外部網址(https://…)。",
+      validation: (Rule: { required: () => { regex: (r: RegExp, o: object) => unknown } }) =>
+        Rule.required().regex(/^(\/[^\/]|https?:\/\/)/, {
+          name: "須為 / 開頭的站內路徑或 https:// 網址",
+        }),
+    },
   ],
   preview: { select: { title: "from", subtitle: "to" } },
 };

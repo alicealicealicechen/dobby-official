@@ -10,16 +10,17 @@
  * data mirrors that by keying each collection on locale.
  */
 
-import { sanityFetch } from "./sanity";
+import { overlay, sanityFetch } from "./sanity";
 import {
   categoriesQuery,
   categoryQuery,
   postQuery,
   postsByCategoryQuery,
   postsQuery,
+  redirectsQuery,
   siteSettingsQuery,
 } from "./queries";
-import type { Locale } from "./i18n";
+import { locales, type Locale } from "./i18n";
 import type { PortableTextBlock } from "@portabletext/types";
 
 export type Seo = {
@@ -152,7 +153,7 @@ const POSTS: Record<Locale, SeedPost[]> = { zh: [], en: [] };
 
 export async function getSiteSettings(locale: Locale): Promise<SiteSettings> {
   const remote = await sanityFetch<SiteSettings>(siteSettingsQuery, { locale }, ["siteSettings"]);
-  return remote?.name ? { ...SITE[locale], ...remote } : SITE[locale];
+  return overlay(SITE[locale], remote);
 }
 
 export async function getCategories(locale: Locale): Promise<Category[]> {
@@ -222,4 +223,64 @@ export function resolveCategory(
   return (
     categories.find((c) => c.slug === slug) ?? categories[0] ?? UNCATEGORISED
   );
+}
+
+/** One CMS-managed redirect. Both paths are absolute and start with a slash. */
+export type Redirect = { from: string; to: string };
+
+/**
+ * Redirects managed by marketing in siteSettings.
+ *
+ * Consumed by the locale catch-all, which only runs once no real route has
+ * matched — so a redirect can never shadow a live page, however it is typed.
+ * That is the whole reason this lives in the catch-all rather than in
+ * next.config: a build-time list would also go stale until the next deploy,
+ * which is exactly the silent trap the `page` type used to be.
+ *
+ * No seed fallback: an empty list is the correct answer for a site with no
+ * redirects, and inventing one here would be content rather than structure.
+ */
+export async function getRedirects(): Promise<Redirect[]> {
+  const remote = await sanityFetch<Redirect[]>(redirectsQuery, {}, [
+    "siteSettings",
+  ]);
+  return remote ?? [];
+}
+
+/**
+ * Resolves a path to its redirect target, or null when there is none.
+ *
+ * Matching is forgiving because a redirect that silently fails to fire looks
+ * exactly like one that was never added: the path is compared with and without
+ * its locale prefix, ignoring case and trailing slashes, so an editor may type
+ * `/zh/old-page` or `/old-page` and get what they meant either way.
+ *
+ * The target is then normalised: an external http(s) URL passes through, an
+ * internal path picks up the current locale unless one was already written.
+ * Anything else — a bare word, a `javascript:` scheme, a protocol-relative
+ * `//host` — returns null rather than emitting a Location header built from
+ * whatever was in the field.
+ */
+export function resolveRedirect(
+  redirects: Redirect[],
+  locale: string,
+  pathWithoutLocale: string,
+): string | null {
+  const norm = (p: string) => p.toLowerCase().replace(/\/+$/, "") || "/";
+  const wanted = [norm(`/${locale}${pathWithoutLocale}`), norm(pathWithoutLocale)];
+
+  const hit = redirects.find(
+    (r) => r?.from && r?.to && wanted.includes(norm(r.from)),
+  );
+  if (!hit) return null;
+
+  const to = hit.to.trim();
+  if (/^https?:\/\//i.test(to)) return to;
+  // Rejected rather than repaired: "//evil.example" is a protocol-relative URL,
+  // not a path, and prefixing a locale onto it would quietly change where it
+  // points instead of refusing an entry that was never valid.
+  if (!to.startsWith("/") || to.startsWith("//")) return null;
+
+  const prefixed = new RegExp(`^/(${locales.join("|")})(/|$)`).test(to);
+  return prefixed ? to : `/${locale}${to}`;
 }

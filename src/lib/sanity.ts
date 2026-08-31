@@ -59,3 +59,28 @@ export async function sanityFetch<T>(
     return null;
   }
 }
+
+/**
+ * Lays a partial CMS document over the structural fallback.
+ *
+ * A plain spread will not do. GROQ returns `null` for every field the editor
+ * left blank, and in a spread those nulls win — so a siteSettings document
+ * filled in with just a name would blank the footer address and crash the
+ * render on `address.map`. Only meaningful values are allowed to override,
+ * which is what "overrides field by field" was always supposed to mean.
+ */
+export function overlay<T extends object>(
+  base: T,
+  remote: Partial<T> | null | undefined,
+): T {
+  if (!remote) return base;
+  const merged = { ...base } as Record<string, unknown>;
+  for (const [key, value] of Object.entries(remote)) {
+    const blank =
+      value == null ||
+      value === "" ||
+      (Array.isArray(value) && value.length === 0);
+    if (!blank) merged[key] = value;
+  }
+  return merged as T;
+}
