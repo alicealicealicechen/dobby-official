@@ -1,13 +1,17 @@
-import { createClient } from "next-sanity";
-import { apiVersion, dataset, projectId } from "@/lib/sanity";
-
 /**
  * Contact form handler.
  *
- * Delivers to two places on purpose: an email to the team, and a document in
- * Sanity. They fail independently, so an enquiry survives a provider outage or
- * an expired API key. The request only fails if *both* sinks fail — otherwise
- * the visitor is told it worked, because it did.
+ * Email is the only sink. This used to also write each enquiry to Sanity so
+ * that one could survive the other failing, but the dataset returns to a public
+ * ACL when the trial ends, and public means every name, address and message is
+ * readable by anyone holding the project id — which ships in the client bundle
+ * by design. Paying to keep a private copy of what is already in the inbox is
+ * not worth it.
+ *
+ * So delivery is single-path, and the failure is made visible: a Resend outage
+ * returns 502 and the form shows the team address, which is better than a
+ * silent loss but worse than the old redundancy. If enquiries ever need a
+ * durable second home, put it somewhere private by default.
  */
 
 export const runtime = "nodejs";
@@ -137,32 +141,6 @@ async function sendEmail(fields: {
   }
 }
 
-async function saveToSanity(
-  fields: { name: string; email: string; message: string; locale: string },
-  emailDelivered: boolean,
-): Promise<void> {
-  const token = process.env.SANITY_API_TOKEN;
-  if (!projectId || !token) {
-    throw new Error("Sanity write is not configured");
-  }
-
-  const client = createClient({
-    projectId,
-    dataset,
-    apiVersion,
-    token,
-    useCdn: false,
-  });
-
-  await client.create({
-    _type: "contactSubmission",
-    ...fields,
-    submittedAt: new Date().toISOString(),
-    status: "new",
-    emailDelivered,
-  });
-}
-
 export async function POST(request: Request) {
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
@@ -215,27 +193,14 @@ export async function POST(request: Request) {
 
   const fields = { name, email, message, locale };
 
-  // Email first, so the Sanity document can record whether it went out.
-  let emailDelivered = true;
   try {
     await sendEmail(fields);
   } catch (error) {
-    emailDelivered = false;
+    // Logged with no enquiry content: the request body is the sensitive part
+    // and platform logs are not the place for it.
     console.error("[contact] email failed:", error);
-  }
-
-  let stored = true;
-  try {
-    await saveToSanity(fields, emailDelivered);
-  } catch (error) {
-    stored = false;
-    console.error("[contact] sanity write failed:", error);
-  }
-
-  // One sink is enough for the enquiry to be safe.
-  if (!emailDelivered && !stored) {
     return Response.json({ error: "delivery_failed" }, { status: 502 });
   }
 
-  return Response.json({ ok: true, emailDelivered, stored });
+  return Response.json({ ok: true });
 }

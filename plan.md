@@ -31,16 +31,19 @@
 - [x] 設定環境變數(本機 `.env.local` 已設定):
   - `NEXT_PUBLIC_SANITY_PROJECT_ID`
   - `NEXT_PUBLIC_SANITY_DATASET`
-  - `SANITY_API_TOKEN`(Editor:讀取內容 + 寫入聯絡表單訊息)
+  - `SANITY_API_TOKEN`(Editor:讀取內容。私有 dataset 與 CDN 快取都靠它)
 
 > ⚠️ **兩個 dataset 目前都是 private。** 私有 dataset 遇到未帶 token 的查詢
 > **不會報錯,而是回傳空陣列**——與「CMS 裡沒內容」完全無法分辨。網站因此會
 > 安靜地全部退回 fallback,不會當機也沒有錯誤訊息。
 >
-> 因應方式二選一:
-> 1. 每個環境都設好 `SANITY_API_TOKEN`(現在的做法),或
-> 2. 把 production 改為公開:`npx sanity dataset visibility set production public`
->    ——行銷網站內容本來就要公開,少一個會忘記設定的變數。
+> 因應方式:每個環境都設好 `SANITY_API_TOKEN`(現在的做法)。
+>
+> **Trial 結束後 production 會被強制轉回 public ACL。** 那時任何人只要有
+> project id(前端 bundle 裡就有)就能讀走全部已發佈文件。行銷文案本來就公開,
+> 所以這件事本身可接受——但前提是**不要把不該公開的東西放進 Sanity**。
+> 聯絡表單的寫入路徑已經因此移除,見 §7。之後新增 document 型別時,先問一句
+> 「這份資料公開在網路上可以嗎」,答案是否就不要放。
 
 ### 產出
 
@@ -275,10 +278,14 @@ Sanity → API → Webhooks → Create:
 原始計畫沒有涵蓋這些,但實作過程中發現是必要的:
 
 - [x] **聯絡表單真的會送出**。原本送出後只是切換成功畫面,訊息全部丟棄,
-      卻顯示「我們會在 1-2 個工作天內與您聯繫」。現在同時寄信(Resend)與寫入
-      Sanity(`contactSubmission`),兩條獨立失敗,只有兩條都失敗才回報錯誤,
-      所以供應商當機也不會掉單。文件會記錄 `emailDelivered`,只存到 Sanity 的
-      那些在 Studio 一眼可辨。
+      卻顯示「我們會在 1-2 個工作天內與您聯繫」。現在寄信到 support@dobbyai.co
+      (Resend),寄失敗回 502,表單顯示錯誤並附上信箱讓對方改用信件。
+- [x] **聯絡表單不再寫入 Sanity**。原本是雙軌投遞(信 + `contactSubmission`
+      文件),任一條掛掉都不掉單。但 trial 結束後 dataset 會回到 public ACL,
+      而 public 表示任何人拿 project id 就能讀走所有姓名/信箱/需求內容——
+      project id 本來就在前端 bundle 裡。為了替已經在信箱裡的東西留一份備份
+      而付費並不划算,所以移除了那條路徑,連同 `contactSubmission` 型別與
+      既有文件。代價是投遞變成單點,失敗時靠使用者看見錯誤訊息補救。
 - [x] **Cloudflare Turnstile**。production 缺 secret 時一律拒絕送出,
       不會默默放行——設定錯誤卻看起來正常的 captcha 比沒有更糟。
 - [x] Honeypot 欄位與每 IP 頻率限制(限制為每實例計算,擋腳本不擋決心)。

@@ -69,14 +69,6 @@ export const postsByCategoryQuery = groq`
   }
 `;
 
-export const pageQuery = groq`
-  *[_type == "page" && slug.current == $slug && language == $locale][0]{
-    title,
-    "slug": slug.current,
-    sections,
-    ${SEO}
-  }
-`;
 
 export const homePageQuery = groq`
   *[_type == "homePage" && language == $locale][0]{
@@ -122,9 +114,3 @@ export const productPageQuery = groq`
   }
 `;
 
-/** Every indexable route, for app/sitemap.ts. */
-export const sitemapQuery = groq`{
-  "posts": *[_type == "post" && defined(slug.current)]{ "slug": slug.current, language, "updatedAt": _updatedAt },
-  "categories": *[_type == "blog-category" && defined(slug.current)]{ "slug": slug.current, "updatedAt": _updatedAt },
-  "pages": *[_type == "page" && defined(slug.current)]{ "slug": slug.current, "updatedAt": _updatedAt }
-}`;

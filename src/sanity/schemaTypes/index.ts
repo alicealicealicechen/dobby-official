@@ -57,39 +57,6 @@ export const seo = {
   ],
 };
 
-/**
- * A composable marketing block; `variant` picks the layout that renders it.
- * The real block list comes out of the Phase 1 workshop — this is a draft.
- */
-export const pageSection = {
-  name: "pageSection",
-  title: "頁面區塊",
-  type: "object",
-  fields: [
-    {
-      name: "variant",
-      type: "string",
-      title: "區塊型式",
-      options: {
-        list: [
-          { title: "主視覺 Hero", value: "hero" },
-          { title: "深色橫幅 Band", value: "band" },
-          { title: "編號清單 Points", value: "points" },
-          { title: "方案 Plans", value: "plans" },
-          { title: "常見問題 FAQ", value: "faq" },
-          { title: "行動呼籲 CTA", value: "cta" },
-        ],
-      },
-      validation: (Rule: { required: () => unknown }) => Rule.required(),
-    },
-    { name: "eyebrow", type: "string", title: "小標" },
-    { name: "heading", type: "string", title: "標題" },
-    { name: "body", type: "text", rows: 3, title: "說明" },
-    { name: "image", type: "image", title: "圖片" },
-  ],
-  preview: { select: { title: "heading", subtitle: "variant" } },
-};
-
 export const redirect = {
   name: "redirect",
   title: "轉址",
@@ -193,33 +160,18 @@ export const post = {
   preview: { select: { title: "title", subtitle: "language" } },
 };
 
-export const page = {
-  name: "page",
-  title: "頁面",
-  type: "document",
-  fields: [
-    language,
-    { name: "title", type: "string", title: "頁面名稱" },
-    { name: "slug", type: "slug", title: "網址", options: { source: "title" } },
-    {
-      name: "sections",
-      type: "array",
-      title: "頁面區塊",
-      of: [{ type: "pageSection" }],
-    },
-    { name: "seo", type: "seo", title: "SEO" },
-  ],
-  preview: { select: { title: "title", subtitle: "language" } },
-};
-
 /* ------------------------------------------------------------------
    Marketing page content.
 
-   Deliberately not the composable `page` builder: there are only two such
-   pages and their layouts differ, so a generic block list would force every
-   field to be vague. These mirror what each page actually renders, which
-   makes the Studio form self-explanatory — marketing edits the words,
+   One type per page rather than a generic block builder: there are only two
+   such pages and their layouts differ, so a shared block list would force
+   every field to be vague. These mirror what each page actually renders,
+   which makes the Studio form self-explanatory — marketing edits the words,
    engineering keeps the layout.
+
+   A generic `page` type lived here once. It was removed because nothing
+   rendered it — a document could be published and listed in the sitemap while
+   every visit 404'd. Reinstate it together with its route, never before.
    ------------------------------------------------------------------ */
 
 export const ctaLink = {
@@ -388,65 +340,6 @@ export const productPage = {
   preview: { select: { title: "heroTitle", subtitle: "language" } },
 };
 
-/**
- * A contact-form submission. Written by the public API route so an enquiry
- * survives even when the email provider is down — see app/api/contact.
- * Never edited by hand; `status` is the only field marketing changes.
- */
-export const contactSubmission = {
-  name: "contactSubmission",
-  title: "聯絡表單訊息",
-  type: "document",
-  fields: [
-    { name: "name", type: "string", title: "姓名", readOnly: true },
-    { name: "email", type: "string", title: "Email", readOnly: true },
-    { name: "message", type: "text", rows: 6, title: "需求說明", readOnly: true },
-    { name: "submittedAt", type: "datetime", title: "送出時間", readOnly: true },
-    {
-      name: "locale",
-      type: "string",
-      title: "來源語系",
-      readOnly: true,
-      options: { list: ["zh", "en"] },
-    },
-    {
-      name: "status",
-      type: "string",
-      title: "處理狀態",
-      initialValue: "new",
-      options: {
-        list: [
-          { title: "未處理", value: "new" },
-          { title: "已回覆", value: "replied" },
-          { title: "已關閉", value: "closed" },
-        ],
-        layout: "radio",
-      },
-    },
-    {
-      name: "emailDelivered",
-      type: "boolean",
-      title: "通知信已寄出",
-      readOnly: true,
-      description: "false 代表寄信失敗,這筆只存在 Sanity,請主動聯繫。",
-    },
-  ],
-  orderings: [
-    {
-      title: "最新的在前",
-      name: "newestFirst",
-      by: [{ field: "submittedAt", direction: "desc" }],
-    },
-  ],
-  preview: {
-    select: { title: "name", subtitle: "email", status: "status" },
-    prepare: ({ title, subtitle, status }: Record<string, string>) => ({
-      title: `${status === "new" ? "● " : ""}${title ?? "(無姓名)"}`,
-      subtitle,
-    }),
-  },
-};
-
 export const siteSettings = {
   name: "siteSettings",
   title: "全站設定",
@@ -487,7 +380,6 @@ export const siteSettings = {
 export const schemaTypes = [
   // Objects first — the documents below reference them by name.
   seo,
-  pageSection,
   redirect,
   ctaLink,
   homePoint,
@@ -496,9 +388,7 @@ export const schemaTypes = [
   faqItem,
   blogCategory,
   post,
-  page,
   homePage,
   productPage,
-  contactSubmission,
   siteSettings,
 ];
