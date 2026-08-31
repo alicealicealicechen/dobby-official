@@ -17,8 +17,10 @@ const TO = process.env.CONTACT_TO_EMAIL ?? "support@dobbyai.co";
 // Resend's sandbox sender works without verifying a domain. Swap for an
 // address on dobbyai.co once SPF/DKIM are set up — deliverability is better.
 const FROM = process.env.CONTACT_FROM_EMAIL ?? "onboarding@resend.dev";
-// Drop CONTACT_SUBJECT_PREFIX (or set it empty) when this goes live.
-const SUBJECT_PREFIX = process.env.CONTACT_SUBJECT_PREFIX ?? "[TEST] ";
+// Empty in production. Set CONTACT_SUBJECT_PREFIX on Preview deployments so
+// their mail is obviously not a real enquiry — production must default to no
+// prefix, or an unset variable silently tags live enquiries as tests.
+const SUBJECT_PREFIX = process.env.CONTACT_SUBJECT_PREFIX ?? "";
 
 const MAX_LENGTHS = { name: 100, email: 200, message: 5000 };
 
