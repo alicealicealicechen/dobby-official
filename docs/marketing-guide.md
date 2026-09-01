@@ -6,11 +6,31 @@ For the marketing team. No technical knowledge needed, and nothing you can click
 
 ## Before you start
 
-**Editor:** https://dobbyai.co/studio
+There are two separate copies of the site. Practise on the test site, do the
+real work on the live one.
 
-Sign in with your Google account. If it says you don't have access, ask the site administrator to add you to the project.
+|  | Test site | Live site |
+|---|---|---|
+| **Website** | [dobby-official.vercel.app](https://dobby-official.vercel.app) | [dobbyai.co](https://dobbyai.co) |
+| **Editor** | [dobby-official.vercel.app/studio](https://dobby-official.vercel.app/studio) | [dobbyai.co/studio](https://dobbyai.co/studio) |
+| **Who can see it** | you and the team | everyone |
+| **Content** | its own, currently near-empty | the real thing |
 
-The editor is called **Sanity Studio**. Content types are listed on the left, the document you're editing is in the middle. What you change here goes live on the website once you publish it.
+The two hold **completely separate content**. Nothing you write, change or
+delete on one can reach the other, so the test site is somewhere to get a feel
+for the editor with no chance of publishing something by accident.
+
+That same separation is the catch: work done on the test site stays there.
+Anything you want on the real website has to be written again on the live one.
+Use the test site to learn the tool, not to draft the words.
+
+Sign in to either editor with your Google account. If it says you don't have
+access, ask the site administrator to add you to the project. The test site
+asks for a Vercel login as well the first time — same person to ask.
+
+The editor is called **Sanity Studio**. Content types are listed down the left,
+the document you're editing sits in the middle. What you change here reaches the
+website once you publish it.
 
 ---
 
