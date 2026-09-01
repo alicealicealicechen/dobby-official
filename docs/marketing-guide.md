@@ -1,320 +1,322 @@
-# Dobby AI 官網編輯指南
+# Dobby AI Website — Editor's Guide
 
-給行銷團隊。你不需要任何程式知識，也不會有任何操作能弄壞網站。
-
----
-
-## 開始之前
-
-**編輯後台**：https://dobbyai.co/studio
-
-用你的 Google 帳號登入。如果顯示沒有權限，請找網站管理者把你加入專案。
-
-後台叫做 **Sanity Studio**。左邊是內容清單，中間是編輯區。你在這裡改的東西，發佈後會直接更新到官網。
+For the marketing team. No technical knowledge needed, and nothing you can click will break the site.
 
 ---
 
-## 三條最重要的規則
+## Before you start
 
-### 1. 中文和英文是兩份完全獨立的文件
+**Editor:** https://dobbyai.co/studio
 
-網站有中英雙語。後台裡**每一種內容都有兩份**，各自標記著語言：
+Sign in with your Google account. If it says you don't have access, ask the site administrator to add you to the project.
+
+The editor is called **Sanity Studio**. Content types are listed on the left, the document you're editing is in the middle. What you change here goes live on the website once you publish it.
+
+---
+
+## The three rules that matter
+
+### 1. Chinese and English are separate documents
+
+The site is bilingual. **Every kind of content exists twice** in the editor, each tagged with its language:
 
 ```
-首頁
- ├── 首頁 (zh)   ← 改這份只會改中文站
- └── 首頁 (en)   ← 英文站要另外改
+Home page
+ ├── Home page (zh)   ← editing this changes only the Chinese site
+ └── Home page (en)   ← the English site is a different document
 ```
 
-**改了中文不會自動改英文。** 兩邊都要改，這是最常被忘記的一件事。
+**Editing one does not touch the other.** This is the thing people forget most often.
 
-每份文件最上面都有一個「**語言**」欄位，只能填 `zh` 或 `en`。這個欄位決定它出現在哪個語言的網站上，**不要更動已存在文件的語言**。
+Every document has a **Language** field at the top, set to either `zh` or `en`. It decides which site the document appears on. **Never change it on a document that already exists** — see the last section for why.
 
-### 2. 按下 Publish 才會上線
+### 2. Nothing is live until you press Publish
 
-編輯的時候，右下角會出現 **Publish** 按鈕。
+While you edit, a **Publish** button sits in the bottom right.
 
-- 沒按 Publish → 你的修改只是草稿，**官網不會有任何變化**
-- 按了 Publish → 才會上線
+- Haven't pressed it → your changes are a draft, **the website is unchanged**
+- Pressed it → live
 
-草稿是安全的。你可以慢慢改、改到一半離開、隔天再回來，官網都不受影響。
+Drafts are safe. Edit slowly, leave halfway through, come back tomorrow — the public site stays exactly as it was.
 
-### 3. 發佈後約一分鐘生效
+### 3. Give it about a minute
 
-按下 Publish 之後大約一分鐘，官網才會更新。
+The site updates roughly a minute after you publish.
 
-打開官網沒看到變化很正常，**等一下再重新整理**。如果超過三分鐘還是沒變，用無痕視窗開一次（可能是你自己瀏覽器的快取）。
-
----
-
-## 你可以編輯什麼
-
-| 後台項目 | 對應到官網 |
-|---|---|
-| **首頁** | dobbyai.co 的首頁 |
-| **產品頁** | 產品 / 服務 那一頁 |
-| **文章** | 部落格的每一篇文章 |
-| **分類** | 部落格的分類標籤 |
-| **全站設定** | 頁尾資訊、預設分享圖 |
-
-導覽列的文字、頁面版型、按鈕位置**不在後台**，那些需要工程師調整。後台管的是「文字和圖片」。
+Not seeing your change straight away is normal — **wait a moment and refresh**. If it's still missing after three minutes, open the page in a private window; you're probably looking at your own browser's cache.
 
 ---
 
-## 首次上手：發第一篇部落格文章
+## What you can edit
 
-目前部落格是空的。第一次要照這個順序做，**不能跳過第一步**。
-
-### 步驟 1 — 先建立分類
-
-文章必須掛在分類底下，所以分類要先存在。
-
-左側點 **分類** → 右上 **+**（新增），填：
-
-| 欄位 | 填什麼 |
+| In the editor | On the website |
 |---|---|
-| **語言** | `zh` |
-| **分類名稱** | 例如「產品新知」 |
-| **網址** | 點旁邊的 **Generate** 自動產生，或自己填英文小寫（例如 `product-news`） |
-| **分類描述** | 一兩句話，會顯示在分類頁上方 |
-| **代表色** | 可留空，留空用預設品牌色 |
-| **排序** | 數字，越小越前面。例如 1、2、3 |
+| **Home page** | dobbyai.co landing page |
+| **Product page** | the Product / Services page |
+| **Post** | each blog article |
+| **Category** | the blog's category labels |
+| **Site settings** | footer details, default share image, redirects |
 
-按 **Publish**。
+Navigation labels, page layout and button placement are **not** in the editor — those need an engineer. The editor owns the words and the pictures.
 
-接著**再建一次英文版**：一樣的步驟，語言選 `en`，分類名稱填英文（例如 Product News）。
+---
 
-> **網址要跟中文版一樣**（都填 `product-news`）。這樣訪客在中英文之間切換時才會停在同一個分類，不然會跳回首頁。
+## Getting started: your first blog post
 
-### 步驟 2 — 寫文章
+The blog is currently empty. The first time through, follow this order — **step 1 cannot be skipped**.
 
-左側點 **文章** → **+**：
+### Step 1 — Create a category first
 
-| 欄位 | 說明 |
+A post has to belong to a category, so the category must already exist.
+
+Click **Category** on the left, then **+** to create one:
+
+| Field | What to put |
 |---|---|
-| **語言** | `zh` 或 `en` |
-| **標題** | 文章標題 |
-| **網址** | 按 **Generate**。中文標題產生的網址可能是亂碼，建議自己改成英文小寫加連字號，例如 `why-on-premise-ai` |
-| **摘要** | 兩三句話，顯示在文章列表的卡片上，也會被 Google 拿去當搜尋結果的描述 |
-| **分類** | 點 **Add item** 選剛才建好的分類。可以選多個 |
-| **發佈時間** | 文章列表依這個時間排序，**新的在前面** |
-| **閱讀時間** | 手動填，例如「5 分鐘閱讀」 |
-| **主圖** | 文章頁最上方的橫幅（規格見下方） |
-| **內文** | 正文 |
-| **SEO** | 可留空，見下方說明 |
+| **Language** | `zh` or `en` |
+| **Category name** | e.g. "Product news" |
+| **Slug** | press **Generate**, or type lowercase English yourself (e.g. `product-news`) |
+| **Category description** | a sentence or two, shown at the top of the category page |
+| **Accent colour** | leave empty to use the default brand colour |
+| **Order** | a number. Lower sorts first: 1, 2, 3 |
 
-按 **Publish**。
+Press **Publish**.
 
-### 步驟 3 — 中英文網址要一致
+Then **create it a second time** for the other language: same steps, with the other **Language** value and a translated **Category name**.
 
-同一篇文章的中文版和英文版，**網址欄位要填一樣的值**。
+> **Use the same Slug in both languages** (`product-news` in each). That's what lets a reader switch language and stay on the same category instead of being sent back to the home page.
+
+### Step 2 — Write the post
+
+Click **Post** on the left, then **+**:
+
+| Field | Notes |
+|---|---|
+| **Language** | `zh` or `en` |
+| **Title** | the headline |
+| **Slug** | press **Generate**. A Chinese title can produce an unreadable slug — type lowercase English with hyphens instead, e.g. `why-on-premise-ai` |
+| **Excerpt** | two or three sentences. Used on the article card and as the Google search description |
+| **Categories** | **Add item**, then pick the category you just made. More than one is fine |
+| **Published at** | the article list sorts by this, **newest first** |
+| **Read time** | typed in by hand, e.g. "5 min read" |
+| **Main image** | the banner at the top of the article (sizes below) |
+| **Body** | the article itself |
+| **SEO** | safe to leave empty, see below |
+
+Press **Publish**.
+
+### Step 3 — Keep the slugs matching
+
+The Chinese and English versions of the same article need **the same value in Slug**:
 
 ```
-中文版  語言 zh   網址 why-on-premise-ai
-英文版  語言 en   網址 why-on-premise-ai   ← 一樣
+Chinese   Language zh   Slug  why-on-premise-ai
+English   Language en   Slug  why-on-premise-ai   ← identical
 ```
 
-這樣讀者在文章頁按語言切換，才會跳到同一篇的另一個語言版本。
+That's what makes the language switcher land on the translation instead of the home page.
 
-如果只寫了中文版沒寫英文版，英文站就不會有這篇文章——這是可以接受的，不會出錯。
+Writing only one language is fine — the article simply won't exist on the other site. Nothing breaks.
 
 ---
 
-## 內文編輯器怎麼用
+## Using the body editor
 
-內文區可以用這些格式：
-
-| 格式 | 用途 |
+| Format | Use it for |
 |---|---|
-| **內文** | 一般段落 |
-| **小標 H2** | 章節標題 |
-| **小標 H3** | 次級標題 |
-| **引言** | 引述區塊 |
-| 項目符號 / 編號 | 清單 |
-| **粗體**、*斜體*、`程式碼` | 選取文字後點上方工具列 |
-| 連結 | 選取文字 → 點連結圖示 → 貼網址 |
-| 圖片 | 點 **+** 插入，可加圖說 |
+| **Normal text** | ordinary paragraphs |
+| **Subheading H2** | section headings |
+| **Subheading H3** | sub-sections |
+| **Quote** | pull quotes |
+| Bulleted / Numbered | lists |
+| **Bold**, *Italic*, `Code` | select the text, then use the toolbar |
+| Link | select text → link icon → paste the URL |
+| Image | click **+** to insert; a caption is optional |
 
-### H2 會自動變成文章目錄
+### H2 headings become the table of contents
 
-文章頁左側的目錄是**自動從 H2 產生的**，你不需要手動維護。
+The contents list beside an article is **generated from your H2 headings**. You never maintain it by hand.
 
-這代表：想讓某個段落出現在目錄，就把它設成 H2；不想出現，就用 H3 或粗體。
+Which means: to put a section in the contents, make it an H2. To keep it out, use H3 or bold instead.
 
 ---
 
-## 首頁怎麼編
+## Editing the home page
 
-首頁的欄位是照著版面由上到下排列的：
+Fields are ordered the way the page is, top to bottom.
 
-**主視覺（最上方那一大塊）**
+**Hero — the large block at the top**
 
-| 欄位 | 位置 |
+| Field | Where it lands |
 |---|---|
-| 主視覺 · 小標 | 標題上方的小字 |
-| 主視覺 · 標題第一行 | 大標題第一行 |
-| 主視覺 · 標題第二行 | 大標題第二行 |
-| 主視覺 · 強調字 | 接在第二行後面，**以品牌橘色顯示** |
-| 主視覺 · 說明 | 標題底下的段落 |
+| Hero · Eyebrow | the small line above the headline |
+| Hero · Heading line 1 | first line of the big headline |
+| Hero · Heading line 2 | second line |
+| Hero · Highlight | follows line 2, **shown in the brand orange** |
+| Hero · Intro | the paragraph under the headline |
 
-**深色橫幅**
+**Dark band**
 
-標題、說明、圖片。圖片可留空，留空時用系統內建的預設圖。
+Heading, Body and Image. Leaving the image empty falls back to the built-in one.
 
-**賣點區**
+**Selling points**
 
-「賣點區 · 標題」加上一組「賣點」。每個賣點有標題和說明，點 **Add item** 新增、拖曳可調順序。
+A **Selling points · Heading**, then a list of points, each with its own Heading and Body. **Add item** to add one; drag to reorder.
 
-**行動呼籲 CTA（最下方）**
+**CTA — the closing call to action**
 
-小標、標題、說明、主按鈕文字，以及「次要連結」——次要連結的「前往」是下拉選單，只能選產品 / 部落格 / 聯絡我們，這是為了避免連到不存在的頁面。
-
----
-
-## 產品頁怎麼編
-
-同樣照版面順序：
-
-- **主視覺** — 標題、說明
-- **功能總覽** — 標題 + 一張產品截圖
-- **功能** — 每一項有「圖示」「標題」「說明」。圖示是下拉選單（上傳 / 鎖頭 / 編輯 / 雙對話 / 文件），只能從裡面選
-- **方案** — 每個方案有名稱、副標、一句話說明，加上「包含項目」清單
-- **常見問題** — 問答配對，可自由增減
-- **結尾** — 標題和按鈕文字
+Eyebrow, Heading, Body and Primary button. **CTA · Secondary links** has a **Goes to** dropdown limited to Product, Blog and Contact — that restriction exists so a link can't point at a page that doesn't exist.
 
 ---
 
-## 圖片規格
+## Editing the product page
 
-上傳前先確認尺寸，不對的話網站上會模糊或被裁掉。
+Also in page order:
 
-| 用在哪 | 建議上傳尺寸 | 會不會裁切 |
+- **Hero** — Heading and Intro
+- **Overview** — Heading plus a product screenshot
+- **Features** — each has an **Icon**, **Heading** and **Body**. Icon is a dropdown (Upload / Lock / Edit / Dual chat / Document); you can only pick from it
+- **Plans** — each has a Plan name, Subtitle, One-line summary, and an **Included** list
+- **FAQ** — question-and-answer pairs, add or remove freely
+- **Closing** — Heading and Button label
+
+---
+
+## Image sizes
+
+Check the size before uploading, or the image will look blurry or get cropped.
+
+| Where it's used | Upload at | Cropped? |
 |---|---|---|
-| **文章主圖** | 2400 × 560 | **會裁成橫幅**，重點放正中央 |
-| **文章內文插圖** | 寬 1360 以上 | 不裁，維持原比例 |
-| **首頁深色橫幅圖** | 寬 2288 以上 | 不裁，維持原比例 |
-| **產品功能總覽截圖** | 2728 × 1532（16:9） | 不裁，維持原比例 |
-| **社群分享圖（SEO 欄位）** | 1200 × 630 | 不裁 |
+| **Main image** — on a Post | 2400 × 560 | **Cropped to a banner** — keep the subject centred |
+| **Images inside an article** | 1360 wide or more | No, aspect ratio preserved |
+| **Dark band · Image** — Home page | 2288 wide or more | No |
+| **Overview · Screenshot** — Product page | 2728 × 1532 (16:9) | No |
+| **Social share image** — SEO section | 1200 × 630 | No |
 
-尺寸是顯示寬度的兩倍，這樣在高解析度螢幕上才不會糊。
+These are twice the display width so the image stays sharp on high-resolution screens.
 
-**替代文字一定要填。** 有 alt 欄位的地方都填一句話描述圖片內容——這是給視障讀者的螢幕報讀軟體用的，Google 也會讀。
+**Always fill in Alt text.** Every image field has one. Describe what the image shows — screen readers rely on it, and Google reads it too.
 
 ---
 
-## SEO 欄位
+## The SEO section
 
-每種內容底部都有一個 **SEO** 區塊，**全部可以留空**。留空時系統會自動用頁面標題和摘要，通常就夠好了。
+Every content type has an **SEO** block at the bottom. **All of it can be left empty** — the page title and excerpt are used automatically, and that is usually the right answer.
 
-想要細調的時候：
+When you do want to override:
 
-| 欄位 | 說明 |
+| Field | Notes |
 |---|---|
-| **Meta title** | Google 搜尋結果的標題。建議 60 字以內 |
-| **Meta description** | 搜尋結果的描述。建議 160 字以內 |
-| **Canonical URL** | 除非這篇文章同時發表在別的網站，否則**留空** |
-| **社群分享圖** | 貼到 LinkedIn / Facebook 時顯示的圖，1200×630 |
-| **禁止索引** | 打開的話這頁不會出現在 Google。**平常不要開** |
+| **Meta title** | the headline in Google results. 60 characters or fewer |
+| **Meta description** | the description underneath. 160 characters or fewer |
+| **Canonical URL** | **leave empty** unless this article is also published on another site |
+| **Social share image** | what LinkedIn and Facebook show, 1200 × 630 |
+| **Hide from search engines** | keeps the page out of Google. **Normally leave this off** |
 
 ---
 
-## 客戶詢問去哪裡了
+## Where enquiries go
 
-官網聯絡表單送出的詢問**只會寄到 support@dobbyai.co**，後台看不到，也不會留存在後台。
+Contact form submissions are **emailed to support@dobbyai.co only**. They are not stored in the editor and you won't find them there.
 
-這是刻意的：後台的資料庫方案到期後會轉為公開讀取，客戶的姓名、信箱和需求內容留在那裡會有外洩風險，所以那條路徑已經移除。
+That's deliberate: the content database becomes publicly readable once the current plan expires, and customer names, addresses and enquiries have no business sitting somewhere public.
 
-**所以請直接用信箱管理詢問。** 收件匣就是唯一的清單，回覆、標記、分派都在那裡做。
+**So manage enquiries from the inbox.** It is the only list — replying, tagging and assigning all happen there.
 
-如果客戶反映「表單送不出去」，請通知網站管理者——那代表寄信服務出問題了，這種情況表單會顯示錯誤訊息並附上信箱，請客戶改用信件聯絡。
+If a customer says the form won't submit, tell the site administrator: that means the mail service is failing. The form shows an error with the email address when that happens, so the customer can write in instead.
 
 ---
 
-## 全站設定
+## Site settings
 
-頁尾資訊和全站預設值。一樣**中英文各一份**。
+Footer details and site-wide defaults. **One document per language**, like everything else.
 
-網站名稱、標語、網站描述、聯絡信箱、地址（每行一筆）、LinkedIn 網址、預設分享圖。
+Site name, Tagline, Site description, Contact email, Address (one line per entry), LinkedIn, Default share image.
 
-**文章署名**這個欄位是所有文章共用的作者名稱——部落格沒有獨立的作者管理，所有文章都掛同一個署名。
+**Post byline** is the author name shared by every article — the blog has no separate author records, so all posts carry the same name.
 
-**留空的欄位會自動用系統預設值**，所以你不需要一次填完。只填想改的那幾個就好。
+**Empty fields fall back to sensible defaults**, so you don't have to fill it all in at once. Set only what you want to change.
 
-### 301 轉址
+### Redirects
 
-同樣在「全站設定」裡。用來處理**網址換掉了，但舊連結還在外面流傳**的情況——別人分享過的連結、Google 搜尋結果裡的舊網址、名片上印的短網址。
+Also under Site settings. Use these when **a URL has changed but old links are still out there** — links people shared, old Google results, a short URL printed on a business card.
 
-點 **Add item**，填兩個欄位：
+Click **Add item** and fill in two fields:
 
-| 欄位 | 填什麼 |
+| Field | What to put |
 |---|---|
-| **舊網址** | 要退休的路徑，例如 `/pricing` |
-| **新網址** | 要送去哪，例如 `/product` |
+| **Old URL** | the path being retired, e.g. `/pricing` |
+| **New URL** | where it should go, e.g. `/product` |
 
-**語系可加可不加，兩種都對：**
+**The language prefix is optional — both of these are valid:**
 
 ```
-/pricing        → /product      中英文站都生效，各自導到自己語言的頁面
-/zh/pricing     → /zh/product   只對中文站生效
+/pricing        → /product      applies to both sites, each staying in its own language
+/zh/pricing     → /zh/product   Chinese site only
 ```
 
-大小寫和結尾斜線會自動忽略，所以 `/Pricing/` 和 `/pricing` 是同一筆。
+Capitalisation and trailing slashes are ignored, so `/Pricing/` and `/pricing` are the same entry.
 
-新網址也可以填完整的外部網址（`https://...`），例如導到合作夥伴的頁面。
+New URL can also be a full external address (`https://…`) — a partner's page, for instance.
 
-**兩個安全設計，你不用擔心弄壞網站：**
-
-轉址只在「找不到頁面」的時候才會被查詢，所以就算你不小心填了 `/product`（一個存在的頁面），真實頁面永遠優先，不會被蓋掉。
-
-發佈後一分鐘生效，跟其他內容一樣，不需要工程協助。
+**Two things stop you breaking anything here.** A redirect is only consulted once no real page has matched, so even if you typed `/product` (a page that exists), the real page always wins. And like everything else it goes live a minute after publishing, with no engineering involved.
 
 ---
 
-## 請不要碰的東西
+## Working across two languages
 
-### Vision
+Whoever writes the Chinese, two things need to stay in step.
 
-左上角有個 **Vision** 分頁，那是工程用的資料庫查詢工具。點進去不會壞事，但那裡面沒有你需要的東西。
+**Slugs must match** between a document and its translation. Everything else can differ freely — headline, images, even length.
 
-### 已存在文件的「語言」欄位
+**Established translations should stay consistent.** Some product terms are already settled on this site; check an existing page before inventing a new rendering of one.
 
-不要把一份 `zh` 的文件改成 `en`。那會讓中文站少一份內容、英文站多一份重複的。要英文版就**另外建一份新的**。
-
----
-
-## 出狀況怎麼辦
-
-**改完官網沒變**
-先確認有按 **Publish**（右下角）。有的話等一分鐘，再用無痕視窗開一次。
-
-**文章沒出現在列表上**
-檢查三件事：語言欄位對不對、有沒有按 Publish、SEO 裡的「禁止索引」是不是被打開了（打開的文章不會出現在列表）。
-
-**切換語言跳回首頁**
-中英文兩份的**網址欄位不一樣**。改成一致即可。
-
-**分類選單裡找不到剛建的分類**
-分類要先 Publish 才能被文章引用。回去確認分類是不是還停在草稿。
-
-**不小心刪錯東西**
-Sanity 有版本歷史。打開該文件 → 右上角三個點 → **Review changes**，可以看到所有修改記錄並還原。真的救不回來就找工程協助。
+If only one language gets updated, the other simply keeps showing what it had. It does not go blank and nothing breaks — the two sites are independent.
 
 ---
 
-## 快速對照
+## When something looks wrong
 
-| 我想做 | 去哪裡 |
+**I published but the site hasn't changed**
+Check you actually pressed **Publish** (bottom right). If you did, wait a minute and try a private window.
+
+**My post isn't in the list**
+Three things to check: the Language field, whether it is published, and whether **Hide from search engines** got switched on in the SEO section — those posts are left out of listings.
+
+**Switching language sends me to the home page**
+The two documents have different **Slug** values. Make them identical.
+
+**I can't find my category when editing a post**
+Categories must be published before a post can reference them. Check whether it is still a draft.
+
+**I deleted something by mistake**
+Sanity keeps history. Open the document → the three dots in the top right → **Review changes** — you can see every edit and roll back. If that does not recover it, ask engineering.
+
+---
+
+## Please don't
+
+**Vision** — the tab at the top left is a database query tool for engineers. Clicking it breaks nothing, but there is nothing there for you.
+
+**The Language field on an existing document** — do not switch a `zh` document to `en`. That removes it from the Chinese site and creates a duplicate on the English one. To make a translation, **create a new document** instead.
+
+---
+
+## Quick reference
+
+| I want to | Go to |
 |---|---|
-| 改首頁標語 | 首頁 → 主視覺 · 標題 |
-| 換首頁的圖 | 首頁 → 深色橫幅 · 圖片 |
-| 加一個產品功能 | 產品頁 → 功能 → Add item |
-| 改方案內容 | 產品頁 → 方案 |
-| 新增常見問題 | 產品頁 → 常見問題 → Add item |
-| 發文章 | 分類（先） → 文章 |
-| 改頁尾地址 | 全站設定 → 地址 |
-| 舊網址要導到新頁面 | 全站設定 → 301 轉址 |
-| 看客戶詢問 | support@dobbyai.co 收件匣（不在後台） |
+| Change the home page headline | Home page → Hero · Heading line 1 |
+| Swap the home page image | Home page → Dark band · Image |
+| Add a product feature | Product page → Features → Add item |
+| Edit a plan | Product page → Plans |
+| Add an FAQ | Product page → FAQ → Add item |
+| Publish an article | Category (first) → Post |
+| Change the footer address | Site settings → Address |
+| Point an old URL at a new page | Site settings → Redirects |
+| Read customer enquiries | the support@dobbyai.co inbox, not the editor |
 
 ---
 
-**記住三件事就好：中英文要分別改、記得按 Publish、等一分鐘。** 其餘的都可以試，草稿不會影響官網。
+**Three things to remember: the two languages are edited separately, nothing is live until you press Publish, and it takes about a minute.** Everything else is safe to explore — drafts never touch the public site.

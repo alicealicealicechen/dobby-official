@@ -20,8 +20,8 @@
 const language = {
   name: "language",
   type: "string",
-  title: "語言",
-  description: "zh 或 en。文件級翻譯:每個語言各一份文件,共用 slug。",
+  title: "Language",
+  description: "zh or en. Translation is document-level: one document per language, sharing a slug.",
   options: { list: ["zh", "en"] },
   validation: (Rule: { required: () => unknown }) => Rule.required(),
 };
@@ -35,7 +35,7 @@ export const seo = {
       name: "metaTitle",
       type: "string",
       title: "Meta title",
-      description: "建議 60 字元以內;留白則自動用頁面標題。",
+      description: "60 characters or fewer. Falls back to the page title when empty.",
       validation: (Rule: { max: (n: number) => unknown }) => Rule.max(60),
     },
     {
@@ -43,17 +43,17 @@ export const seo = {
       type: "text",
       rows: 3,
       title: "Meta description",
-      description: "建議 160 字元以內。",
+      description: "160 characters or fewer.",
       validation: (Rule: { max: (n: number) => unknown }) => Rule.max(160),
     },
     { name: "canonicalUrl", type: "url", title: "Canonical URL" },
     {
       name: "ogImage",
       type: "image",
-      title: "社群分享圖",
-      description: "1200×630。留白則使用全站預設圖。",
+      title: "Social share image",
+      description: "1200×630. Falls back to the site-wide default when empty.",
     },
-    { name: "noIndex", type: "boolean", title: "禁止索引", initialValue: false },
+    { name: "noIndex", type: "boolean", title: "Hide from search engines", initialValue: false },
   ],
 };
 
@@ -65,27 +65,27 @@ export const seo = {
  */
 export const redirect = {
   name: "redirect",
-  title: "轉址",
+  title: "Redirect",
   type: "object",
   fields: [
     {
       name: "from",
       type: "string",
-      title: "舊網址",
+      title: "Old URL",
       description:
-        "要退休的路徑,以 / 開頭。語系前綴可加可不加:/old-page 對中英文都生效,/zh/old-page 只對中文生效。",
+        "The path being retired, starting with /. The locale prefix is optional: /old-page covers both languages, /zh/old-page only Chinese.",
       validation: (Rule: { required: () => { regex: (r: RegExp, o: object) => unknown } }) =>
-        Rule.required().regex(/^\//, { name: "必須以 / 開頭" }),
+        Rule.required().regex(/^\//, { name: "Must start with /" }),
     },
     {
       name: "to",
       type: "string",
-      title: "新網址",
+      title: "New URL",
       description:
-        "站內路徑(/product,會自動補上語系)或完整外部網址(https://…)。",
+        "A site path (/product — the locale is added for you) or a full external URL (https://…).",
       validation: (Rule: { required: () => { regex: (r: RegExp, o: object) => unknown } }) =>
         Rule.required().regex(/^(\/[^\/]|https?:\/\/)/, {
-          name: "須為 / 開頭的站內路徑或 https:// 網址",
+          name: "Must be a site path starting with / or an https:// URL",
         }),
     },
   ],
@@ -94,78 +94,78 @@ export const redirect = {
 
 export const blogCategory = {
   name: "blog-category",
-  title: "分類",
+  title: "Category",
   type: "document",
   fields: [
     language,
-    { name: "title", type: "string", title: "分類名稱" },
-    { name: "slug", type: "slug", title: "網址", options: { source: "title" } },
-    { name: "description", type: "text", rows: 2, title: "分類描述" },
+    { name: "title", type: "string", title: "Category name" },
+    { name: "slug", type: "slug", title: "Slug", options: { source: "title" } },
+    { name: "description", type: "text", rows: 2, title: "Category description" },
     {
       name: "color",
       type: "string",
-      title: "代表色",
-      description: "文章卡片色帶用。CSS 色值或 var(--orange-600) 這類 token。",
+      title: "Accent colour",
+      description: "Stripe colour on post cards. A CSS colour, or a token such as var(--orange-600).",
     },
-    { name: "order", type: "number", title: "排序" },
+    { name: "order", type: "number", title: "Order" },
   ],
   preview: { select: { title: "title", subtitle: "language" } },
 };
 
 export const post = {
   name: "post",
-  title: "文章",
+  title: "Post",
   type: "document",
   fields: [
     language,
-    { name: "title", type: "string", title: "標題" },
-    { name: "slug", type: "slug", title: "網址", options: { source: "title" } },
-    { name: "excerpt", type: "text", rows: 2, title: "摘要" },
+    { name: "title", type: "string", title: "Title" },
+    { name: "slug", type: "slug", title: "Slug", options: { source: "title" } },
+    { name: "excerpt", type: "text", rows: 2, title: "Excerpt" },
     {
       name: "categories",
       type: "array",
       of: [{ type: "reference", to: [{ type: "blog-category" }] }],
-      title: "分類",
+      title: "Categories",
     },
-    { name: "publishedAt", type: "datetime", title: "發佈時間" },
-    { name: "readTime", type: "string", title: "閱讀時間" },
+    { name: "publishedAt", type: "datetime", title: "Published at" },
+    { name: "readTime", type: "string", title: "Read time" },
     {
       name: "mainImage",
       type: "image",
-      title: "主圖",
-      fields: [{ name: "alt", type: "string", title: "替代文字" }],
+      title: "Main image",
+      fields: [{ name: "alt", type: "string", title: "Alt text" }],
     },
     {
       name: "body",
       type: "array",
-      title: "內文",
+      title: "Body",
       description:
-        "H2 小標會自動成為文章目錄。段落、清單、粗體、連結、圖片、引言皆可用。",
+        "H2 subheadings become the article table of contents automatically. Paragraphs, lists, bold, links, images and quotes are all available.",
       of: [
         {
           type: "block",
           styles: [
-            { title: "內文", value: "normal" },
-            { title: "小標 H2", value: "h2" },
-            { title: "小標 H3", value: "h3" },
-            { title: "引言", value: "blockquote" },
+            { title: "Normal text", value: "normal" },
+            { title: "Subheading H2", value: "h2" },
+            { title: "Subheading H3", value: "h3" },
+            { title: "Quote", value: "blockquote" },
           ],
           lists: [
-            { title: "項目符號", value: "bullet" },
-            { title: "編號", value: "number" },
+            { title: "Bulleted", value: "bullet" },
+            { title: "Numbered", value: "number" },
           ],
           marks: {
             decorators: [
-              { title: "粗體", value: "strong" },
-              { title: "斜體", value: "em" },
-              { title: "程式碼", value: "code" },
+              { title: "Bold", value: "strong" },
+              { title: "Italic", value: "em" },
+              { title: "Code", value: "code" },
             ],
             annotations: [
               {
                 name: "link",
                 type: "object",
-                title: "連結",
-                fields: [{ name: "href", type: "url", title: "網址" }],
+                title: "Link",
+                fields: [{ name: "href", type: "url", title: "URL" }],
               },
             ],
           },
@@ -173,8 +173,8 @@ export const post = {
         {
           type: "image",
           fields: [
-            { name: "alt", type: "string", title: "替代文字" },
-            { name: "caption", type: "string", title: "圖說" },
+            { name: "alt", type: "string", title: "Alt text" },
+            { name: "caption", type: "string", title: "Caption" },
           ],
         },
       ],
@@ -200,20 +200,20 @@ export const post = {
 
 export const ctaLink = {
   name: "ctaLink",
-  title: "次要連結",
+  title: "Secondary link",
   type: "object",
   fields: [
-    { name: "label", type: "string", title: "文字" },
+    { name: "label", type: "string", title: "Label" },
     {
       name: "to",
       type: "string",
-      title: "前往",
-      description: "站內路徑,不含語系前綴。",
+      title: "Goes to",
+      description: "Site path, without the locale prefix.",
       options: {
         list: [
-          { title: "產品", value: "/product" },
-          { title: "部落格", value: "/blog" },
-          { title: "聯絡我們", value: "/contact" },
+          { title: "Product", value: "/product" },
+          { title: "Blog", value: "/blog" },
+          { title: "Contact", value: "/contact" },
         ],
       },
     },
@@ -223,53 +223,53 @@ export const ctaLink = {
 
 export const homePoint = {
   name: "homePoint",
-  title: "賣點",
+  title: "Selling point",
   type: "object",
   fields: [
-    { name: "title", type: "string", title: "標題" },
-    { name: "body", type: "text", rows: 2, title: "說明" },
+    { name: "title", type: "string", title: "Heading" },
+    { name: "body", type: "text", rows: 2, title: "Body" },
   ],
   preview: { select: { title: "title", subtitle: "body" } },
 };
 
 export const productFeature = {
   name: "productFeature",
-  title: "功能",
+  title: "Feature",
   type: "object",
   fields: [
     {
       name: "icon",
       type: "string",
-      title: "圖示",
+      title: "Icon",
       options: {
         list: [
-          { title: "上傳", value: "upload" },
-          { title: "鎖頭", value: "lock" },
-          { title: "編輯", value: "edit" },
-          { title: "雙對話", value: "dualChat" },
-          { title: "文件", value: "fileText" },
+          { title: "Upload", value: "upload" },
+          { title: "Lock", value: "lock" },
+          { title: "Edit", value: "edit" },
+          { title: "Dual chat", value: "dualChat" },
+          { title: "Document", value: "fileText" },
         ],
       },
     },
-    { name: "title", type: "string", title: "標題" },
-    { name: "body", type: "text", rows: 2, title: "說明" },
+    { name: "title", type: "string", title: "Heading" },
+    { name: "body", type: "text", rows: 2, title: "Body" },
   ],
   preview: { select: { title: "title", subtitle: "body" } },
 };
 
 export const productPlan = {
   name: "productPlan",
-  title: "方案",
+  title: "Plan",
   type: "object",
   fields: [
-    { name: "name", type: "string", title: "方案名稱" },
-    { name: "subtitle", type: "string", title: "副標" },
-    { name: "description", type: "string", title: "一句話說明" },
+    { name: "name", type: "string", title: "Plan name" },
+    { name: "subtitle", type: "string", title: "Subtitle" },
+    { name: "description", type: "string", title: "One-line summary" },
     {
       name: "features",
       type: "array",
       of: [{ type: "string" }],
-      title: "包含項目",
+      title: "Included",
     },
   ],
   preview: { select: { title: "name", subtitle: "subtitle" } },
@@ -277,55 +277,55 @@ export const productPlan = {
 
 export const faqItem = {
   name: "faqItem",
-  title: "問答",
+  title: "Question and answer",
   type: "object",
   fields: [
-    { name: "q", type: "string", title: "問題" },
-    { name: "a", type: "text", rows: 4, title: "回答" },
+    { name: "q", type: "string", title: "Question" },
+    { name: "a", type: "text", rows: 4, title: "Answer" },
   ],
   preview: { select: { title: "q" } },
 };
 
 export const homePage = {
   name: "homePage",
-  title: "首頁",
+  title: "Home page",
   type: "document",
   fields: [
     language,
-    { name: "heroEyebrow", type: "string", title: "主視覺 · 小標" },
-    { name: "heroTitleLead", type: "string", title: "主視覺 · 標題第一行" },
-    { name: "heroTitleRest", type: "string", title: "主視覺 · 標題第二行" },
+    { name: "heroEyebrow", type: "string", title: "Hero · Eyebrow" },
+    { name: "heroTitleLead", type: "string", title: "Hero · Heading line 1" },
+    { name: "heroTitleRest", type: "string", title: "Hero · Heading line 2" },
     {
       name: "heroHighlight",
       type: "string",
-      title: "主視覺 · 強調字",
-      description: "接在第二行之後,以品牌色顯示。",
+      title: "Hero · Highlight",
+      description: "Follows line 2, shown in the brand colour.",
     },
-    { name: "heroLede", type: "text", rows: 3, title: "主視覺 · 說明" },
-    { name: "bandTitle", type: "string", title: "深色橫幅 · 標題" },
-    { name: "bandBody", type: "text", rows: 4, title: "深色橫幅 · 說明" },
+    { name: "heroLede", type: "text", rows: 3, title: "Hero · Intro" },
+    { name: "bandTitle", type: "string", title: "Dark band · Heading" },
+    { name: "bandBody", type: "text", rows: 4, title: "Dark band · Body" },
     {
       name: "bandImage",
       type: "image",
-      title: "深色橫幅 · 圖片",
-      fields: [{ name: "alt", type: "string", title: "替代文字" }],
+      title: "Dark band · Image",
+      fields: [{ name: "alt", type: "string", title: "Alt text" }],
     },
-    { name: "pointsTitle", type: "string", title: "賣點區 · 標題" },
+    { name: "pointsTitle", type: "string", title: "Selling points · Heading" },
     {
       name: "points",
       type: "array",
       of: [{ type: "homePoint" }],
-      title: "賣點",
+      title: "Selling point",
     },
-    { name: "ctaEyebrow", type: "string", title: "CTA · 小標" },
-    { name: "ctaTitle", type: "string", title: "CTA · 標題" },
-    { name: "ctaLede", type: "text", rows: 2, title: "CTA · 說明" },
-    { name: "ctaPrimary", type: "string", title: "CTA · 主按鈕文字" },
+    { name: "ctaEyebrow", type: "string", title: "CTA · Eyebrow" },
+    { name: "ctaTitle", type: "string", title: "CTA · Heading" },
+    { name: "ctaLede", type: "text", rows: 2, title: "CTA · Body" },
+    { name: "ctaPrimary", type: "string", title: "CTA · Primary button" },
     {
       name: "ctaSecondary",
       type: "array",
       of: [{ type: "ctaLink" }],
-      title: "CTA · 次要連結",
+      title: "CTA · Secondary links",
     },
     { name: "seo", type: "seo", title: "SEO" },
   ],
@@ -334,31 +334,31 @@ export const homePage = {
 
 export const productPage = {
   name: "productPage",
-  title: "產品頁",
+  title: "Product page",
   type: "document",
   fields: [
     language,
-    { name: "heroTitle", type: "string", title: "主視覺 · 標題" },
-    { name: "heroLede", type: "text", rows: 3, title: "主視覺 · 說明" },
-    { name: "overviewTitle", type: "string", title: "功能總覽 · 標題" },
+    { name: "heroTitle", type: "string", title: "Hero · Heading" },
+    { name: "heroLede", type: "text", rows: 3, title: "Hero · Intro" },
+    { name: "overviewTitle", type: "string", title: "Overview · Heading" },
     {
       name: "overviewImage",
       type: "image",
-      title: "功能總覽 · 截圖",
-      fields: [{ name: "alt", type: "string", title: "替代文字" }],
+      title: "Overview · Screenshot",
+      fields: [{ name: "alt", type: "string", title: "Alt text" }],
     },
     {
       name: "features",
       type: "array",
       of: [{ type: "productFeature" }],
-      title: "功能",
+      title: "Features",
     },
-    { name: "plansTitle", type: "string", title: "方案區 · 標題" },
-    { name: "plans", type: "array", of: [{ type: "productPlan" }], title: "方案" },
-    { name: "faqTitle", type: "string", title: "常見問題 · 標題" },
-    { name: "faqs", type: "array", of: [{ type: "faqItem" }], title: "問答" },
-    { name: "closingTitle", type: "string", title: "結尾 · 標題" },
-    { name: "closingCta", type: "string", title: "結尾 · 按鈕文字" },
+    { name: "plansTitle", type: "string", title: "Plans · Heading" },
+    { name: "plans", type: "array", of: [{ type: "productPlan" }], title: "Plans" },
+    { name: "faqTitle", type: "string", title: "FAQ · Heading" },
+    { name: "faqs", type: "array", of: [{ type: "faqItem" }], title: "Question and answer" },
+    { name: "closingTitle", type: "string", title: "Closing · Heading" },
+    { name: "closingCta", type: "string", title: "Closing · Button label" },
     { name: "seo", type: "seo", title: "SEO" },
   ],
   preview: { select: { title: "heroTitle", subtitle: "language" } },
@@ -366,35 +366,35 @@ export const productPage = {
 
 export const siteSettings = {
   name: "siteSettings",
-  title: "全站設定",
+  title: "Site settings",
   type: "document",
   fields: [
     language,
-    { name: "siteName", type: "string", title: "網站名稱" },
+    { name: "siteName", type: "string", title: "Site name" },
     {
       name: "authorName",
       type: "string",
-      title: "文章署名",
-      description: "所有文章共用的作者名稱(部落格沒有獨立作者型別)。",
+      title: "Post byline",
+      description: "Byline shared by every post — the blog has no separate author type.",
     },
-    { name: "tagline", type: "string", title: "標語" },
-    { name: "description", type: "text", rows: 3, title: "網站描述" },
-    { name: "url", type: "url", title: "正式網址" },
-    { name: "email", type: "string", title: "聯絡信箱" },
+    { name: "tagline", type: "string", title: "Tagline" },
+    { name: "description", type: "text", rows: 3, title: "Site description" },
+    { name: "url", type: "url", title: "Production URL" },
+    { name: "email", type: "string", title: "Contact email" },
     {
       name: "address",
       type: "array",
       of: [{ type: "string" }],
-      title: "地址(每行一筆)",
+      title: "Address (one line per entry)",
     },
     { name: "linkedin", type: "url", title: "LinkedIn" },
-    { name: "defaultOgImage", type: "image", title: "預設分享圖" },
+    { name: "defaultOgImage", type: "image", title: "Default share image" },
     // Nav labels and legal links are interface chrome, not editorial content —
     // they live in lib/i18n.ts so marketing cannot break routing.
     {
       name: "redirects",
       type: "array",
-      title: "301 轉址",
+      title: "Redirects",
       of: [{ type: "redirect" }],
     },
   ],
