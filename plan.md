@@ -278,7 +278,7 @@ Sanity → API → Webhooks → Create:
 原始計畫沒有涵蓋這些,但實作過程中發現是必要的:
 
 - [x] **聯絡表單真的會送出**。原本送出後只是切換成功畫面,訊息全部丟棄,
-      卻顯示「我們會在 1-2 個工作天內與您聯繫」。現在寄信到 support@dobbyai.co
+      卻顯示「我們會在 1-2 個工作天內與您聯繫」。現在寄信到 sales@dobbyai.co
       (Resend),寄失敗回 502,表單顯示錯誤並附上信箱讓對方改用信件。
 - [x] **聯絡表單不再寫入 Sanity**。原本是雙軌投遞(信 + `contactSubmission`
       文件),任一條掛掉都不掉單。但 trial 結束後 dataset 會回到 public ACL,

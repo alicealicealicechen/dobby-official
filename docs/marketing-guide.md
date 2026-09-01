@@ -431,7 +431,7 @@ Sanity keeps history. Open the document → the three dots in the top right → 
 | Publish an article | Category (first) → Post |
 | Change the footer address | Site settings → Address |
 | Point an old URL at a new page | Site settings → Redirects |
-| Read customer enquiries | the support@dobbyai.co inbox, not the editor |
+| Read customer enquiries | the sales@dobbyai.co inbox, not the editor |
 
 ---
 

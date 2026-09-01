@@ -17,7 +17,7 @@
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const TO = process.env.CONTACT_TO_EMAIL ?? "support@dobbyai.co";
+const TO = process.env.CONTACT_TO_EMAIL ?? "sales@dobbyai.co";
 // Resend's sandbox sender works without verifying a domain. Swap for an
 // address on dobbyai.co once SPF/DKIM are set up — deliverability is better.
 const FROM = process.env.CONTACT_FROM_EMAIL ?? "onboarding@resend.dev";
