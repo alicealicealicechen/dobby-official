@@ -1,6 +1,10 @@
 # Dobby AI Website — Editor's Guide
 
-For the marketing team. No technical knowledge needed, and nothing you can click will break the site.
+For the marketing team. No technical knowledge needed, and every change is
+reversible — the editor keeps a full history.
+
+**In a hurry?** The [quick reference](#quick-reference) at the bottom lists the
+common jobs and where each one lives.
 
 ---
 
@@ -14,7 +18,7 @@ real work on the live one.
 | **Website** | [dobby-official.vercel.app](https://dobby-official.vercel.app) | [dobbyai.co](https://dobbyai.co) |
 | **Editor** | [dobby-official.vercel.app/studio](https://dobby-official.vercel.app/studio) | [dobbyai.co/studio](https://dobbyai.co/studio) |
 | **Who can see it** | you and the team | everyone |
-| **Content** | its own, currently near-empty | the real thing |
+| **Content** | its own, whatever has been tried out there | the real thing |
 
 The two hold **completely separate content**. Nothing you write, change or
 delete on one can reach the other, so the test site is somewhere to get a feel
@@ -24,9 +28,9 @@ That same separation is the catch: work done on the test site stays there.
 Anything you want on the real website has to be written again on the live one.
 Use the test site to learn the tool, not to draft the words.
 
-Sign in to either editor with your Google account. If it says you don't have
-access, ask the site administrator to add you to the project. The test site
-asks for a Vercel login as well the first time — same person to ask.
+Sign in to either editor with the account you were invited on. If it says you
+don't have access, ask the site administrator to add you to the project. The
+test site asks for a Vercel login as well the first time — same person to ask.
 
 The editor is called **Sanity Studio**. Content types are listed down the left,
 the document you're editing sits in the middle. What you change here reaches the
@@ -48,7 +52,7 @@ Home page
 
 **Editing one does not touch the other.** This is the thing people forget most often.
 
-Every document has a **Language** field at the top, set to either `zh` or `en`. It decides which site the document appears on. **Never change it on a document that already exists** — see the last section for why.
+Every document has a **Language** field at the top, set to either `zh` or `en`. It decides which site the document appears on. **Never change it on a document that already exists** — see [Please don't](#please-dont) for why.
 
 ### 2. Nothing is live until you press Publish
 
@@ -59,11 +63,14 @@ While you edit, a **Publish** button sits in the bottom right.
 
 Drafts are safe. Edit slowly, leave halfway through, come back tomorrow — the public site stays exactly as it was.
 
-### 3. Give it about a minute
+### 3. Give it up to a minute
 
-The site updates roughly a minute after you publish.
+Publishing does not update the website instantly. Allow up to a minute; it is
+often quicker.
 
-Not seeing your change straight away is normal — **wait a moment and refresh**. If it's still missing after three minutes, open the page in a private window; you're probably looking at your own browser's cache.
+Not seeing the change straight away is normal — **wait a moment and refresh**.
+If it is still missing after three minutes, open the page in a private window:
+you are probably looking at your own browser's cache rather than the site.
 
 ---
 
@@ -94,8 +101,6 @@ is the real site, rendered with your unpublished draft.
 While previewing, an orange bar reads *Previewing unpublished changes* with an
 **Exit preview** link. That bar exists only inside the preview — visitors never
 see it.
-
-Two things worth knowing:
 
 **Opening the site in a normal tab never shows drafts.** `dobbyai.co` always
 serves the published version. That is deliberate: a preview that leaked to the
@@ -163,11 +168,14 @@ Navigation labels, page layout and button placement are **not** in the editor �
 
 ## Getting started: your first blog post
 
-The blog is currently empty. The first time through, follow this order — **step 1 cannot be skipped**.
+Follow this order the first time through — **step 1 comes first for a reason**.
 
 ### Step 1 — Create a category first
 
-A post has to belong to a category, so the category must already exist.
+The editor will let you save a post without a category, but the article page
+always shows one — so an article with none displays whichever category happens
+to be first, which is rarely what you meant. Make the category first and pick
+it deliberately.
 
 Click **Category** on the left, then **+** to create one:
 
@@ -184,7 +192,10 @@ Press **Publish**.
 
 Then **create it a second time** for the other language: same steps, with the other **Language** value and a translated **Category name**.
 
-> **Use the same Slug in both languages** (`product-news` in each). That's what lets a reader switch language and stay on the same category instead of being sent back to the home page.
+> **Use the same Slug in both languages** (`product-news` in each). The
+> language switcher swaps only the `/zh/` or `/en/` part of the address and
+> keeps the rest, so a different slug points at a page that does not exist and
+> the reader gets a 404.
 
 ### Step 2 — Write the post
 
@@ -214,9 +225,12 @@ Chinese   Language zh   Slug  why-on-premise-ai
 English   Language en   Slug  why-on-premise-ai   ← identical
 ```
 
-That's what makes the language switcher land on the translation instead of the home page.
+The language switcher swaps only the `/zh/` or `/en/` part of the address and
+keeps everything after it. Matching slugs are what make it land on the
+translation; different ones send the reader to a page that does not exist.
 
-Writing only one language is fine — the article simply won't exist on the other site. Nothing breaks.
+Writing only one language is fine — the article simply will not exist on the
+other site. Be aware that the switcher will still offer it, and lead to a 404.
 
 ---
 
@@ -360,7 +374,7 @@ Capitalisation and trailing slashes are ignored, so `/Pricing/` and `/pricing` a
 
 New URL can also be a full external address (`https://…`) — a partner's page, for instance.
 
-**Two things stop you breaking anything here.** A redirect is only consulted once no real page has matched, so even if you typed `/product` (a page that exists), the real page always wins. And like everything else it goes live a minute after publishing, with no engineering involved.
+**Two things stop you breaking anything here.** A redirect is only consulted once no real page has matched, so even if you typed `/product` (a page that exists), the real page always wins. And like everything else it goes live within a minute of publishing, with no engineering involved.
 
 ---
 
@@ -384,11 +398,13 @@ Check you actually pressed **Publish** (bottom right). If you did, wait a minute
 **My post isn't in the list**
 Three things to check: the Language field, whether it is published, and whether **Hide from search engines** got switched on in the SEO section — those posts are left out of listings.
 
-**Switching language sends me to the home page**
-The two documents have different **Slug** values. Make them identical.
+**Switching language gives me a 404**
+Either the other language does not exist yet, or the two documents have
+different **Slug** values. Make the slugs identical.
 
-**I can't find my category when editing a post**
-Categories must be published before a post can reference them. Check whether it is still a draft.
+**My category is not showing on the site**
+An unpublished category can still be picked in a post, but it does not exist on
+the website until you publish it. Open it and check for a draft marker.
 
 **I deleted something by mistake**
 Sanity keeps history. Open the document → the three dots in the top right → **Review changes** — you can see every edit and roll back. If that does not recover it, ask engineering.
@@ -419,4 +435,7 @@ Sanity keeps history. Open the document → the three dots in the top right → 
 
 ---
 
-**Three things to remember: the two languages are edited separately, nothing is live until you press Publish, and it takes about a minute.** Everything else is safe to explore — drafts never touch the public site.
+**Three things to remember: the two languages are edited separately, nothing
+is live until you press Publish, and publishing takes up to a minute to
+appear.** Everything else is safe to explore — drafts never touch the public
+site, and every change can be rolled back.
