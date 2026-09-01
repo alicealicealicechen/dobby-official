@@ -47,6 +47,40 @@ Not seeing your change straight away is normal — **wait a moment and refresh**
 
 ---
 
+## Seeing your changes before they go live
+
+A draft on its own changes nothing you can look at — the public site only ever
+serves published content. To see a draft **rendered as a page**, use
+**Presentation**.
+
+**1.** In the Studio, click the **Presentation** tab at the top left, beside
+Structure.
+
+**2.** The screen splits: the website on the right, the document editor on the
+left.
+
+**3.** Start typing. The preview updates as you go — **no need to publish**.
+
+**4.** The preview is clickable. Navigate to any page inside it and the editor
+on the left switches to the document behind that page.
+
+**5.** Publish only once it looks right.
+
+While previewing, an orange bar reads *Previewing unpublished changes* with an
+**Exit preview** link. That bar exists only inside the preview — visitors never
+see it.
+
+Two things worth knowing:
+
+**Opening the site in a normal tab never shows drafts.** `dobbyai.co` always
+serves the published version. That is deliberate: a preview that leaked to the
+public would be indistinguishable from publishing by accident.
+
+**Presentation has a Published / Drafts switch** at the top. Flip to Published
+to compare your draft against what is currently live.
+
+---
+
 ## What you can edit
 
 | In the editor | On the website |
