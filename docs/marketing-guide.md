@@ -79,6 +79,47 @@ public would be indistinguishable from publishing by accident.
 **Presentation has a Published / Drafts switch** at the top. Flip to Published
 to compare your draft against what is currently live.
 
+### A draft needs a Slug before it can be previewed
+
+Presentation finds a document **by its URL**. A post with no **Slug** has no
+URL, so there is nowhere to preview it — the editor pane stays empty and it
+looks as though preview is broken when the document simply is not on the site
+yet.
+
+A brand-new post needs three fields before it can be looked at:
+
+| Field | Why |
+|---|---|
+| **Language** | decides which of the two sites it belongs to |
+| **Title** | the page needs a headline |
+| **Slug** | this *is* the URL — press **Generate** |
+
+Everything else can stay empty; the page renders regardless. And you still do
+not need to publish.
+
+A half-finished draft is also kept out of the article list until it has a slug,
+so the preview never shows you a card that leads nowhere.
+
+### Not every page has an editor beside it
+
+| Page | In Presentation |
+|---|---|
+| Home page, Product page | preview **and** editor |
+| A single article | preview **and** editor |
+| A category page | preview **and** editor |
+| **The blog index**, Contact | **preview only** |
+
+The blog index is a list of articles rather than a document someone wrote, so
+there is nothing to open beside it. That is expected, not a fault — edit the
+individual articles instead.
+
+### Language has to match
+
+An article tagged `en` only ever appears on the English site, and it can only
+be filed under a category that is also `en`. Mixing them is the usual reason a
+new article is nowhere to be found: it was written in one language and looked
+for in the other.
+
 ---
 
 ## What you can edit
