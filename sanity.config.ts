@@ -1,6 +1,10 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
-import { defineLocations, presentationTool } from "sanity/presentation";
+import {
+  defineDocuments,
+  defineLocations,
+  presentationTool,
+} from "sanity/presentation";
 import { visionTool } from "@sanity/vision";
 import { schemaTypes } from "./src/sanity/schemaTypes";
 import { apiVersion, dataset, projectId } from "./src/lib/sanity.env";
@@ -68,6 +72,37 @@ const locations = {
   }),
 };
 
+/**
+ * Which document backs each URL — the other direction from `locations`.
+ *
+ * Without this, Presentation can render the site but cannot tell which document
+ * produced the page in the iframe, so it shows the preview alone with no editor
+ * beside it. Both resolvers are needed for the split view: this one opens the
+ * right document as the editor navigates the preview, `locations` tells a
+ * document where it is used.
+ *
+ * Order matters — the first matching route wins, so anything specific goes
+ * above the pattern that would otherwise swallow it.
+ */
+const mainDocuments = defineDocuments([
+  {
+    route: "/:locale/blog/category/:slug",
+    filter: `_type == "blog-category" && slug.current == $slug && language == $locale`,
+  },
+  {
+    route: "/:locale/blog/:slug",
+    filter: `_type == "post" && slug.current == $slug && language == $locale`,
+  },
+  {
+    route: "/:locale/product",
+    filter: `_type == "productPage" && language == $locale`,
+  },
+  {
+    route: "/:locale",
+    filter: `_type == "homePage" && language == $locale`,
+  },
+]);
+
 export default defineConfig({
   name: "dobby",
   title: "Dobby AI",
@@ -81,7 +116,7 @@ export default defineConfig({
       // Same origin as the Studio, so the site loads in the preview iframe
       // under the `frame-ancestors 'self'` policy set in next.config.
       previewUrl: { previewMode: { enable: "/api/draft-mode/enable" } },
-      resolve: { locations },
+      resolve: { locations, mainDocuments },
     }),
     structureTool(),
     visionTool({ defaultApiVersion: apiVersion }),
