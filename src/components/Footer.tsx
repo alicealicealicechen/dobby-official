@@ -11,7 +11,7 @@ export default async function Footer({ locale }: { locale: Locale }) {
 
   return (
     <footer className="bg-[#2c2c2c] text-[#d4d2cb]">
-      <div className="mx-auto grid max-w-[1520px] gap-10 px-6 pt-14 pb-8 sm:grid-cols-2 sm:px-8 sm:pt-16 lg:grid-cols-[1.6fr_1fr_1fr]">
+      <div className="mx-auto grid max-w-[1520px] gap-10 px-6 pt-10 pb-6 sm:grid-cols-2 sm:px-8 sm:pt-12 lg:grid-cols-[1.6fr_1fr_1fr]">
         <div>
           <Logo invert className="mb-4 h-[18px]" />
           <p className="m-0 max-w-[260px] text-sm leading-[1.7] text-[#a8a49a]">
@@ -51,7 +51,7 @@ export default async function Footer({ locale }: { locale: Locale }) {
         */}
       </div>
 
-      <div className="mx-auto max-w-[1520px] border-t border-[#484747] px-6 sm:px-8 py-6 text-[13px] text-[#757575]">
+      <div className="mx-auto max-w-[1520px] border-t border-[#484747] px-6 sm:px-8 py-4 text-[13px] text-[#757575]">
         © {year} {site.name}. All rights reserved.
       </div>
     </footer>

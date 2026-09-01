@@ -1,5 +1,5 @@
 import Studio from "./Studio";
-import { isSanityConfigured, projectId } from "@/lib/sanity";
+import { isSanityConfigured, projectId } from "@/lib/sanity.env";
 
 // The Studio is a client-side app; nothing here should be prerendered per-path.
 export const dynamic = "force-static";

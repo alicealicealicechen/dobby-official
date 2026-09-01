@@ -49,9 +49,14 @@ export default function Header({
       <header className="sticky top-0 z-40 border-b border-line bg-paper/[0.86] backdrop-blur-[10px]">
         <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-6 py-3.5 sm:py-4 md:px-10">
           <Link href={nav[0].href} aria-label="Dobby AI" className="flex items-center">
+            {/* The wordmark carries a descender — the tail of the "y" fills the
+                bottom 28% of its canvas, so centring the box leaves the letters
+                reading high. Measured off the artwork: cap-top at y13, baseline
+                at y489 of 679, putting the ink 13% of the height above centre.
+                The mark has no descender and needs no correction. */}
             <Logo
               variant={scrolled ? "mark" : "wordmark"}
-              className={scrolled ? "h-[22px]" : "h-[26px]"}
+              className={scrolled ? "h-[22px]" : "h-[26px] translate-y-[13%]"}
               priority
             />
           </Link>

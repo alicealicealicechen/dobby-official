@@ -218,7 +218,7 @@ When you do want to override:
 
 ## Where enquiries go
 
-Contact form submissions are **emailed to support@dobbyai.co only**. They are not stored in the editor and you won't find them there.
+Contact form submissions are **emailed to sales@dobbyai.co only**. They are not stored in the editor and you won't find them there.
 
 That's deliberate: the content database becomes publicly readable once the current plan expires, and customer names, addresses and enquiries have no business sitting somewhere public.
 

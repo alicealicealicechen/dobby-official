@@ -1,17 +1,9 @@
+import { draftMode } from "next/headers";
 import { createClient } from "next-sanity";
+import { apiVersion, dataset, projectId } from "./sanity.env";
 
-export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
-export const apiVersion = "2024-10-01";
-
-/**
- * The Sanity project is created in Phase 0 of the implementation plan. Until
- * `NEXT_PUBLIC_SANITY_PROJECT_ID` is set, every query short-circuits to null and
- * the accessors in `content.ts` serve the seed content instead — so the site
- * builds and renders before the CMS exists, and switches over with no code
- * change once the env vars land.
- */
-export const isSanityConfigured = Boolean(projectId);
+// Re-exported so server modules keep one import site for everything Sanity.
+export { apiVersion, dataset, isSanityConfigured, projectId } from "./sanity.env";
 
 /**
  * Server-only. Next replaces non-NEXT_PUBLIC_ vars with undefined in client
@@ -36,6 +28,20 @@ const client = projectId
     })
   : null;
 
+/**
+ * Same project, but reading unpublished drafts.
+ *
+ * Only ever reached when draft mode is on, which only happens for an editor
+ * who arrived from the Studio. Everyone else keeps the published, CDN-cached
+ * client — the cost of an uncached authenticated read is paid by the person
+ * who asked for a preview and by nobody else.
+ */
+export const draftClient = client?.withConfig({
+  perspective: "drafts",
+  useCdn: false,
+  token,
+});
+
 export async function sanityFetch<T>(
   query: string,
   params: Record<string, unknown> = {},
@@ -49,7 +55,21 @@ export async function sanityFetch<T>(
 ): Promise<T | null> {
   if (!client) return null;
 
+  // Reading the flag cannot throw here, but it can be called outside a request
+  // (a script importing this module), where there is no draft mode to read.
+  let previewing = false;
   try {
+    previewing = (await draftMode()).isEnabled;
+  } catch {
+    previewing = false;
+  }
+
+  try {
+    if (previewing && draftClient) {
+      // Deliberately uncached. A preview that served a cached draft would show
+      // the editor their previous save and look exactly like a broken publish.
+      return await draftClient.fetch<T>(query, params, { cache: "no-store" });
+    }
     // SSG + ISR, per the rendering contract in the README.
     return await client.fetch<T>(query, params, {
       next: { revalidate: 60, tags },
@@ -84,3 +104,13 @@ export function overlay<T extends object>(
   }
   return merged as T;
 }
+
+/**
+ * Non-null client for the draft-mode route, which cannot run at all without a
+ * project. Throwing here beats exporting `null` and having the route fail
+ * later with a message that says nothing about the missing configuration.
+ */
+export const previewClient = (() => {
+  if (!client) throw new Error("NEXT_PUBLIC_SANITY_PROJECT_ID is not set");
+  return client.withConfig({ token, useCdn: false });
+})();
