@@ -33,8 +33,17 @@ export const siteSettingsQuery = groq`
   }
 `;
 
+/**
+ * Listings require a slug.
+ *
+ * Published documents always have one — the Studio would not let them through
+ * otherwise. Drafts are a different matter: draft mode renders whatever an
+ * editor has half-typed, and a document with no slug has no URL, so listing it
+ * produces a card linking nowhere. Filtering here keeps a preview honest about
+ * what is actually reachable.
+ */
 export const categoriesQuery = groq`
-  *[_type == "blog-category" && language == $locale] | order(order asc){
+  *[_type == "blog-category" && language == $locale && defined(slug.current)] | order(order asc){
     title,
     "slug": slug.current,
     description,
@@ -52,7 +61,7 @@ export const categoryQuery = groq`
 `;
 
 export const postsQuery = groq`
-  *[_type == "post" && language == $locale && seo.noIndex != true] | order(publishedAt desc){
+  *[_type == "post" && language == $locale && defined(slug.current) && seo.noIndex != true] | order(publishedAt desc){
     ${POST_FIELDS}
   }
 `;
@@ -64,7 +73,7 @@ export const postQuery = groq`
 `;
 
 export const postsByCategoryQuery = groq`
-  *[_type == "post" && language == $locale && $slug in categories[]->slug.current] | order(publishedAt desc){
+  *[_type == "post" && language == $locale && defined(slug.current) && $slug in categories[]->slug.current] | order(publishedAt desc){
     ${POST_FIELDS}
   }
 `;
