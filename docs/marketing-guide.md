@@ -79,12 +79,17 @@ Structure.
 **2.** The screen splits: the website on the right, the document editor on the
 left.
 
-**3.** Start typing. The preview updates as you go — **no need to publish**.
+**3.** Make your changes, then press the **reload button** in the preview
+toolbar to see them. Saving the draft is enough — **no need to publish**.
 
 **4.** The preview is clickable. Navigate to any page inside it and the editor
 on the left switches to the document behind that page.
 
 **5.** Publish only once it looks right.
+
+The preview does not refresh by itself as you type; reload it when you want to
+check your work. Everything else about it is live — the page you are looking at
+is the real site, rendered with your unpublished draft.
 
 While previewing, an orange bar reads *Previewing unpublished changes* with an
 **Exit preview** link. That bar exists only inside the preview — visitors never
