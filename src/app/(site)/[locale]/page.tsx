@@ -40,7 +40,18 @@ export default async function Home({
           <p className="mb-5 font-mono text-[12.5px] font-semibold tracking-[0.14em] text-primary sm:mb-7 sm:text-[16px]">
             {hero.eyebrow}
           </p>
-          <h1 className="m-0 mb-8 text-[clamp(2.25rem,8vw,6.2rem)] leading-[1.02] sm:leading-[0.98] font-extrabold tracking-[-0.04em] text-ink">
+          {/* Leading is set per language on purpose. Latin display type can sit
+              below 1.0 because ascenders and descenders leave visual air between
+              lines; CJK glyphs fill the full em box, so the same value puts the
+              two lines in contact. English keeps the tight setting the design
+              was drawn at. */}
+          <h1
+            className={`m-0 mb-8 text-[clamp(2.25rem,8vw,6.2rem)] font-extrabold tracking-[-0.04em] text-ink ${
+              locale === "zh"
+                ? "leading-[1.15] sm:leading-[1.1]"
+                : "leading-[1.02] sm:leading-[0.98]"
+            }`}
+          >
             {hero.titleLead}
             <br />
             {hero.titleRest}

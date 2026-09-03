@@ -117,11 +117,15 @@ export default async function LocaleLayout({
 
         {previewing && (
           <>
-            {/* The draft cookie outlives the tab it was set in, which is how an
-                editor ends up reading unpublished copy hours later and reporting
-                it as a bug on the live site. The way out is always on screen. */}
-            <div className="fixed inset-x-0 bottom-0 z-50 flex items-center justify-center gap-3 bg-primary px-4 py-2 text-[13px] font-semibold text-on-primary">
-              <span>Previewing unpublished changes</span>
+            {/* The draft cookie belongs to the domain, not the preview iframe, so
+                opening Presentation puts this whole browser into draft mode —
+                including a separate tab on the live site. The banner says who can
+                see it because the alarming reading is the opposite one: that
+                unpublished work has somehow gone out to the public. */}
+            <div className="fixed inset-x-0 bottom-0 z-50 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-primary px-4 py-2 text-center text-[13px] font-semibold text-on-primary">
+              <span>
+                Previewing unpublished changes — visible only in your browser
+              </span>
               <a
                 href={`/api/draft-mode/disable?to=/${locale}`}
                 className="rounded border border-white/40 px-2 py-0.5 underline-offset-2 hover:bg-white/15"
