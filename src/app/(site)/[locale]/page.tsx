@@ -149,7 +149,10 @@ export default async function Home({
               >
                 {cta.primary}
               </Button>
-              {cta.secondary.map((link) => (
+              {cta.secondary
+                // Blog is hidden; the CMS may still link to it.
+                .filter((link) => !link.to.startsWith("/blog"))
+                .map((link) => (
                 <Link
                   key={link.to}
                   href={path(locale, link.to)}

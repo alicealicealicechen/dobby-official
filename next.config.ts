@@ -48,12 +48,6 @@ const nextConfig: NextConfig = {
       { source: "/", destination: "/zh", permanent: false },
       { source: "/product", destination: "/zh/product", permanent: false },
       { source: "/contact", destination: "/zh/contact", permanent: false },
-      { source: "/blog", destination: "/zh/blog", permanent: false },
-      {
-        source: "/blog/:path*",
-        destination: "/zh/blog/:path*",
-        permanent: false,
-      },
     ];
   },
 };

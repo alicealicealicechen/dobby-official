@@ -176,7 +176,7 @@ export function getNav(locale: Locale): NavItem[] {
   return [
     { key: "home", label: nav.home, href: path(locale) },
     { key: "product", label: nav.product, href: path(locale, "/product") },
-    { key: "blog", label: nav.blog, href: path(locale, "/blog") },
+    // Blog hidden for now; its routes live in the private `_blog` folder.
     { key: "contact", label: nav.contact, href: path(locale, "/contact") },
   ];
 }
