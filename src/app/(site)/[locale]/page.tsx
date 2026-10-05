@@ -23,7 +23,7 @@ export default async function Home({
     getSiteSettings(locale),
     getHomeContent(locale),
   ]);
-  const { hero, band, points, cta } = content;
+  const { hero, band, darkBands, platform, points, cta } = content;
 
   return (
     <main>
@@ -57,41 +57,92 @@ export default async function Home({
             {hero.titleRest}
             <span className="text-primary">{hero.highlight}</span>
           </h1>
-          <p className="m-0 max-w-[480px] text-[17px] leading-[1.65] text-secondary sm:text-[19px]">
+          <p className="m-0 mb-10 max-w-[480px] text-[17px] leading-[1.65] text-secondary sm:text-[19px]">
             {hero.lede}
           </p>
+          <div>
+            <Button
+              href={path(locale, "/product")}
+              iconRight={<Icon name="arrowRight" size={16} />}
+            >
+              {hero.button}
+            </Button>
+          </div>
         </div>
       </section>
 
-      {/* STATS BAND */}
-      <section className="w-full bg-ink">
-        <div className="mx-auto max-w-[1520px] px-6 py-[clamp(48px,7vw,72px)] sm:px-8 text-center">
-          <h2 className="mb-5 text-[clamp(1.6rem,3vw,2.4rem)] font-bold tracking-[-0.02em] text-white">
-            {band.title}
-          </h2>
-          <p className="text-balance mx-auto mb-10 max-w-[480px] text-[15px] leading-[1.7] text-white">
-            {band.body}
-          </p>
+      {/* DARK SECTION — band, extra bands, platform table, then the photo */}
+      <section className="w-full bg-ink text-center">
+        <div className="mx-auto max-w-[1520px] px-6 py-[clamp(48px,7vw,72px)] sm:px-8">
+          {[band, ...darkBands].map((item, i) => (
+            <div
+              key={item.title}
+              className={i > 0 ? "mt-[clamp(48px,7vw,72px)] border-t border-white/10 pt-[clamp(48px,7vw,72px)]" : ""}
+            >
+              <h2 className="text-balance mx-auto mb-5 max-w-[880px] text-[clamp(1.6rem,3vw,2.4rem)] font-bold tracking-[-0.02em] text-white">
+                {item.title}
+              </h2>
+              <p className="text-balance mx-auto max-w-[640px] text-[15px] leading-[1.7] text-white">
+                {item.body}
+              </p>
+            </div>
+          ))}
+
+          {platform.items.length > 0 && (
+            <div className="mt-[clamp(48px,7vw,72px)] border-t border-white/10 pt-[clamp(48px,7vw,72px)]">
+              <h2 className="text-balance mx-auto mb-5 max-w-[880px] text-[clamp(1.6rem,3vw,2.4rem)] font-bold tracking-[-0.02em] text-white">
+                {platform.title}
+              </h2>
+              <p className="text-balance mx-auto mb-10 max-w-[640px] text-[15px] leading-[1.7] text-white">
+                {platform.body}
+              </p>
+              <div className="mx-auto grid max-w-[1100px] gap-4 text-left md:grid-cols-3 md:gap-5">
+                {platform.items.map((item, i) => (
+                  <div
+                    key={item.title}
+                    className="relative overflow-hidden rounded-[16px] border border-white/10 bg-white/[0.04] p-7 transition-colors duration-150 ease-standard hover:border-primary/60 sm:p-8"
+                  >
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-primary opacity-15 blur-[50px]"
+                    />
+                    <p className="relative mb-6 font-mono text-[12.5px] font-semibold tracking-[0.14em] text-primary">
+                      {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <h3 className="relative m-0 mb-3 text-[20px] font-bold text-white sm:text-[24px]">
+                      {item.title}
+                    </h3>
+                    <p className="relative m-0 text-[15px] leading-[1.7] text-white/70">
+                      {item.body}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* The CMS image wins when the document has one; the bundled asset
               is the fallback so the page never renders a hole. */}
-          {band.image ? (
-            <Image
-              src={band.image}
-              alt={band.imageAlt}
-              width={1144}
-              height={1440}
-              sizes="(max-width: 768px) 100vw, 720px"
-              className="mx-auto h-auto w-full max-w-[720px] rounded-[4px]"
-            />
-          ) : (
-            <Image
-              src={heroPhoto}
-              alt={band.imageAlt}
-              sizes="(max-width: 768px) 100vw, 720px"
-              placeholder="blur"
-              className="mx-auto h-auto w-full max-w-[720px] rounded-[4px]"
-            />
-          )}
+          <div className="mt-[clamp(48px,7vw,72px)]">
+            {band.image ? (
+              <Image
+                src={band.image}
+                alt={band.imageAlt}
+                width={1144}
+                height={1440}
+                sizes="(max-width: 768px) 100vw, 720px"
+                className="mx-auto h-auto w-full max-w-[720px] rounded-[4px]"
+              />
+            ) : (
+              <Image
+                src={heroPhoto}
+                alt={band.imageAlt}
+                sizes="(max-width: 768px) 100vw, 720px"
+                placeholder="blur"
+                className="mx-auto h-auto w-full max-w-[720px] rounded-[4px]"
+              />
+            )}
+          </div>
         </div>
       </section>
 

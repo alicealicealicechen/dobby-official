@@ -268,10 +268,21 @@ Fields are ordered the way the page is, top to bottom.
 | Hero · Heading line 2 | second line |
 | Hero · Highlight | follows line 2, **shown in the brand orange** |
 | Hero · Intro | the paragraph under the headline |
+| Hero · Button label | the button under the intro; always goes to the Product page |
 
-**Dark band**
+**Dark band — the dark section under the hero**
+
+Everything below lives in one dark section, in this order: the Dark band heading and body, the extra dark bands, the Platform row of three, and finally the image at the bottom.
 
 Heading, Body and Image. Leaving the image empty falls back to the built-in one.
+
+**More dark bands**
+
+A list of extra heading-and-body blocks shown under the Dark band text, each with its own Heading and Body. **Add item** to add one; drag to reorder. Leave it empty and the built-in copy shows.
+
+**Platform**
+
+**Platform · Heading** and **Platform · Intro**, then **Platform · Columns**: up to three items, each with a Heading and Body, shown side by side as a row of three (stacked on phones). Any field left empty falls back to the built-in copy.
 
 **Selling points**
 

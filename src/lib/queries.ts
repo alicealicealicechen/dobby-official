@@ -86,13 +86,20 @@ export const homePageQuery = groq`
       "titleLead": heroTitleLead,
       "titleRest": heroTitleRest,
       "highlight": heroHighlight,
-      "lede": heroLede
+      "lede": heroLede,
+      "button": heroButton
     },
     "band": {
       "title": bandTitle,
       "body": bandBody,
       "image": bandImage.asset->url,
       "imageAlt": bandImage.alt
+    },
+    darkBands[]{ title, body },
+    "platform": {
+      "title": platformTitle,
+      "body": platformBody,
+      "items": platformItems[]{ title, body }
     },
     pointsTitle,
     points[]{ title, body },

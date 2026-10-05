@@ -223,7 +223,7 @@ export const ctaLink = {
 
 export const homePoint = {
   name: "homePoint",
-  title: "Selling point",
+  title: "Heading and body",
   type: "object",
   fields: [
     { name: "title", type: "string", title: "Heading" },
@@ -302,6 +302,12 @@ export const homePage = {
       description: "Follows line 2, shown in the brand colour.",
     },
     { name: "heroLede", type: "text", rows: 3, title: "Hero · Intro" },
+    {
+      name: "heroButton",
+      type: "string",
+      title: "Hero · Button label",
+      description: "Goes to the Product page.",
+    },
     { name: "bandTitle", type: "string", title: "Dark band · Heading" },
     { name: "bandBody", type: "text", rows: 4, title: "Dark band · Body" },
     {
@@ -309,6 +315,23 @@ export const homePage = {
       type: "image",
       title: "Dark band · Image",
       fields: [{ name: "alt", type: "string", title: "Alt text" }],
+    },
+    {
+      name: "darkBands",
+      type: "array",
+      of: [{ type: "homePoint" }],
+      title: "More dark bands",
+      description: "Extra heading-and-body blocks inside the dark section, under the dark band text. Leave empty to use the built-in copy.",
+    },
+    { name: "platformTitle", type: "string", title: "Platform · Heading" },
+    { name: "platformBody", type: "text", rows: 3, title: "Platform · Intro" },
+    {
+      name: "platformItems",
+      type: "array",
+      of: [{ type: "homePoint" }],
+      title: "Platform · Columns",
+      description: "Shown side by side in one row of three. Leave empty to use the built-in copy.",
+      validation: (Rule: { max: (n: number) => unknown }) => Rule.max(3),
     },
     { name: "pointsTitle", type: "string", title: "Selling points · Heading" },
     {

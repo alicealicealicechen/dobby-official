@@ -18,8 +18,11 @@ export type HomeContent = {
     titleRest: string;
     highlight: string;
     lede: string;
+    button: string;
   };
   band: { title: string; body: string; image?: string; imageAlt: string };
+  darkBands: { title: string; body: string }[];
+  platform: { title: string; body: string; items: { title: string; body: string }[] };
   pointsTitle: string;
   points: { title: string; body: string }[];
   cta: {
@@ -59,11 +62,44 @@ const HOME: Record<Locale, HomeContent> = {
       titleRest: "協作，值得",
       highlight: "更好的 AI",
       lede: "可控、可追溯，真正融入團隊。在不連網路的環境要求下，讓 AI 成為真正協作的工作夥伴。",
+      button: "立即開始",
     },
     band: {
       title: "100% 離線運作，不受外界干擾",
       body: "所有運算、知識庫與對話紀錄都留在企業自己的環境中，支援 on-premise、localhost 與全離線部署，不受外部網路與政策變動影響。",
       imageAlt: "離線運作示意",
+    },
+    darkBands: [
+      {
+        title: "資料始終留在您的環境中",
+        body: "對於無法將敏感資料存放在雲端的企業，Dobby AI 提供完全在地端運作的 AI 平台，讓模型、文件、嵌入向量、向量資料庫與對話資料都留在您的環境內。",
+      },
+      {
+        title: "從會回答的 AI，到會做事的 AI",
+        body: "企業級 AI 不能只回答問題。它必須能運用您的資料、遵循您的規則、處理真實任務，並知道何時該請人介入。Dobby AI 整合模型、知識、工具與監督機制，支撐這些工作流程。",
+      },
+      {
+        title: "組織的知識，不該隨員工離開",
+        body: "當資深工程師退休或離職，多年累積的寶貴知識可能隨之流失。Dobby AI 協助記錄這些專家的工作方式，將知識轉化為 AI 可遵循、可重複使用的指引，也就是 Skills。這些 Skills 可融入企業的工作流程，並在需要人為判斷時讓人參與其中。",
+      },
+    ],
+    platform: {
+      title: "一個平台，AI 技術堆疊始終屬於您",
+      body: "Dobby 整合在您自有環境中建構與執行企業 AI 工作流程所需的核心元件。",
+      items: [
+        {
+          title: "模型",
+          body: "在自有基礎設施上執行支援的語言與視覺模型，或在部署需要時串接外部模型供應商。",
+        },
+        {
+          title: "RAG",
+          body: "建立私有知識庫，支援混合檢索、重新排序、多語言嵌入、對話記憶與 Agentic RAG。",
+        },
+        {
+          title: "微調",
+          body: "讓模型適應組織的專有術語、輸出格式、行為與任務邏輯。",
+        },
+      ],
     },
     pointsTitle: "打造 AI 真正參與溝通與協作的工作世界",
     points: [
@@ -104,11 +140,44 @@ const HOME: Record<Locale, HomeContent> = {
       titleRest: "deserves ",
       highlight: "better AI",
       lede: "Controllable, traceable, and genuinely part of the team — even in environments that never touch the internet.",
+      button: "Get started",
     },
     band: {
       title: "100% offline. Nothing leaves the building.",
       body: "Compute, knowledge base and conversation history all stay inside your own environment. Runs on-premise, on localhost, or fully air-gapped — unaffected by outside networks or shifting vendor policy.",
       imageAlt: "Offline operation",
+    },
+    darkBands: [
+      {
+        title: "Your Data Stays Inside Your Environment",
+        body: "For businesses that cannot store sensitive data in the cloud, Dobby AI provides an AI platform that runs entirely on premises, keeping models, documents, embeddings, vector databases and conversation data inside your environment.",
+      },
+      {
+        title: "From AI That Answers To AI That Works",
+        body: "Enterprise AI needs to do more than answer questions. It needs to work with your data, follow your rules, handle real tasks, and know when to ask for human input. Dobby AI brings together the models, knowledge, tools, and oversight needed to support these workflows.",
+      },
+      {
+        title: "Your Organization's Knowledge Should Not Leave With Your Employees",
+        body: "When an experienced engineer retires or leaves, years of valuable knowledge can leave with them. Dobby AI helps capture how these experts do their work and turn that knowledge into reusable instructions, or Skills, that AI can follow. These skills can be incorporated into your business’s workflows, with human involvement when their judgement is needed.",
+      },
+    ],
+    platform: {
+      title: "One Platform. The AI Stack Stays Yours",
+      body: "Dobby brings together the core components needed to build and run enterprise AI workflows within your own environment.",
+      items: [
+        {
+          title: "Models",
+          body: "Run supported language and vision models on your own infrastructure, or connect to external model providers when your deployment calls for them.",
+        },
+        {
+          title: "RAG",
+          body: "Build private knowledge bases with hybrid search, reranking, multilingual embeddings, conversation memory, and Agentic RAG.",
+        },
+        {
+          title: "Fine-tuning",
+          body: "Adapt models to your organization's terminology, output formats, behavior, and task logic.",
+        },
+      ],
     },
     pointsTitle: "Building a workplace where AI actually takes part",
     points: [
@@ -327,6 +396,8 @@ export async function getHomeContent(locale: Locale): Promise<HomeContent> {
   return {
     hero: overlay(seed.hero, remote.hero),
     band: overlay(seed.band, remote.band),
+    darkBands: remote.darkBands?.length ? remote.darkBands : seed.darkBands,
+    platform: overlay(seed.platform, remote.platform),
     pointsTitle: remote.pointsTitle || seed.pointsTitle,
     points: remote.points?.length ? remote.points : seed.points,
     cta: overlay(seed.cta, remote.cta),
